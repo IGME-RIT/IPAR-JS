@@ -8,7 +8,6 @@ function board(startPosition, lessonNodes){
 
 board.drawLib = undefined;
 
-
 //prototype
 var p = board.prototype;
 

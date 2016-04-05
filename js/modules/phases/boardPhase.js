@@ -5,14 +5,18 @@ var LessonNode = require('../lessonNode.js');
 
 var boardArray;
 var activeBoardIndex;
-var currentPhase;
 
-function boardPhase(){
-    currentPhase = 2;
+function boardPhase(pUrl){
+    this.currentPhase = 2;
     
+    //read data
     //initialize boards
     
 }	
+
+function processData(pUrl){
+    
+}
 
 var p = boardPhase.prototype;
 

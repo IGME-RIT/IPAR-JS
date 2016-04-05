@@ -6,11 +6,12 @@ var LessonNode = require('./lessonNode.js');
 var Utilities = require('./utilities.js');
 var boardPhase = require('./phases/boardPhase.js');
 
-var GAME_PHASE = Object.freeze({LANDING: 0, SELECTION: 1, BOARD: 2});
+//"enumeration"
+var currentPhase;
 
+//utilities
 var drawLib;
 var utility;
-var currentPhase;
 
 //mouse management
 var mouseState;
@@ -23,15 +24,19 @@ var mouseSustainedDown;
 var phaseObject;
 
 
-
 function game(pUltility, pDrawLib){
     utility = pUltility;
     drawLib = pDrawLib;
-    currentPhase = GAME_PHASE.BOARD;
+    currentPhase = 2;
     phaseObject = new boardPhase();
     
     draggingDisabled = false;
     mouseSustainedDown = false;
+}
+
+//changes the phase object based on the phase number input
+function phaseChanger(phaseNum){
+    
 }
 
 var p = game.prototype;
@@ -48,12 +53,18 @@ p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
     //draw stuff
     p.draw(ctx, canvas, center, activeHeight);
     
+    //update the active phase object
     phaseObject.update();
     
     
 }
 
 p.act = function(){
+    //if the phase object is different change it
+    if(phaseObject.currentPhase != currentPhase){
+        phaseChanger(phaseObject.currentPhase);
+    }
+    
     //collision detection, iterate through each node in the active board
     /*for(var i = 0; i < board.lessonNodeArray.length; i++){
         var targetLessonNode = board.lessonNodeArray[i];
@@ -101,7 +112,7 @@ p.act = function(){
 }
 
 p.draw = function(ctx, canvas, center, activeHeight){
-    //draw board
+    //draw debug background
     ctx.save();
     drawLib.clear(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
     drawLib.rect(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight, "white");
