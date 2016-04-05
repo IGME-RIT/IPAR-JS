@@ -8,30 +8,6 @@ function board(startPosition, lessonNodes){
 
 board.drawLib = undefined;
 
-//helper
-function calculateBounds(){
-    if(this.lessonNodeArray.length > 0){
-        this.boundLeft = this.lessonNodeArray[0].position.x;
-        this.boundRight = this.lessonNodeArray[0].position.x;
-        this.boundTop = this.lessonNodeArray[0].position.y;
-        this.boundBottom = this.lessonNodeArray[0].position.y;
-        for(var i = 1; i < this.lessonNodeArray.length; i++){
-            if(this.boundLeft > this.lessonNodeArray[i].position.x){
-                this.boundLeft = this.lessonNodeArray[i].position.x;
-            }
-            else if(this.boundRight < this.lessonNodeArray[i].position.x){
-                this.boundRight > this.lessonNodeArray[i].position.x;
-            }
-            if(this.boundTop > this.lessonNodeArray[i].position.y){
-                this.boundTop = this.lessonNodeArray[i].position.y;
-            }
-            else if(this.boundBottom < this.lessonNodeArray[i].position.y){
-                this.boundBottom = this.lessonNodeArray[i].position.y;
-            }
-        }
-    }
-}
-
 
 //prototype
 var p = board.prototype;

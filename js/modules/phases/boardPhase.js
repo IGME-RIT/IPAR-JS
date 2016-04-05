@@ -1,24 +1,16 @@
 "use strict";
 var Board = require('../board.js');
 var Point = require('../point.js');
-var DrawLib = require('../drawLib.js');
 var LessonNode = require('../lessonNode.js');
 
-var painter;
+var boardArray;
+var activeBoardIndex;
+var currentPhase;
 
-//position data, lessNode data
-var activeBoard;
-
-function boardPhase(pBoard){
-    painter = new DrawLib();
+function boardPhase(){
+    currentPhase = 2;
     
-    activeBoard = pBoard;
-    
-    var testLessonNodeArray = [];
-    
-    for(var i = 0; i < ActiveJSON.length; i++){
-        testLessonNodeArray.push(new LessonNode(new Point(i * 100, i * 75), "images/dog.png"));
-    }
+    //initialize boards
     
 }	
 

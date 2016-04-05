@@ -4,52 +4,34 @@ var Point = require('./point.js');
 var DrawLib = require('./drawLib.js');
 var LessonNode = require('./lessonNode.js');
 var Utilities = require('./utilities.js');
-var ActiveJSON = require('../../data/lessons.json');
+var boardPhase = require('./phases/boardPhase.js');
 
 var GAME_PHASE = Object.freeze({LANDING: 0, SELECTION: 1, BOARD: 2});
 
-//var painter;
+var drawLib;
 var utility;
 var currentPhase;
 
+//mouse management
 var mouseState;
 var previousMouseState;
 var draggingDisabled;
 var mouseTarget;
 var mouseSustainedDown;
 
-var tempJSONContainer;
+//phase handling
+var phaseObject;
 
 
 
-function game(){
-    loadJSON("https://atlas-backend.herokuapp.com/repos");
-    
-    //painter = new DrawLib();
-    utility = new Utilities();
+function game(pUltility, pDrawLib){
+    utility = pUltility;
+    drawLib = pDrawLib;
     currentPhase = GAME_PHASE.BOARD;
+    phaseObject = new boardPhase();
     
     draggingDisabled = false;
     mouseSustainedDown = false;
-    
-    var testLessonNodeArray = [];
-    
-    for(var i = 0; i < ActiveJSON.length; i++){
-        testLessonNodeArray.push(new LessonNode(new Point(i * 100, i * 75), "images/dog.png"));
-    }
-    
-    //board = new Board(new Point(0,0), testLessonNodeArray);
-}	
-
-function loadJSON(pFilePath){
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function(){
-        var tempJSONContainer = JSON.parse(xhr.responseText);
-    }
-
-    xhr.open('GET', pFilePath, true);
-    xhr.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2010 00:00:00 GM0T");
-    xhr.send();
 }
 
 var p = game.prototype;
@@ -61,15 +43,14 @@ p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
     if(typeof previousMouseState === 'undefined'){
         previousMouseState = mouseState;
     }
-    
-    
-    if(currentPhase == GAME_PHASE.BOARD){
-        //update active board object
-    }
     //update stuff
     p.act();
     //draw stuff
     p.draw(ctx, canvas, center, activeHeight);
+    
+    phaseObject.update();
+    
+    
 }
 
 p.act = function(){
@@ -81,7 +62,7 @@ p.act = function(){
             mouseTarget = targetLessonNode;
             break;
         }
-    }*/
+    }
     
     //if the element that the mouse is hovering over is NOT the canvas
     if(mouseTarget != 0){
@@ -110,6 +91,7 @@ p.act = function(){
     if(mouseState.mouseDown == true && draggingDisabled == false){
         board.move(previousMouseState.position.x - mouseState.position.x, previousMouseState.position.y - mouseState.position.y);
     }
+    */
     
     
     
@@ -121,13 +103,10 @@ p.act = function(){
 p.draw = function(ctx, canvas, center, activeHeight){
     //draw board
     ctx.save();
-    //painter.clear(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-    //painter.rect(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight, "white");
-    //painter.line(ctx, canvas.offsetWidth/2, center.y - activeHeight/2, canvas.offsetWidth/2, canvas.offsetHeight, 2, "lightgray");
-    //painter.line(ctx, 0, center.y, canvas.offsetWidth, center.y, 2, "lightGray");
-    
-    //drawing lesson nodes
-    //board.draw(ctx, center, activeHeight);
+    drawLib.clear(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    drawLib.rect(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight, "white");
+    drawLib.line(ctx, canvas.offsetWidth/2, center.y - activeHeight/2, canvas.offsetWidth/2, canvas.offsetHeight, 2, "lightgray");
+    drawLib.line(ctx, 0, center.y, canvas.offsetWidth, center.y, 2, "lightGray");
     
     ctx.restore();
 }

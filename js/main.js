@@ -3,11 +3,15 @@
 var Game = require('./modules/game.js');
 var Point = require('./modules/point.js');
 var MouseState = require('./modules/mouseState.js');
+var Utility = require('./modules/utilities.js');
+var DrawLib = require('./modules/drawLib.js');
 
 //game objects
 var game;
 var canvas;
 var ctx;
+var utility;
+var drawLib;
 
 //responsiveness
 var header;
@@ -20,6 +24,8 @@ var relativeMousePosition;
 var mouseDown;
 var mouseIn;
 
+//persistent utilities
+
 //fires when the window loads
 window.onload = function(e){
     initializeVariables();
@@ -30,6 +36,8 @@ window.onload = function(e){
 function initializeVariables(){
     canvas = document.querySelector('canvas');
     ctx = canvas.getContext('2d');
+    utility = new Utility();
+    drawLib = new DrawLib();
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     console.log("Canvas Dimensions: " + canvas.width + ", " + canvas.height);
@@ -63,7 +71,7 @@ function initializeVariables(){
         mouseDown = false;
     });
     
-    game = new Game();
+    game = new Game(utility, drawLib);
 }
 
 //fires once per frame
