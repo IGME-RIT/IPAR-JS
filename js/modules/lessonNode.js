@@ -15,7 +15,7 @@ function lessonNode(startPosition, imagePath){
         this.image = tempImage;
     }
     catch (e) {
-        tempImage.src = "images/dog.png";
+        tempImage.src = "./images/dog.png";
         this.image = tempImage;
     }
     this.width = this.image.naturalWidth;

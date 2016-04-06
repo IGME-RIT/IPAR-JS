@@ -54,9 +54,7 @@ p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
     p.draw(ctx, canvas, center, activeHeight);
     
     //update the active phase object
-    phaseObject.update();
-    
-    
+    phaseObject.update(ctx, canvas, dt, center, activeHeight, pMouseState);
 }
 
 p.act = function(){
@@ -118,7 +116,6 @@ p.draw = function(ctx, canvas, center, activeHeight){
     drawLib.rect(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight, "white");
     drawLib.line(ctx, canvas.offsetWidth/2, center.y - activeHeight/2, canvas.offsetWidth/2, canvas.offsetHeight, 2, "lightgray");
     drawLib.line(ctx, 0, center.y, canvas.offsetWidth, center.y, 2, "lightGray");
-    
     ctx.restore();
 }
 
