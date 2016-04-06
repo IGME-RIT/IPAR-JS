@@ -33,7 +33,7 @@ var p = iparDataParser.prototype;
 p.parser = {};
 
 // creates data structure in case file variable, takes url argument
-p.createCaseFile = function(url) {
+p.createCaseFile = function(url, callback) {
 	//													console.log("loading "+url);
 	// get XML
     var xhr = new XMLHttpRequest();
@@ -42,7 +42,7 @@ p.createCaseFile = function(url) {
     	if (xhr.readyState == 4 && xhr.status == 200) {
     		//											console.log(xhr.response);
     		caseFile = xhr.responseXML;
-    		return caseFile;
+    		callback(caseFile);
     		//											console.log(caseFile.getElementsByTagName("resource")[0].getAttribute("text"));
 		}
     }
@@ -56,10 +56,10 @@ p.getCaseFile = function() {
 }
 
 // get questions
-p.getQuestionsList = function() {
+p.getQuestionsArray = function() {
 	// if there is a case file
 	if (caseFile != null) {
-		return caseFile.getElementsByTagName("question");
+		return caseFile.getElementsByTagName("button");
 	}
 }
 
