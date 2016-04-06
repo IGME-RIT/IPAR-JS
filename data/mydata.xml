@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<case version=".4" ID="Academic Dishonesty Case 28201693949PM" caseName="Academic Dishonesty Case" description="Professor Frank found the project reports from Mike and Laura were very similar. After discussing with them, neither of them admitted ever viewing or copying the report from each other. Professor Frank has to find the evidence to prove that one of them copied the report. He took both students’ lab USB memory devices for investigation. Given the forensic duplication of Mike's USB device, dishonesty Case.001, would you be able to prove or disprove whether Mike had copied Laura's project report?&#xD;&#xA;" conclusion="This case has followed 4-step forensic process and applied basic forensic functions to a simulated real-life investigation.&#xD;&#xA;" password="">
+	<categoryList categoryCount="5">
+		<element>Phase 0 - Your Background</element>
+		<element>Phase 1: Create Image</element>
+		<element>Phase 2: Preserve Image</element>
+		<element>Phase 3: Analyze Image</element>
+		<element>Phase 4: Report</element>
+	</categoryList>
+	<softwareList softwareCount="0" />
+	<resourceList resourceCount="9">
+		<resource type="0" text="What is Evidence" link="(3) WhatIsEvidence.pdf" />
+		<resource type="0" text="Source of Evidence" link="(4) Evidence.pdf" />
+		<resource type="0" text="Write Blocker" link="(4) write_blocker.pdf" />
+		<resource type="0" text="FTK Imager User Guide" link="(3) FTK Imager User Guide.pdf" />
+		<resource type="0" text="Preserve Evidence" link="(4) Preserve Evidence.pdf" />
+		<resource type="1" text="Web Link: Autopsy 3 User Guide" link="http://sleuthkit.org/autopsy/docs/user-docs/3.1/" />
+		<resource type="0" text="Time Stamps" link="(4) Time-Stamps.pdf" />
+		<resource type="0" text="Bit-Stream Copy" link="(1) Bit-stream copy.pdf" />
+		<resource type="1" text="Write Blockers Described in Forensicswiki" link="http://forensicswiki.org/wiki/Write_Blockers" />
+	</resourceList>
+	<category categoryDesignation="0" questionCount="1">
+		<button xPositionPercent="18.8572" yPositionPercent="25.02919" numConnections="0" numAnswers="0" correctAnswer="0" imageLink="assets/images/044 sticky-note-blue.png" revealThreshold="0" questionType="3" resourceCount="0">
+			<questionName>Before we start the game</questionName>
+			<instructions>This game will be more effective if we know about your prior-experience with digital forensic investigation.</instructions>
+			<questionText>How much experience do you have with digital forensic investigation?
+A. I am an experienced digital forensic investigator.
+B. I have used a few digital forensic tools.
+C. I have read digital forensics, but I have never used any forensic tools.
+D. I have no experience with digital forensics</questionText>
+		</button>
+	</category>
+	<category categoryDesignation="1" questionCount="7">
+		<button xPositionPercent="11.85923" yPositionPercent="47.05153" numConnections="1" numAnswers="5" correctAnswer="4" imageLink="assets/images/034 Screen Shot 2015-10-02 at 12.25.43 PM.png" revealThreshold="1" questionType="2" resourceCount="1">
+			<questionName>Evidence Collection</questionName>
+			<instructions>The Digital Forensics process begins with Imaging: the collection of evidence. Read the document provided under resources below before answering the question.</instructions>
+			<questionText>Which of the following is considered "evidence" that may be used in court?</questionText>
+			<answer>data stored in a drive, USB, mobile device, etc</answer>
+			<answer>emails and log files </answer>
+			<answer>data in memory (RAM)</answer>
+			<answer>data in network transmission</answer>
+			<answer>all of the above</answer>
+			<connections>2</connections>
+			<feedback>This is a right answer, but not the best answer</feedback>
+			<feedback>This is a right answer, but not the best answer</feedback>
+			<feedback>This is a right answer, but not the best answer</feedback>
+			<feedback>This is a right answer, but not the best answer</feedback>
+			<feedback>each of these can be sources of evidence</feedback>
+			<resourceIndex>0</resourceIndex>
+		</button>
+		<button xPositionPercent="28.67607" yPositionPercent="47.05437" numConnections="1" numAnswers="0" correctAnswer="0" imageLink="assets/images/039 Screen Shot 2015-10-02 at 12.40.59 PM.png" revealThreshold="1" questionType="3" resourceCount="1">
+			<questionName>Sources of Data</questionName>
+			<instructions>Think about the types of data and where they reside. The previous question gives you some examples of locations where you can look for data. Read the document provided under resources before answering the question.</instructions>
+			<questionText>List possible locations an investigator can glean evidence.</questionText>
+			<connections>3</connections>
+			<resourceIndex>1</resourceIndex>
+		</button>
+		<button xPositionPercent="27.59255" yPositionPercent="9.524753" numConnections="1" numAnswers="2" correctAnswer="1" imageLink="assets/images/035 Screen Shot 2015-10-02 at 12.27.41 PM.png" revealThreshold="1" questionType="2" resourceCount="1">
+			<questionName>Bit-Stream Copy</questionName>
+			<instructions>To acquire a drive image for court-admissible evidence, forensic investigators use bit-image copy to get ever single bit of every byte on a storage device including deleted data.
+
+Read the Bit-Stream Copy document under resources before answering the question.</instructions>
+			<questionText>What is the main difference between bit-stream copy (such as dd) and a common cp?</questionText>
+			<answer>they are the same</answer>
+			<answer>bit stream copy will also copy deleted data</answer>
+			<connections>5</connections>
+			<feedback>Please read the Bit-Stream Copy document in resources to better understand these concepts.</feedback>
+			<feedback></feedback>
+			<resourceIndex>7</resourceIndex>
+		</button>
+		<button xPositionPercent="71.32019" yPositionPercent="10.3566" numConnections="1" numAnswers="5" correctAnswer="3" imageLink="assets/images/037 Screen Shot 2015-10-02 at 12.37.13 PM.png" revealThreshold="1" questionType="2" resourceCount="1">
+			<questionName>FTK Imager</questionName>
+			<instructions>FTK Imager is a popular free tool to create a bit-stream forensic copy.
+Take a look at the FTK Imager manual provided in the resources before answering Q4.</instructions>
+			<questionText>FTK Imager can be used to:</questionText>
+			<answer>acquire an image of evidence data</answer>
+			<answer>convert existing images to other formats</answer>
+			<answer>analyze images</answer>
+			<answer>both A and B</answer>
+			<answer>all of the above</answer>
+			<connections>6</connections>
+			<feedback></feedback>
+			<feedback></feedback>
+			<feedback></feedback>
+			<feedback></feedback>
+			<feedback></feedback>
+			<resourceIndex>3</resourceIndex>
+		</button>
+		<button xPositionPercent="45.73767" yPositionPercent="33.16034" numConnections="1" numAnswers="2" correctAnswer="1" imageLink="assets/images/036 Screen Shot 2015-10-02 at 12.31.43 PM.png" revealThreshold="1" questionType="2" resourceCount="2">
+			<questionName>Write-Blocker</questionName>
+			<instructions>When using FTK Imager to create a forensic image of a suspect's hard drive, a hardware device called write-blocker should be used. This prevents the operating system from accidentally altering the drive (data or meta-data on the drive) when it is attached to your computer. Refer the document provided under resources. </instructions>
+			<questionText>When one uses FTK Imager to acquire an image from a hard drive, FTK Imager will not modify any data even without using a write-blocker device.</questionText>
+			<answer>true</answer>
+			<answer>false</answer>
+			<connections>4</connections>
+			<feedback></feedback>
+			<feedback></feedback>
+			<resourceIndex>2</resourceIndex>
+			<resourceIndex>8</resourceIndex>
+		</button>
+		<button xPositionPercent="71.00058" yPositionPercent="51.47387" numConnections="0" numAnswers="0" correctAnswer="0" imageLink="assets/images/037 Screen Shot 2015-10-02 at 12.37.13 PM.png" revealThreshold="1" questionType="4" resourceCount="1">
+			<questionName>Creating an Image</questionName>
+			<instructions>Use FTK imager to create a forensic duplication of a USB device assuming the USB device is connected via a write-blocker.
+1) Plug in a USB drive.
+2) Launch FTK Imager from the Toolbox folder on the desktop.
+3) Choose File &gt; Create Disk Image.
+4) Choose physical drive and click next.
+5) Select the USB drive from drop-down and click "Finish".
+6) Click the "Add" button to add to the list of destinations.
+7) Select "Raw (dd)" and click next.
+8) At Evidence Item Information you can enter case information or skip to the next step.
+9) For the image Destination folder, browse to and select the desktop.
+10) Enter your own name for "Image Filename".
+11) Uncheck the 'use AD Encryption' box.
+12) Click "Finish" to return to the Create Image menu and press Start to create the image.
+
+When this process is finished, two new files should appear on your desktop.
+One is the image file itself and has the file extension ".001", and the other is a hash file with a ".txt" extension.</instructions>
+			<questionText>Submit the hash file.</questionText>
+			<resourceIndex>3</resourceIndex>
+		</button>
+		<button xPositionPercent="4.429182" yPositionPercent="6.579138" numConnections="1" numAnswers="0" correctAnswer="0" imageLink="assets/images/042 yellow-envelope.png" revealThreshold="0" questionType="5" resourceCount="0">
+			<questionName>The Boss</questionName>
+			<instructions>Your Task</instructions>
+			<questionText>Dear Detective,
+
+As you know, digital forensics involves four steps: 
+1. Create a forensic image of an evidence, 2. Preserve the evidence making sure that no one has changed the image, 3. Analyze the image to find pertinent evidence to either support or dispel the charge, 4. Report your conclusion along with supporting evidence.
+
+For this case, we first want to test your capability of creating an image. After you pass this test, you will be given an already acquired image for the Dishonesty case. Your job is to verify that the image has not been changed, then analyze the image and submit a report to provide your opinion on this case.
+
+Good Luck,
+Boss
+</questionText>
+			<connections>1</connections>
+		</button>
+	</category>
+	<category categoryDesignation="2" questionCount="1">
+		<button xPositionPercent="35.2183" yPositionPercent="26.1727" numConnections="0" numAnswers="5" correctAnswer="0" imageLink="assets/images/032 preserve.png" revealThreshold="0" questionType="1" resourceCount="1">
+			<questionName>Verify that the evidence image has not been modified.</questionName>
+			<instructions>The evidence is considered void and is not admissible in the court if it has been modified during the investigation. Therefore, it is important to verify its integrity.
+To verify the given evidence has not been modified, we want to make sure that both md5 and sha1 values (the fingerprints of the evidence) are unchanged.  Read "Preserve Evidence" document provided under resources.
+
+Verify the integrity of provided evidence image:
+
+1) Run FTK Imager and load the Dishonesty Case.001 image file that was provided to you into FTK Imager by selecting File &gt; Add Evidence Item.
+2) Choose "Image File" and click next. 
+3) Browse for the Dishonesty Case.001 image file and click "Finish".
+4) Select File &gt; Verify Drive/Image. A window containing hash numbers should now be visible.
+   
+In this case, when the Dishonesty Case.001 image were created, these were the sequences that this method produced:
+MD5  :    a685e69aeb3b3f91bb8946c6c97eac34
+SHA1 :    699f1de53fb5989ff71818aff16207645de1643a
+
+Compare these sequences with those returned by the program.</instructions>
+			<questionText>How do you verify your copy is valid? Justify your answer.</questionText>
+			<answer>md5 of the image = provided md5, and sha1 of the image = provided sha1</answer>
+			<answer>md5 of the copy = provided md5</answer>
+			<answer>sha1 of the copy = provided sha1</answer>
+			<answer>they are always the same</answer>
+			<answer>A, B and C</answer>
+			<feedback>check all options</feedback>
+			<feedback>What if md5 collision happies?</feedback>
+			<feedback>What if sha1 collision happies?</feedback>
+			<feedback>Really? Why we need to preserve evidence?</feedback>
+			<feedback>Choice B and choice C alone will not serve the purpose due to collision.</feedback>
+			<resourceIndex>4</resourceIndex>
+		</button>
+	</category>
+	<category categoryDesignation="3" questionCount="14">
+		<button xPositionPercent="0.2645342" yPositionPercent="1.141037" numConnections="1" numAnswers="0" correctAnswer="0" imageLink="assets/images/043 yellow-envelop-text.png" revealThreshold="0" questionType="5" resourceCount="0">
+			<questionName>The Boss</questionName>
+			<instructions>Forensic Analysis Tools</instructions>
+			<questionText>Congratulations, Detective! You have passed the Create-image and Preserve phases. Now you move on to the analysis phase!
+
+We have created a forensic image called Dishonesty Case.001 located in Desktop\Cases\ folder. Your job is to used forensics tools to analyze this image and provide a report on your findings.
+
+There are many forensic analysis tools available.
+EnCase from Guidance Software, Forensic Toolkit (FTK) from AccessData, and open source tool Autopsy/Sleuthkit are among the most popular forensic tools used in forensics investigation. In this exercise, you will use Autopsy for your analysis.
+
+Good Luck!</questionText>
+			<connections>2</connections>
+		</button>
+		<button xPositionPercent="19.26982" yPositionPercent="0.9280009" numConnections="1" numAnswers="0" correctAnswer="0" imageLink="assets/images/026 create case3.png" revealThreshold="1" questionType="5" resourceCount="0">
+			<questionName>The Boss</questionName>
+			<instructions>Action 1: Creating a case</instructions>
+			<questionText>Launch Autopsy from the Toolbox folder on the desktop.
+   
+1) Select &gt; Create new case
+2) Name the case as 'Dishonesty Case'.
+3) Use the default Base Directory (Desktop) where Autopsy will store the Case data in Desktop\Dishonesty Case. 
+4) Enter the Case Number  as 1 and enter your name as Examiner.
+5) Click Finish. You will see "Add Data Source" window. Move on to next message for further instructions.
+
+******************
+Note: Once you have the case created, you can reopen it at any time in Autopsy using "Open Existing Case", then choose Desktop\Dishonesty Case\Dishonesty Case.aut file.</questionText>
+			<connections>3</connections>
+		</button>
+		<button xPositionPercent="0.5967944" yPositionPercent="19.88816" numConnections="1" numAnswers="0" correctAnswer="0" imageLink="assets/images/041 Screen Shot 2015-10-06 at 2.58.37 PM.png" revealThreshold="1" questionType="5" resourceCount="0">
+			<questionName>The Boss</questionName>
+			<instructions>Action 2: Add Data Source (Image) and Select time zone</instructions>
+			<questionText>1). Select source type to add: Image File
+
+2) Browse for an image file: browse and choose "Desktop\Cases\Dishonesty Case.001" file.  
+
+2). Selecting Time Zone:
+When you acquire a computer as evidence it is important to make note of the computer's time and time zone, especially if you need to correlate evidence from different time zones (never assume the time or time zone on a computer is correct).
+Select you local time zone and click next. You will see Ingest (processing) modules window.</questionText>
+			<connections>4</connections>
+		</button>
+		<button xPositionPercent="43.79063" yPositionPercent="6.99952" numConnections="6" numAnswers="0" correctAnswer="0" imageLink="assets/images/033 Screen Shot 2015-10-02 at 12.21.59 PM.png" revealThreshold="1" questionType="5" resourceCount="0">
+			<questionName>The Boss</questionName>
+			<instructions>Action 3: Select the Ingest Modules</instructions>
+			<questionText>Ingest modules analyze the data in a data source. They perform all of the analysis of the files and parse their contents. Leave all modules checked, click next and then click finish.
+You will see "Analyzing files from Dishonesty Case.001" status at the lower right corner of the Autopsy Screen.</questionText>
+			<connections>6</connections>
+			<connections>10</connections>
+			<connections>12</connections>
+			<connections>13</connections>
+			<connections>8</connections>
+			<connections>14</connections>
+		</button>
+		<button xPositionPercent="29.43014" yPositionPercent="63.28822" numConnections="1" numAnswers="0" correctAnswer="0" imageLink="assets/images/030 overview.png" revealThreshold="1" questionType="3" resourceCount="1">
+			<questionName>Deleted Files</questionName>
+			<instructions>Refer the Autopsy User Guide web link provided under resources.
+The "Views" explorer on the left side will display the files based on their categories such as image, video, audio, documents, deleted files etc and their counts in parenthesis. </instructions>
+			<questionText>Select 'Views' &gt;'Deleted Files' to see all deleted files. How many deleted files and graphics files have been identified?
+</questionText>
+			<connections>11</connections>
+			<resourceIndex>5</resourceIndex>
+		</button>
+		<button xPositionPercent="7.109097" yPositionPercent="47.68925" numConnections="1" numAnswers="3" correctAnswer="1" imageLink="assets/images/014 search.png" revealThreshold="1" questionType="2" resourceCount="1">
+			<questionName>Exploring Image Contents</questionName>
+			<instructions>The Tree Viewer, located on the left side of the Autopsy screen, shows the discovered folders by the data sources they come from, as well as a list of files in the folders. The number in parenthesis indicates the number of items are contained in the folder. 
+Refer the Autopsy User Guide link provided under resources.
+</instructions>
+			<questionText>Explore the "Data Sources" tree on the left side of the Autopsy screen and expand vol2. When you select a directory in the tree, the files in that directory are showed in the Result Viewer on the right of the Autopsy screen. It shows lists of files and their corresponding attributes such as time, path, size, checksum, etc.
+
+Where is "Windows_Memory_Analysis Lab.rtf" located?</questionText>
+			<answer>could not be found</answer>
+			<answer>in Forensics Labs and Projects folder</answer>
+			<answer>in Lab and Project Assignments folder</answer>
+			<connections>7</connections>
+			<feedback>Autopsy's explorer is similar to Windows. Click on each + or directory to expand the folder.</feedback>
+			<feedback>You are right!</feedback>
+			<feedback>check again</feedback>
+			<resourceIndex>5</resourceIndex>
+		</button>
+		<button xPositionPercent="17.14335" yPositionPercent="61.74958" numConnections="2" numAnswers="3" correctAnswer="1" imageLink="assets/images/015 question.png" revealThreshold="1" questionType="2" resourceCount="0">
+			<questionName>Locating Evidence</questionName>
+			<instructions>The Result Viewer is located on the top right of the Autopsy screen. It shows lists of files and their corresponding attributes such as time, path, size, checksum, etc. Explore the contents in the tree on the left side to answer this question.</instructions>
+			<questionText>Mike Lewis's lab report for the Windows Memory Analysis Lab is called __________?</questionText>
+			<answer>cannot be found</answer>
+			<answer>Mike Lewis Windows Memory Analysis.rtf</answer>
+			<answer>Mike Unix Forensics Lab Report.rtf</answer>
+			<connections>9</connections>
+			<connections>14</connections>
+			<feedback>check again</feedback>
+			<feedback></feedback>
+			<feedback>That is not the name of the file that is being tested for.</feedback>
+		</button>
+		<button xPositionPercent="37.61203" yPositionPercent="40.67295" numConnections="4" numAnswers="3" correctAnswer="1" imageLink="assets/images/016 deleted.png" revealThreshold="1" questionType="2" resourceCount="0">
+			<questionName>Recognizing Deleted Files</questionName>
+			<instructions>Click on the 'Dishonesty.case.001' in left pane and explore its volume(s).</instructions>
+			<questionText>In the Forensics Labs and Projects folder, do you see any deleted files (with a red x on the file icon)?</questionText>
+			<answer>none can be found in this folder</answer>
+			<answer>Laura Smith Windows Memory Analysis.rtf &amp; Image1_Laura</answer>
+			<answer>Windows_Memory_Analysis Lab.rtf &amp; Image1_Laura</answer>
+			<connections>9</connections>
+			<connections>14</connections>
+			<connections>11</connections>
+			<connections>5</connections>
+			<feedback>check again</feedback>
+			<feedback>Correct.!!</feedback>
+			<feedback></feedback>
+		</button>
+		<button xPositionPercent="66.34869" yPositionPercent="44.60049" numConnections="0" numAnswers="4" correctAnswer="0" imageLink="assets/images/019 mod time.png" revealThreshold="2" questionType="2" resourceCount="1">
+			<questionName>Comparing Mod Time</questionName>
+			<instructions>Explore the 'Dishonesty.case.001' tree in left side and select the folder "Forensics Labs and Projects".
+  
+All the files contained in this folder and their corresponding attributes will be displayed in the Result Viewer on the right side. Information in the Modified Time column details when the file was last modified. Read the document provided under resources.</instructions>
+			<questionText>Even if you find Laura Smith's lab report on Mike's USB image, it could be possible that Mike had first prepared his report and did not copy from Laura's report. To confirm which file was created or modified first, you need to compare the time stamps associated with the files. 
+
+When was the last time that "Laura Smith Windows Memory Analysis.rtf" was modified?</questionText>
+			<answer>2015-10-12 19:43:30 EDT</answer>
+			<answer>2015-10-12 19:59:50 EDT</answer>
+			<answer>2015-10-11 00:00:00 EDT</answer>
+			<answer>cannot be determined</answer>
+			<feedback></feedback>
+			<feedback>Check the filename of this entry.</feedback>
+			<feedback>Check again</feedback>
+			<feedback>Yes it can be, refer to the Mod Date column.</feedback>
+			<resourceIndex>6</resourceIndex>
+		</button>
+		<button xPositionPercent="87.15347" yPositionPercent="52.55861" numConnections="0" numAnswers="0" correctAnswer="0" imageLink="assets/images/020 read.png" revealThreshold="1" questionType="3" resourceCount="0">
+			<questionName>Comparing Contents</questionName>
+			<instructions>The Content Viewer lives in the lower right-hand side of the Autopsy main screen and show pictures, video, hex, text, extracted strings, metadata, etc. They are enabled when you select a file in the file list above it.
+
+The Content Viewer is context-aware, meaning it will present different views of the content based on the type of file selected. For example, a .JPG would show up as a picture, a text file would show up as text, and a .bin file would show up as hex output.
+</instructions>
+			<questionText>Select the folder "Forensics Labs and Projects", what differences are there in the contents of "Mike Lewis Windows Memory Analysis.rtf" and "Laura Smith Windows Memory Analysis.rtf" files ?</questionText>
+		</button>
+		<button xPositionPercent="42.88955" yPositionPercent="81.77549" numConnections="0" numAnswers="0" correctAnswer="0" imageLink="assets/images/021 graphics.png" revealThreshold="2" questionType="3" resourceCount="0">
+			<questionName>Viewing Graphical Data</questionName>
+			<instructions>The "Views" explorer on the left side will display the files based on their categories such as image, video, audio, documents, deleted files etc and their counts in parenthesis.</instructions>
+			<questionText>Do you see any image that was deleted from 'Forensics Labs and Projects' folder ? (Notice the 'Location' column in the viewer on the right.)</questionText>
+		</button>
+		<button xPositionPercent="80.91824" yPositionPercent="24.94336" numConnections="0" numAnswers="0" correctAnswer="0" imageLink="assets/images/029 analyze.png" revealThreshold="1" questionType="3" resourceCount="1">
+			<questionName>Running a search</questionName>
+			<instructions>Click on "Keyword Search" tab at the upper right corner of the Autopsy screen and type"Laura" in the Search field. Choose "Exact Match" or "Substring Match" and Click Search.
+The results will be showed in Result Viewer. Refer the Autopsy user guide web-link provided under resources for detailed information.</instructions>
+			<questionText>From the search results, list findings that support your investigation.</questionText>
+			<resourceIndex>5</resourceIndex>
+		</button>
+		<button xPositionPercent="74.7047" yPositionPercent="3.647434" numConnections="0" numAnswers="0" correctAnswer="0" imageLink="assets/images/023 more evidence.png" revealThreshold="1" questionType="3" resourceCount="0">
+			<questionName>More Evidence</questionName>
+			<instructions>Explore all available options such as Data Sources, Views, Results etc on the left side.</instructions>
+			<questionText>Is there any evidence to suggest that Mike looked at Laura's work for more than this one assignment?</questionText>
+		</button>
+		<button xPositionPercent="69.46838" yPositionPercent="74.03114" numConnections="0" numAnswers="4" correctAnswer="3" imageLink="assets/images/028 submit report.png" revealThreshold="3" questionType="2" resourceCount="1">
+			<questionName>Determining Time of Modification</questionName>
+			<instructions>Explore the 'dishonesty.case.001' tree in left side and select the folder "Forensics Labs and Projects".
+  
+All the files contained in this folder and their corresponding attributes will be displayed in the Result Viewer on the right side. Information in the Modified Time column details when the file was last modified. Read the document provided under resources.</instructions>
+			<questionText>When was the last time that "Mike Lewis Windows Memory Analysis.rtf" was modified?</questionText>
+			<answer>2015-06-25 21:45:46 EDT</answer>
+			<answer>2015-10-12 19:59:50 EDT</answer>
+			<answer>2015-5-12 1:43:16 EDT</answer>
+			<answer>2015-10-15 17:58:22 EDT</answer>
+			<feedback>Check again</feedback>
+			<feedback>Check the file name for this file</feedback>
+			<feedback>Check again</feedback>
+			<feedback></feedback>
+			<resourceIndex>6</resourceIndex>
+		</button>
+	</category>
+	<category categoryDesignation="4" questionCount="1">
+		<button xPositionPercent="40.80027" yPositionPercent="27.45092" numConnections="0" numAnswers="0" correctAnswer="0" imageLink="assets/images/038 Screen Shot 2015-10-02 at 12.39.16 PM.png" revealThreshold="0" questionType="4" resourceCount="0">
+			<questionName>Submitting a Report</questionName>
+			<instructions>Write a report in which you will prove or disprove Lewis’ story by presenting relevant evidence. The procedure/tools used for the investigation are also expected to be included as part of this report.
+
+Use a word processor to write the report and submit the file here as a .docx or .pdf</instructions>
+			<questionText>Your report should include the following information:
+1. Executive summary of your investigation (prove or disprove the claim)
+2. Briefly describe four steps of digital forensics process 
+3. List of the evidences that support your conclusion
+4. Conclusion</questionText>
+		</button>
+	</category>
+</case>

@@ -5,6 +5,7 @@ var DrawLib = require('./drawLib.js');
 var LessonNode = require('./lessonNode.js');
 var Utilities = require('./utilities.js');
 var boardPhase = require('./phases/boardPhase.js');
+var iparDataParser = require('./iparDataParser.js');
 
 //"enumeration"
 var currentPhase;
@@ -12,6 +13,9 @@ var currentPhase;
 //utilities
 var drawLib;
 var utility;
+
+// file management
+var iparParser;
 
 //mouse management
 var mouseState;
@@ -24,10 +28,16 @@ var mouseSustainedDown;
 var phaseObject;
 
 
-function game(pUltility, pDrawLib){
-    utility = pUltility;
+function game(pUtility, pDrawLib){
+    utility = pUtility;
     drawLib = pDrawLib;
     currentPhase = 2;
+    
+    // create the parser
+    iparParser = new iparDataParser();
+    // turn demo file into structure
+    iparParser.createCaseFile("../data/mydata.xml");
+    
     phaseObject = new boardPhase();
     
     draggingDisabled = false;
