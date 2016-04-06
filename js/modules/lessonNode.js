@@ -10,14 +10,9 @@ function lessonNode(startPosition, imagePath){
     
     //image loading and resizing
     var tempImage = new Image();
-    try{
-        tempImage.src = imagePath;
-        this.image = tempImage;
-    }
-    catch (e) {
-        tempImage.src = "./images/dog.png";
-        this.image = tempImage;
-    }
+    tempImage.src = imagePath;
+    this.image = tempImage;
+    
     this.width = this.image.naturalWidth;
     this.height = this.image.naturalHeight;
     var maxDimension = 100;
