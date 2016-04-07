@@ -1,5 +1,7 @@
 "use strict"
 
+var Question = require("./question.js");
+
 // Parses the xml case files
 // ----------------------------
 // known tags
@@ -55,12 +57,59 @@ p.getCaseFile = function() {
 	return caseFile;
 }
 
-// get questions
+// takes the xml structure and fills in the data for the question object
 p.getQuestionsArray = function() {
 	// if there is a case file
 	if (caseFile != null) {
-		return caseFile.getElementsByTagName("button");
+		// buttons are the top-level element for the questions
+		var questionElements = caseFile.getElementsByTagName("button");
+		var questions = [];
+		// create questions
+		for (var i=0; i<questionElements.length; i++) 
+		{
+			// fill question
+			
+			// create a question object
+			questions[i] = new Question();
+			
+			// correct answer number
+			questions[i].correctAnswer = questionElements[i].getAttribute("correctAnswer");
+			
+			// question text
+			questions[i].questionText = questionElements[i].getElementsByTagName("questionText")[0].textContent;
+			
+			// get an array of answers
+			var answers = questionElements[i].getElementsByTagName("answer");
+			// initialize question's answerText property
+			questions[i].answerText = [];
+			// loop through and add answer's textContent
+			for (var j=0; j<answers.length; j++) {
+				questions[i].answerText.push(answers[j].textContent);
+			}
+			
+			// get an array of feedback
+			var feedback = questionElements[i].getElementsByTagName("feedback");
+			// initialize question's feedbackText property
+			questions[i].feedbackText = [];
+			// loop through and add answer's textContent
+			for (var j=0; j<answers.length; j++) {
+				questions[i].feedbackText.push(feedback[j].textContent);
+			}
+			
+			// correct answer number
+			
+			// image link
+			questions[i].imageLink = questionElements[i].getAttribute("imageLink");
+			// alter image link string for new file structure
+			questions[i].imageLink = "./images/"+ ( questions[i].imageLink.replace("assets/images/","") );
+			
+			//console.log("answer text: "+questions[i].answerText);
+			//console.log("Correct answer for question "+(i+1)+": "+questions[i].correctAnswer); debug
+			
+		}
+		return questions;
 	}
+	return null
 }
 
 module.exports = iparDataParser;
