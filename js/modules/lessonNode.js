@@ -11,36 +11,37 @@ function lessonNode(startPosition, imagePath){
     this.scaleFactor = 1;
     this.type = "lessonNode";
     this.image = new Image();
-    this.width = 100;
-    this.height = 100;
+    this.width;
+    this.height;
     
+    var that = this;
     //image loading and resizing
     this.image.onload = function() {
-        //this.width = this.image.naturalWidth;
-        //this.height = this.image.naturalHeight;
+        that.width = that.image.naturalWidth;
+        that.height = that.image.naturalHeight;
         var maxDimension = 100;
         //too small?
-        if(this.width < maxDimension && this.height < maxDimension){
+        if(that.width < maxDimension && that.height < maxDimension){
             var x;
-            if(this.width > this.height){
-                x = maxDimension / this.width;
+            if(that.width > that.height){
+                x = maxDimension / that.width;
             }
             else{
-                x = maxDimension / this.height;
+                x = maxDimension / that.height;
             }
-            this.width = this.width * x;
-            this.height = this.height * x;
+            that.width = that.width * x;
+            that.height = that.height * x;
         }
-        if(this.width > maxDimension || this.height > maxDimension){
+        if(that.width > maxDimension || that.height > maxDimension){
             var x;
-            if(this.width > this.height){
-                x = this.width / maxDimension;
+            if(that.width > that.height){
+                x = that.width / maxDimension;
             }
             else{
-                x = this.height / maxDimension;
+                x = that.height / maxDimension;
             }
-            this.width = this.width / x;
-            this.height = this.height / x;
+            that.width = that.width / x;
+            that.height = that.height / x;
         }
     };
     
@@ -57,8 +58,8 @@ p.draw = function(ctx){
         ctx.shadowColor = 'dodgerBlue';
         ctx.shadowBlur = 20;
     }
-    //ctx.drawImage(this.image, this.position.x - (this.width*this.scaleFactor)/2, this.position.y - (this.height*this.scaleFactor)/2, this.width * this.scaleFactor, this.height * this.scaleFactor)
     drawLib.rect(ctx, this.position.x, this.position.y, this.width, this.height, "blue", true);
+    ctx.drawImage(this.image, this.position.x - (this.width*this.scaleFactor)/2, this.position.y - (this.height*this.scaleFactor)/2, this.width * this.scaleFactor, this.height * this.scaleFactor)
     
     
     ctx.restore();

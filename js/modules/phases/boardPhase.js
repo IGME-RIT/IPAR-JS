@@ -47,6 +47,10 @@ function processData(pUrl){
     boardArray = [];
     var lessonNodes = [];
     lessonNodes.push(new LessonNode(new Point(0,0), "./images/dog.png"));
+    lessonNodes.push(new LessonNode(new Point(400,200), "./images/dog.png"));
+    lessonNodes.push(new LessonNode(new Point(-300,100), "./images/goldDog.png"));
+    lessonNodes.push(new LessonNode(new Point(-200,-200), "./images/dog.png"));
+    lessonNodes.push(new LessonNode(new Point(300,-200), "./images/smolDog.png"));
     boardArray.push(new Board(new Point(0,0), lessonNodes));
 }
 
