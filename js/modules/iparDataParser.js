@@ -68,7 +68,24 @@ p.getQuestionsArray = function() {
 		for (var i=0; i<questionElements.length; i++) 
 		{
 			// fill question
-			
+			/* question needs these things:
+			this.index;             //int
+			this.correctAnswer;     //int
+			this.questionText;      //string
+			this.answerText;        //stromg array
+			this.feedbackText;      //string array
+			this.imageLink;         //string
+			this.connections;       //string
+			this.instructions;      //string
+			this.resources;         //resourceItem
+			this.revealThreshold;   //int
+	
+			this.justification;     //string
+			this.fileSubmitCount;   //int
+			this.animated;          //bool
+			this.linesTraced;       //int
+			this.revealBuffer;      //int
+			*/
 			// create a question object
 			questions[i] = new Question();
 			
@@ -96,12 +113,14 @@ p.getQuestionsArray = function() {
 				questions[i].feedbackText.push(feedback[j].textContent);
 			}
 			
-			// correct answer number
-			
 			// image link
 			questions[i].imageLink = questionElements[i].getAttribute("imageLink");
 			// alter image link string for new file structure
-			questions[i].imageLink = "./images/"+ ( questions[i].imageLink.replace("assets/images/","") );
+			questions[i].imageLink = questions[i].imageLink.replace("assets",".").replace("software/","");
+			
+			// connections
+			var connectionsElem = questionElements[i].getElementsByTagName("connections")[0];
+			if (connectionsElem) questions[i].connections = connectionsElem.textContent;
 			
 			//console.log("answer text: "+questions[i].answerText);
 			//console.log("Correct answer for question "+(i+1)+": "+questions[i].correctAnswer); debug
