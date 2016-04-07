@@ -9,10 +9,15 @@ p.clear = function(ctx, x, y, w, h) {
     ctx.clearRect(x, y, w, h);
 }
 
-p.rect = function(ctx, x, y, w, h, col) {
+p.rect = function(ctx, x, y, w, h, col, centerOrigin) {
     ctx.save();
     ctx.fillStyle = col;
-    ctx.fillRect(x, y, w, h);
+    if(centerOrigin){
+        ctx.fillRect(x - (w / 2), y - (h / 2), w, h);
+    }
+    else{
+        ctx.fillRect(x, y, w, h);
+    }
     ctx.restore();
 }
 
