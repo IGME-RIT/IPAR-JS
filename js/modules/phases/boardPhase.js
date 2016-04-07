@@ -64,7 +64,7 @@ p.act = function(){
 p.draw = function(ctx, canvas, center, activeHeight){
     for(var i = 0; i < boardArray.length; i++){
         for(var k = 0; k < boardArray[i].lessonNodeArray.length; k++){
-            boardArray[i].lessonNodeArray[k].draw(ctx);
+            boardArray[i].draw(ctx, center, activeHeight);
         }
     }
 }
