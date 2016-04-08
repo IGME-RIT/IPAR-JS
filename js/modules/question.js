@@ -5,6 +5,7 @@ function question(){
     this.index;             //int
     this.correctAnswer;     //int
     this.questionText;      //string
+    this.questionType		//int			<- from xml
     this.answerText;        //stromg array
     this.feedbackText;      //string array
     this.imageLink;         //string

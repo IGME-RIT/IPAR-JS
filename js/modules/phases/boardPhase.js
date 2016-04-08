@@ -16,11 +16,10 @@ var iparParser;
 function boardPhase(pUrl, pName){
     this.currentPhase = 2;
     this.name = pName;
-    
     processData(pUrl);
 
     //initialize boards
-    
+    activeBoardIndex = 0;
 }	
 
 
@@ -60,10 +59,10 @@ function createLessonNodesFromQuestions(questions) {
     // add a node per question
 	for (var i=0; i<questions.length; i++) {
 		// create a new lesson node
-		lessonNodes.push(new LessonNode(new Point(5*i-200,5*i-200), questions[i].imageLink ) );
+		lessonNodes.push(new LessonNode(new Point(15*i-200,15*i-200), questions[i].imageLink ) );
 		// attach question object to lesson node
 		lessonNodes[lessonNodes.length-1].question = questions[i];
-		console.log("image: "+lessonNodes[lessonNodes.length-1].image.getAttribute("src"));
+		//console.log("image: "+lessonNodes[lessonNodes.length-1].image.getAttribute("src"));
 		
 	}
 	// create a board
@@ -76,6 +75,20 @@ var p = boardPhase.prototype;
 p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
     p.act();
     p.draw(ctx, canvas, center, activeHeight);
+    
+    // hover states
+    for(var i = 0; i < boardArray.length; i++){
+		boardArray[i].lessonNodeArray.forEach(function(lNode) {
+			// if hovering, reduce opacity
+			if (pMouseState.position.x > lNode.x-lNode.width/2 
+			&& pMouseState.position.x < lNode.x+lNode.width
+			&& pMouseState.position.y > lNode.y-lNode.height/2
+			&& pMouseState.position.y < lNode.y+lNode.height) {
+				lNode.mouseOver = true;
+				console.log("mouse over");
+			}
+		});
+    }
 }
 
 p.act = function(){

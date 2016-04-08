@@ -69,28 +69,35 @@ p.getQuestionsArray = function() {
 		{
 			// fill question
 			/* question needs these things:
-			this.index;             //int
-			this.correctAnswer;     //int
-			this.questionText;      //string
-			this.answerText;        //stromg array
-			this.feedbackText;      //string array
-			this.imageLink;         //string
-			this.connections;       //string
-			this.instructions;      //string
-			this.resources;         //resourceItem
-			this.revealThreshold;   //int
+			index;             //int
+			correctAnswer;     //int
+			questionText;      //string
+			questionType	   //int
+			answerText;        //string array
+			feedbackText;      //string array
+			imageLink;         //string
+			connections;       //string
+			instructions;      //string
+			resources;         //resourceItem
+			revealThreshold;   //int
 	
-			this.justification;     //string
-			this.fileSubmitCount;   //int
-			this.animated;          //bool
-			this.linesTraced;       //int
-			this.revealBuffer;      //int
+			justification;     //string
+			fileSubmitCount;   //int
+			animated;          //bool
+			linesTraced;       //int
+			revealBuffer;      //int
 			*/
 			// create a question object
 			questions[i] = new Question();
 			
+			// index (may not exhibit expected behavior)
+			questions[i].index = i;
+			
 			// correct answer number
 			questions[i].correctAnswer = questionElements[i].getAttribute("correctAnswer");
+			
+			// correct answer number
+			questions[i].questionType = questionElements[i].getAttribute("questionType");
 			
 			// question text
 			questions[i].questionText = questionElements[i].getElementsByTagName("questionText")[0].textContent;
@@ -108,8 +115,8 @@ p.getQuestionsArray = function() {
 			var feedback = questionElements[i].getElementsByTagName("feedback");
 			// initialize question's feedbackText property
 			questions[i].feedbackText = [];
-			// loop through and add answer's textContent
-			for (var j=0; j<answers.length; j++) {
+			// loop through and add feedback's textContent
+			for (var j=0; j<feedback.length; j++) {
 				questions[i].feedbackText.push(feedback[j].textContent);
 			}
 			
@@ -122,8 +129,34 @@ p.getQuestionsArray = function() {
 			var connectionsElem = questionElements[i].getElementsByTagName("connections")[0];
 			if (connectionsElem) questions[i].connections = connectionsElem.textContent;
 			
+			// instructions
+			questions[i].instructions = questionElements[i].getElementsByTagName("instructions")[0].textContent;
+			
+			// get an array of resources
+			var resources = questionElements[i].getElementsByTagName("resource");
+			// initialize question's resources property
+			questions[i].resources = [];
+			// loop through and add resources's textContent
+			for (var j=0; j<resources.length; j++) {
+				questions[i].resources.push(resources[j].textContent);
+			}
+			
+			// reveal threshold
+			questions[i].revealThreshold = questionElements[i].getAttribute("revealThreshold");
+			
+			// justification
+			
+			// fileSubmitCount
+			
+			// animated
+			
+			// linesTraced
+			
+			// revealBuffer
+			
+			// DEBUG
 			//console.log("answer text: "+questions[i].answerText);
-			//console.log("Correct answer for question "+(i+1)+": "+questions[i].correctAnswer); debug
+			//console.log("Correct answer for question "+(i+1)+": "+questions[i].correctAnswer); 
 			
 		}
 		return questions;

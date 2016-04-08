@@ -13,7 +13,6 @@ function lessonNode(startPosition, imagePath){
     this.image = new Image();
     this.width;
     this.height;
-    this.question;
     
     var that = this;
     //image loading and resizing
