@@ -6,6 +6,9 @@ var LessonNode = require('./lessonNode.js');
 var Utilities = require('./utilities.js');
 var boardPhase = require('./phases/boardPhase.js');
 
+// debug line
+var debugLine;
+
 //"enumeration"
 var currentPhase;
 
@@ -28,6 +31,7 @@ function game(pUtility, pDrawLib){
     utility = pUtility;
     drawLib = pDrawLib;
     currentPhase = 2;
+    debugLine = document.querySelector('#debugLine');
     
     phaseObject = new boardPhase("./data/myData.xml");
     
@@ -43,6 +47,7 @@ function phaseChanger(phaseNum){
 var p = game.prototype;
 
 p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
+    // mouse
     previousMouseState = mouseState;
     mouseState = pMouseState;
     mouseTarget = 0;
@@ -50,7 +55,7 @@ p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
         previousMouseState = mouseState;
     }
     //update stuff
-    p.act();
+    p.act(pMouseState, previousMouseState);
     //draw stuff
     p.draw(ctx, canvas, center, activeHeight);
     
@@ -58,11 +63,13 @@ p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
     phaseObject.update(ctx, canvas, dt, center, activeHeight, pMouseState);
 }
 
-p.act = function(){
+p.act = function(pMouseState, previousMouseState){
+
     //if the phase object is different change it
     if(phaseObject.currentPhase != currentPhase){
         phaseChanger(phaseObject.currentPhase);
     }
+    
     
     //collision detection, iterate through each node in the active board
     /*for(var i = 0; i < board.lessonNodeArray.length; i++){
@@ -105,7 +112,7 @@ p.act = function(){
     
     
     
-    document.querySelector('#debugLine').innerHTML = "mousePosition: x = " + mouseState.relativePosition.x + ", y = " + mouseState.relativePosition.y + 
+    debugLine.innerHTML = "mousePosition: x = " + mouseState.relativePosition.x + ", y = " + mouseState.relativePosition.y + 
     "<br>Clicked = " + mouseState.mouseDown + 
     "<br>Over Canvas = " + mouseState.mouseIn;
 }

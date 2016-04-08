@@ -7,7 +7,9 @@ function lessonNode(startPosition, imagePath, pQuestion){
     drawLib = new DrawLib();
     
     this.position = startPosition;
+    this.dragLocation = undefined;
     this.mouseOver = false;
+    this.dragging = false;
     this.scaleFactor = 1;
     this.type = "lessonNode";
     this.image = new Image();
@@ -55,7 +57,11 @@ p.draw = function(ctx){
     //lessonNode.drawLib.circle(ctx, this.position.x, this.position.y, 10, "red");
     //draw the image, shadow if hovered
     ctx.save();
-    if(this.mouseOver){
+    if(this.dragging) {
+    	ctx.shadowColor = 'yellow';
+        ctx.shadowBlur = 5;
+    }
+    else if(this.mouseOver){
         ctx.shadowColor = 'dodgerBlue';
         ctx.shadowBlur = 5;
     }

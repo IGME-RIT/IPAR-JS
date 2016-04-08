@@ -4,6 +4,7 @@ function mouseState(pPosition, pRelativePosition, pMousedown, pMouseIn){
     this.relativePosition = pRelativePosition;
     this.mouseDown = pMousedown;
     this.mouseIn = pMouseIn;
+    this.prevMouseDown = pMousedown;
 }
 
 var p = mouseState.prototype;

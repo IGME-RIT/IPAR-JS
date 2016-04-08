@@ -1,9 +1,10 @@
 "use strict";
 
 //parameter is a point that denotes starting position
-function board(startPosition, lessonNodes){
+function board(startPosition, categories, currentCategory){
     this.position = startPosition;
-    this.lessonNodeArray = lessonNodes;
+    this.categoryArray = categories;
+    this.currentCategory = currentCategory;
 }
 
 board.drawLib = undefined;
@@ -18,11 +19,15 @@ p.move = function(pX, pY){
 
 p.draw = function(ctx, center, activeHeight){
     ctx.save();
+    //console.log("draw board");
     //translate to the center of the screen
     ctx.translate(center.x - this.position.x, center.y - this.position.y);
-    for(var i = 0; i < this.lessonNodeArray.length; i++){
-        this.lessonNodeArray[i].draw(ctx);
-    }
+    //for(var i=0; i<this.categoryArray.length; i++){
+    this.categoryArray[this.currentCategory].lessonNodes.forEach(function (node) {
+        node.draw(ctx);
+        //console.log(node.question.questionText);
+    });
+    //}
     ctx.restore();
 };
 
