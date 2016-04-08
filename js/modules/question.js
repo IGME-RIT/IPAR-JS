@@ -3,6 +3,7 @@
 //parameter is a point that denotes starting position
 function question(){
     this.index;             //int
+    this.categoryIndex;     //int
     this.correctAnswer;     //int
     this.questionText;      //string
     this.questionType		//int			<- from xml

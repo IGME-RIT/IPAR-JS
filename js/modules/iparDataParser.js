@@ -23,46 +23,32 @@ qustionName
 */
 
 // the xml structure that stores the data
-var caseFile;
+var rawData;
 
 // constructor
-function iparDataParser() {
-	this.parser = new DOMParser();
+function iparDataParser(url, callback) {
+    this.categories = [];
+    this.questions = [];
+    
+	// get XML
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        rawData = xhr.responseXML;
+        this.questions = p.getQuestionsArray();
+        callback(this.questions);
+    }
+    xhr.open("GET", url, true);
+    xhr.send();
 }
 
 var p = iparDataParser.prototype;
 
-p.parser = {};
-
-// creates data structure in case file variable, takes url argument
-p.createCaseFile = function(url, callback) {
-	//													console.log("loading "+url);
-	// get XML
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-    	//												console.log("readystate " + xhr.readyState);
-    	if (xhr.readyState == 4 && xhr.status == 200) {
-    		//											console.log(xhr.response);
-    		caseFile = xhr.responseXML;
-    		callback(caseFile);
-    		//											console.log(caseFile.getElementsByTagName("resource")[0].getAttribute("text"));
-		}
-    }
-    xhr.open("GET",url, true);
-    xhr.send();
-}
-
-// getter
-p.getCaseFile = function() {
-	return caseFile;
-}
-
 // takes the xml structure and fills in the data for the question object
 p.getQuestionsArray = function() {
 	// if there is a case file
-	if (caseFile != null) {
+	if (rawData != null) {
 		// buttons are the top-level element for the questions
-		var questionElements = caseFile.getElementsByTagName("button");
+		var questionElements = rawData.getElementsByTagName("button");
 		var questions = [];
 		// create questions
 		for (var i=0; i<questionElements.length; i++) 

@@ -29,7 +29,7 @@ function game(pUtility, pDrawLib){
     drawLib = pDrawLib;
     currentPhase = 2;
     
-    phaseObject = new boardPhase();
+    phaseObject = new boardPhase("./data/myData.xml");
     
     draggingDisabled = false;
     mouseSustainedDown = false;
