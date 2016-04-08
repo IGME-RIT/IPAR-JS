@@ -41,9 +41,9 @@ function createLessonNodesFromQuestions(questions) {
 	// initialize empty
 	var lessonNodes = [];
     // add a node per question
-	for (var i=0; i<questions.length; i++) {
+	for (var i = 0; i < questions.length; i++) {
 		// create a new lesson node
-		lessonNodes.push(new LessonNode(new Point(15*i-200,15*i-200), questions[i].imageLink ) );
+		lessonNodes.push(new LessonNode(new Point(15*i-200,15*i-200), questions[i].imageLink, questions[i] ) );
 		// attach question object to lesson node
 		lessonNodes[lessonNodes.length-1].question = questions[i];
 		//console.log("image: "+lessonNodes[lessonNodes.length-1].image.getAttribute("src"));

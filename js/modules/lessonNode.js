@@ -3,7 +3,7 @@ var DrawLib = require('./drawLib.js');
 
 var drawLib;
 //parameter is a point that denotes starting position
-function lessonNode(startPosition, imagePath){
+function lessonNode(startPosition, imagePath, pQuestion){
     drawLib = new DrawLib();
     
     this.position = startPosition;
@@ -13,6 +13,7 @@ function lessonNode(startPosition, imagePath){
     this.image = new Image();
     this.width;
     this.height;
+    this.question = pQuestion;
     
     var that = this;
     //image loading and resizing
