@@ -78,12 +78,15 @@ p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
     
     // hover states
     for(var i = 0; i < boardArray.length; i++){
+    	
 		boardArray[i].lessonNodeArray.forEach(function(lNode) {
+			//console.log("lnode: " + lNode.position.x);
+			
 			// if hovering, reduce opacity
-			if (pMouseState.position.x > lNode.x-lNode.width/2 
-			&& pMouseState.position.x < lNode.x+lNode.width
-			&& pMouseState.position.y > lNode.y-lNode.height/2
-			&& pMouseState.position.y < lNode.y+lNode.height) {
+			if (pMouseState.position.x > lNode.position.x-lNode.width/2 
+			&& pMouseState.position.x < lNode.position.x+lNode.width/2
+			&& pMouseState.position.y > lNode.position.y-lNode.height/2
+			&& pMouseState.position.y < lNode.position.y+lNode.height/2) {
 				lNode.mouseOver = true;
 				console.log("mouse over");
 			}
