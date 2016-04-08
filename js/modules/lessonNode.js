@@ -57,7 +57,7 @@ p.draw = function(ctx){
     ctx.save();
     if(this.mouseOver){
         ctx.shadowColor = 'dodgerBlue';
-        ctx.shadowBlur = 20;
+        ctx.shadowBlur = 5;
     }
     //drawLib.rect(ctx, this.position.x, this.position.y, this.width, this.height, "blue", true);
     ctx.drawImage(this.image, this.position.x - (this.width*this.scaleFactor)/2, this.position.y - (this.height*this.scaleFactor)/2, this.width * this.scaleFactor, this.height * this.scaleFactor)
