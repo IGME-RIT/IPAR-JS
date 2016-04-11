@@ -82,6 +82,12 @@ p.getCategoriesAndQuestions = function() {
 			
 				// index (may not exhibit expected behavior)
 				questions[i].index = i;
+                
+                //positionPercentX
+                questions[i].positionPercentX = questionElements[i].getAttribute("xPositionPercent")*9;
+                
+                //positionPercentY
+                questions[i].positionPercentY = questionElements[i].getAttribute("yPositionPercent")*8;
 			
 				// correct answer number
 				questions[i].correctAnswer = questionElements[i].getAttribute("correctAnswer");
