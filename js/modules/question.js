@@ -15,6 +15,9 @@ function question(){
     this.resources;         //resourceItem
     this.revealThreshold;   //int
     
+    this.positionPercentX = 50;
+    this.positionPercentY = 50;
+    
     this.justification;     //string
     this.fileSubmitCount;   //int
     this.animated;          //bool
