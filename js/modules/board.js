@@ -20,10 +20,10 @@ p.draw = function(ctx, center, activeHeight){
     ctx.save();
     //translate to the center of the screen
     ctx.translate(center.x - this.position.x, center.y - this.position.y);
-	ctx.strokeStyle = "black";
-	ctx.lineWidth = 5;
-    for(var i = 0; i < this.lessonNodeArray.length; i++){
-        this.lessonNodeArray[i].draw(ctx);
+	ctx.strokeStyle = "rgba(0,0,255,0.2)";
+	ctx.lineWidth = 2;
+	// draw the lines
+	for(var i=0; i<this.lessonNodeArray.length; i++){
         // check to see if the question property is valid
         if (!this.lessonNodeArray[i].question.connections) continue;
         for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
@@ -39,6 +39,12 @@ p.draw = function(ctx, center, activeHeight){
         	ctx.stroke();
         	//console.log("line drawn from "+this.lessonNodeArray[i].position.x+", "+this.lessonNodeArray[i].position.y+" to "+connectionPos.x+", "+connectionPos.y);
         }
+    }
+	
+	
+	// draw the nodes
+    for(var i = 0; i < this.lessonNodeArray.length; i++){
+        this.lessonNodeArray[i].draw(ctx);
     }
     ctx.restore();
 };
