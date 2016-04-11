@@ -8,7 +8,6 @@ var Point = require('../point.js');
 
 var boardArray;
 var currentBoard;
-var categories;
 var questions;
 var activeBoardIndex;
 //has everything loaded?
@@ -18,7 +17,6 @@ var prevMouseState;
 
 function boardPhase(pUrl){
     loadingComplete = false;
-    this.activeNodes = [];
     processData(pUrl);
 }	
 
@@ -33,12 +31,11 @@ function processData(pUrl){
 function dataLoaded(categoryData) {
 	//questions = iparParser.getQuestionsArray();
     //createLessonNodesFromQuestions(questions);
-    categories = categoryData;
-    createLessonNodesInCategories(categories);
+    createLessonNodesInBoards(categoryData);
     loadingComplete = true;
 }
 
-function createLessonNodesInCategories(categories) {
+function createLessonNodesInBoards(categories) {
 	categories.forEach(function(cat) {
 		// initialize empty
 		var lessonNodes = [];
@@ -51,14 +48,11 @@ function createLessonNodesInCategories(categories) {
 			//console.log("image: "+lessonNodes[lessonNodes.length-1].image.getAttribute("src"));
 		
 		}
-		cat.lessonNodes = lessonNodes;
+		// create a board
+		boardArray.push(new Board(new Point(0,0), lessonNodes));
+		//console.log(boardArray[boardArray.length-1].lessonNodeArray[0].question);
 	});
-	// create a board
-	boardArray.push(new Board(new Point(0,0), categories,3));
-	currentBoard = boardArray.length-1;
-	//console.log("currentBoard: "+currentBoard);
-	// set active nodes to all nodes for now
-	//this.activeNodes = lessonNodes;
+	activeBoardIndex = 3; // start with the first board;
 }
 
 
@@ -73,8 +67,8 @@ p.act = function(pMouseState){
 	// hover states
 	//for(var i = 0; i < boardArray.length; i++){
 		// loop through lesson nodes to check for hover
-	if (currentBoard != undefined) {
-		boardArray[currentBoard].categoryArray[boardArray[currentBoard].currentCategory].lessonNodes.forEach(function(lNode) {
+	if (activeBoardIndex != undefined) {
+		boardArray[activeBoardIndex].lessonNodeArray.forEach(function(lNode) {
 			
 			if (!pMouseState.mouseDown) {
 				lNode.dragPosition = undefined; // clear drag behavior
@@ -113,7 +107,7 @@ p.act = function(pMouseState){
 p.draw = function(ctx, canvas, center, activeHeight){
 	// current board = 0;
 	//console.log("draw currentBoard " + currentBoard);
-	if (currentBoard != undefined) boardArray[currentBoard].draw(ctx, center, activeHeight);
+	if (activeBoardIndex != undefined) boardArray[activeBoardIndex].draw(ctx, center, activeHeight);
 }
 
 

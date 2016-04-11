@@ -1,10 +1,9 @@
 "use strict";
 
 //parameter is a point that denotes starting position
-function board(startPosition, categories, currentCategory){
+function board(startPosition, lessonNodes){
     this.position = startPosition;
-    this.categoryArray = categories;
-    this.currentCategory = currentCategory;
+    this.lessonNodeArray = lessonNodes;
 }
 
 board.drawLib = undefined;
@@ -19,15 +18,28 @@ p.move = function(pX, pY){
 
 p.draw = function(ctx, center, activeHeight){
     ctx.save();
-    //console.log("draw board");
     //translate to the center of the screen
     ctx.translate(center.x - this.position.x, center.y - this.position.y);
-    //for(var i=0; i<this.categoryArray.length; i++){
-    this.categoryArray[this.currentCategory].lessonNodes.forEach(function (node) {
-        node.draw(ctx);
-        //console.log(node.question.questionText);
-    });
-    //}
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 5;
+    for(var i = 0; i < this.lessonNodeArray.length; i++){
+        this.lessonNodeArray[i].draw(ctx);
+        // check to see if the question property is valid
+        if (!this.lessonNodeArray[i].question.connections) continue;
+        for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
+        	// go to the index in the array that corresponds to the connected node on this board and save its position
+        	// connection index saved in the lessonNode's question
+        	var connectionPos = this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j]].position;
+        	// draw the line
+        	ctx.beginPath();
+        	// translate to start
+        	ctx.moveTo(this.lessonNodeArray[i].position.x,this.lessonNodeArray[i].position.y);
+        	ctx.lineTo(connectionPos.x,connectionPos.y);
+        	ctx.closePath();
+        	ctx.stroke();
+        	//console.log("line drawn from "+this.lessonNodeArray[i].position.x+", "+this.lessonNodeArray[i].position.y+" to "+connectionPos.x+", "+connectionPos.y);
+        }
+    }
     ctx.restore();
 };
 
