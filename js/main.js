@@ -23,8 +23,13 @@ var mousePosition;
 var relativeMousePosition;
 var mouseDown;
 var mouseIn;
+var mouseDownTimer;
+var mouseClicked;
+var maxClickDuration; // milliseconds
 
 //persistent utilities
+var prevTime; // date in milliseconds
+var dt; // delta time in milliseconds
 
 //fires when the window loads
 window.onload = function(e){
@@ -63,6 +68,9 @@ function initializeVariables(){
         mouseDown = false;
     });
     mouseIn = false;
+    mouseDownTimer = 0;
+    mouseClicked = false;
+    maxClickDuration = 200;
     canvas.addEventListener("mouseover", function(e){
         mouseIn = true;
     });
@@ -71,13 +79,28 @@ function initializeVariables(){
         mouseDown = false;
     });
     
+    prevTime = Date.now();
+    dt = 0;
+    
     game = new Game(utility, drawLib);
 }
 
 //fires once per frame
 function loop(){
+	// loop
     window.requestAnimationFrame(loop.bind(this));
-    game.update(ctx, canvas, 0, center, activeHeight, new MouseState(mousePosition, relativeMousePosition, mouseDown, mouseIn));
+    
+    // update delta time
+    dt = Date.now() - prevTime;
+    prevTime = Date.now();
+    
+    // check mouse click
+    mouseClicked = false;
+    if (mouseDown) { mouseDownTimer += dt; }
+    else { if (mouseDownTimer > 0 && mouseDownTimer < maxClickDuration) { mouseClicked = true; } mouseDownTimer = 0; }
+    
+    // update game
+    game.update(ctx, canvas, dt, center, activeHeight, new MouseState(mousePosition, relativeMousePosition, mouseDown, mouseIn, mouseClicked));
 }
 
 //listens for changes in size of window and adjusts variables accordingly

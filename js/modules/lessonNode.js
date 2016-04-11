@@ -16,6 +16,8 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.width;
     this.height;
     this.question = pQuestion;
+    this.clicked = false;
+    this.linksAwayFromOrigin = 0;
     
     var that = this;
     //image loading and resizing
@@ -82,7 +84,8 @@ p.draw = function(ctx){
 };
 
 p.click = function(mouseState){
-    console.log("whoopity doo");
+    console.log("node "+this.question.index+" clicked");
+    this.clicked = true;
 }
 
 module.exports = lessonNode;

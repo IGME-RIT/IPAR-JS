@@ -66,7 +66,7 @@ p.getCategoriesAndQuestions = function() {
 				answerText;        //string array
 				feedbackText;      //string array
 				imageLink;         //string
-				connections;       //string
+				connections;       //string array
 				instructions;      //string
 				resources;         //resourceItem
 				revealThreshold;   //int
@@ -86,7 +86,7 @@ p.getCategoriesAndQuestions = function() {
 				// correct answer number
 				questions[i].correctAnswer = questionElements[i].getAttribute("correctAnswer");
 			
-				// correct answer number
+				// q type
 				questions[i].questionType = questionElements[i].getAttribute("questionType");
 			
 				// question text
@@ -116,8 +116,12 @@ p.getCategoriesAndQuestions = function() {
 				questions[i].imageLink = questions[i].imageLink.replace("assets",".").replace("software/","");
 			
 				// connections
-				var connectionsElem = questionElements[i].getElementsByTagName("connections")[0];
-				if (connectionsElem) questions[i].connections = connectionsElem.textContent;
+				questions[i].connections = [];
+				var connectionElems = questionElements[i].getElementsByTagName("connections");
+				for (var j=0; j<connectionElems.length; j++) {
+					var connectionElem = connectionElems[j];
+					if (connectionElem) questions[i].connections.push(connectionElem.textContent);
+				}
 			
 				// instructions
 				questions[i].instructions = questionElements[i].getElementsByTagName("instructions")[0].textContent;

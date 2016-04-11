@@ -16,6 +16,26 @@ p.move = function(pX, pY){
     this.position.y += pY;
 };
 
+p.update = function() {
+	// for each  node
+	for(var i=0; i<this.lessonNodeArray.length; i++){
+	 
+		// handle click
+		if (this.lessonNodeArray[i].clicked) {
+		
+			// check for valid connections
+			if (!this.lessonNodeArray[i].question.connections) continue;
+			
+			// add connections
+			for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
+			
+				// update each connection's linksAwayFromOrigin value
+				this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].linksAwayFromOrigin = this.lessonNodeArray[i].linksAwayFromOrigin + 1;
+			}
+		}
+	}
+}
+
 p.draw = function(ctx, center, activeHeight){
     ctx.save();
     //translate to the center of the screen
@@ -23,14 +43,20 @@ p.draw = function(ctx, center, activeHeight){
 	
 	// draw the nodes
     for(var i = 0; i < this.lessonNodeArray.length; i++){
+    
+    	// temporarily hide all but the first question
+		if (this.lessonNodeArray[i].question.revealThreshold > this.lessonNodeArray[i].linksAwayFromOrigin) continue;
+    	
     	// draw the node itself
         this.lessonNodeArray[i].draw(ctx);
     }
-    
-    
-   
+
 	// draw the pins and lines
 	for(var i=0; i<this.lessonNodeArray.length; i++){
+		
+		// temporarily hide all but the first question
+		if (this.lessonNodeArray[i].question.revealThreshold > this.lessonNodeArray[i].linksAwayFromOrigin) continue;
+		
 		// draw the pin in the corner with margin 5,5
         var pinX = this.lessonNodeArray[i].position.x - this.lessonNodeArray[i].width*this.lessonNodeArray[i].scaleFactor/2 + 15;
         var pinY = this.lessonNodeArray[i].position.y - this.lessonNodeArray[i].height*this.lessonNodeArray[i].scaleFactor/2 + 15;
@@ -38,16 +64,22 @@ p.draw = function(ctx, center, activeHeight){
 		// set line style
 		ctx.strokeStyle = "rgba(0,0,105,0.2)";
 		ctx.lineWidth = 1;
+        
         // check to see if the question property is valid
         if (!this.lessonNodeArray[i].question.connections) continue;
         for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
+        	
+        	// temporarily hide all but the first question
+			if (this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].question.revealThreshold > this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].linksAwayFromOrigin) continue;
+        	
         	// go to the index in the array that corresponds to the connected node on this board and save its position
         	// connection index saved in the lessonNode's question
-        	var connection = this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j]];
+        	var connection = this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1];
         	var cPos = connection.position;
         	var cWidth = connection.width;
         	var cHeight = connection.height;
         	var cScale = connection.scaleFactor;
+        	
         	// draw the line
         	ctx.beginPath();
         	// translate to start (pin)

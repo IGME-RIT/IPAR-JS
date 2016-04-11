@@ -52,15 +52,16 @@ function createLessonNodesInBoards(categories) {
 		boardArray.push(new Board(new Point(0,0), lessonNodes));
 		//console.log(boardArray[boardArray.length-1].lessonNodeArray[0].question);
 	});
-	activeBoardIndex = 3; // start with the first board;
+	activeBoardIndex = 3; // start with the first board (actually its the second now so I can debug)
 }
 
 
 var p = boardPhase.prototype;
 
-p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState){
+p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState) {
     p.act(pMouseState);
     p.draw(ctx, canvas, center, activeHeight);
+    if (activeBoardIndex) boardArray[activeBoardIndex].update();
 }
 
 p.act = function(pMouseState){
@@ -68,7 +69,9 @@ p.act = function(pMouseState){
 	//for(var i = 0; i < boardArray.length; i++){
 		// loop through lesson nodes to check for hover
 	if (activeBoardIndex != undefined) {
-		var draggingNode = false;
+		// update board
+		
+		var nodeChosen = false;
 		for (var i=boardArray[activeBoardIndex].lessonNodeArray.length-1; i>=0; i--) {
 			var lNode = boardArray[activeBoardIndex].lessonNodeArray[i];
 			
@@ -79,6 +82,9 @@ p.act = function(pMouseState){
 			
 			lNode.mouseOver = false;
 			
+			// if there is already a selected node, do not continue
+			if (nodeChosen) continue;
+			
 			//consoel.log("node update");
 			// if hovering, show hover glow
 			if (pMouseState.relativePosition.x > lNode.position.x-lNode.width/2 
@@ -86,18 +92,23 @@ p.act = function(pMouseState){
 			&& pMouseState.relativePosition.y > lNode.position.y-lNode.height/2
 			&& pMouseState.relativePosition.y < lNode.position.y+lNode.height/2) {
 				lNode.mouseOver = true;
+				nodeChosen = true;
 				
-				if (pMouseState.mouseDown && !prevMouseState.mouseDown && !draggingNode) {
+				if (pMouseState.mouseDown && !prevMouseState.mouseDown) {
 					// drag
 					lNode.dragging = true;
-					draggingNode = true; // only drag one
 					lNode.dragPosition = new Point(
 					pMouseState.relativePosition.x - lNode.position.x,
 					pMouseState.relativePosition.y - lNode.position.y
 					);
 					
 				}
+				if (pMouseState.mouseClicked) {
+					// handle click code
+					lNode.click(pMouseState);
+				}
 			}
+			// if the user is dragging a node, allow the mouse to control its movement
 			if (lNode.dragging) {
 				lNode.position.x = pMouseState.relativePosition.x - lNode.dragPosition.x;
 				lNode.position.y = pMouseState.relativePosition.y - lNode.dragPosition.y;
