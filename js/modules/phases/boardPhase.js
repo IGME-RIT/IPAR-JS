@@ -68,7 +68,9 @@ p.act = function(pMouseState){
 	//for(var i = 0; i < boardArray.length; i++){
 		// loop through lesson nodes to check for hover
 	if (activeBoardIndex != undefined) {
-		boardArray[activeBoardIndex].lessonNodeArray.forEach(function(lNode) {
+		var draggingNode = false;
+		for (var i=boardArray[activeBoardIndex].lessonNodeArray.length-1; i>=0; i--) {
+			var lNode = boardArray[activeBoardIndex].lessonNodeArray[i];
 			
 			if (!pMouseState.mouseDown) {
 				lNode.dragPosition = undefined; // clear drag behavior
@@ -85,9 +87,10 @@ p.act = function(pMouseState){
 			&& pMouseState.relativePosition.y < lNode.position.y+lNode.height/2) {
 				lNode.mouseOver = true;
 				
-				if (pMouseState.mouseDown && !prevMouseState.mouseDown) {
+				if (pMouseState.mouseDown && !prevMouseState.mouseDown && !draggingNode) {
 					// drag
 					lNode.dragging = true;
+					draggingNode = true; // only drag one
 					lNode.dragPosition = new Point(
 					pMouseState.relativePosition.x - lNode.position.x,
 					pMouseState.relativePosition.y - lNode.position.y
@@ -99,7 +102,7 @@ p.act = function(pMouseState){
 				lNode.position.x = pMouseState.relativePosition.x - lNode.dragPosition.x;
 				lNode.position.y = pMouseState.relativePosition.y - lNode.dragPosition.y;
 			}
-		});
+		}
 	}
 	prevMouseState = pMouseState;
 }
