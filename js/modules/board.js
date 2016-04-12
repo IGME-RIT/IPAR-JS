@@ -18,27 +18,26 @@ p.move = function(pX, pY){
 
 p.update = function() {
 	// for each  node
-	for(var i=0; i<this.lessonNodeArray.length; i++){
-	 
+    for(var i=0; i<this.lessonNodeArray.length; i++){
+	var activeNode = this.lessonNodeArray[i]; 
 		// handle click
-		if (this.lessonNodeArray[i].clicked && this.lessonNodeArray[i].question.currentState == 1) {
+		if (activeNode.clicked && this.activeNode.question.currentState == this.activeNode.question.SOLVE_STATE.UNSOLVED) {
 		
 			// check for valid connections
-			if (!this.lessonNodeArray[i].question.connections) continue;
+			if (!activeNode.question.connections) continue;
 			
 			// add connections
-			for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
+			for (var j = 0; j < activeNode.question.connections.length; j++) {
 			
 				// update each connection's linksAwayFromOrigin value
-				this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].linksAwayFromOrigin = this.lessonNodeArray[i].linksAwayFromOrigin + 1;
-				this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].question.currentState = 1;
+				this.lessonNodeArray[activeNode.question.connections[j] - 1].linksAwayFromOrigin = activeNode.linksAwayFromOrigin + 1;
+				this.lessonNodeArray[activeNode.question.connections[j] - 1].question.currentState = 1;
 			}
 			
-			// change lesson node state
-			this.lessonNodeArray[i].question.currentState = 2;
-			
+            activeNode.question.currentState = activeNode.question.SOLVE_STATE.SOLVED;
+            
 			// record that the click has been dealt with
-			this.lessonNodeArray[i].clicked = false;
+			activeNode.clicked = false;
 		}
 	}
 }

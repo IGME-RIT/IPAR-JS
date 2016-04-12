@@ -2,7 +2,7 @@
 //parameter is a point that denotes starting position
 function question(){
     this.SOLVE_STATE = Object.freeze({HIDDEN: 0, UNSOLVED: 1, SOLVED: 2});
-    this.currentState;
+    this.currentState = this.SOLVE_STATE.UNSOLVED;
     
     this.index;             //int
     this.categoryIndex;     //int
