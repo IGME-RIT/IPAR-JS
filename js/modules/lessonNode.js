@@ -71,8 +71,17 @@ p.draw = function(ctx){
     ctx.drawImage(this.image, this.position.x - (this.width*this.scaleFactor)/2, this.position.y - (this.height*this.scaleFactor)/2, this.width * this.scaleFactor, this.height * this.scaleFactor);
     
     //drawing the pin
-    ctx.fillStyle = "blue";
-	ctx.strokeStyle = "cyan";
+    console.log("qstate " + this.question.currentState);
+    switch (this.question.currentState) {
+    	case 1:
+    		ctx.fillStyle = "blue";
+			ctx.strokeStyle = "cyan";
+			break;
+     	case 2:
+    		ctx.fillStyle = "green";
+			ctx.strokeStyle = "yellow";
+			break;
+    }
 	ctx.lineWidth = 2;
 
 	ctx.beginPath();

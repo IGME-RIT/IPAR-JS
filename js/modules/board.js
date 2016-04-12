@@ -21,7 +21,7 @@ p.update = function() {
 	for(var i=0; i<this.lessonNodeArray.length; i++){
 	 
 		// handle click
-		if (this.lessonNodeArray[i].clicked) {
+		if (this.lessonNodeArray[i].clicked && this.lessonNodeArray[i].question.currentState == 1) {
 		
 			// check for valid connections
 			if (!this.lessonNodeArray[i].question.connections) continue;
@@ -31,7 +31,11 @@ p.update = function() {
 			
 				// update each connection's linksAwayFromOrigin value
 				this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].linksAwayFromOrigin = this.lessonNodeArray[i].linksAwayFromOrigin + 1;
+				this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].question.currentState = 1;
 			}
+			
+			// change lesson node state
+			this.lessonNodeArray[i].question.currentState = 2;
 			
 			// record that the click has been dealt with
 			this.lessonNodeArray[i].clicked = false;
@@ -57,7 +61,7 @@ p.draw = function(ctx, center, activeHeight){
 	// draw the pins and lines
 	for(var i=0; i<this.lessonNodeArray.length; i++){
 		
-		// temporarily hide all but the first question
+		// only show valiid questions
 		if (this.lessonNodeArray[i].question.revealThreshold > this.lessonNodeArray[i].linksAwayFromOrigin) continue;
 		
 		// draw the pin in the corner with margin 5,5

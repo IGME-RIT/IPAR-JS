@@ -143,6 +143,12 @@ p.getCategoriesAndQuestions = function() {
 			
 				// reveal threshold
 				questions[i].revealThreshold = questionElements[i].getAttribute("revealThreshold");
+				
+				if (questions[i].revealThreshold <= 0) {
+					questions[i].currentState = 1;
+				} else {
+					questions[i].currentState = 2;
+				}
 			
 				// justification
 			
