@@ -32,6 +32,9 @@ p.update = function() {
 				// update each connection's linksAwayFromOrigin value
 				this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].linksAwayFromOrigin = this.lessonNodeArray[i].linksAwayFromOrigin + 1;
 			}
+			
+			// record that the click has been dealt with
+			this.lessonNodeArray[i].clicked = false;
 		}
 	}
 }
