@@ -33,7 +33,7 @@ p.update = function() {
 				this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].linksAwayFromOrigin = activeNode.linksAwayFromOrigin + 1;
 			}
 			
-            //this.lessonNodeArray[i].currentState = this.lessonNodeArray[i].SOLVE_STATE.SOLVED;
+            activeNode.question.currentState = activeNode.question.SOLVE_STATE.SOLVED;
             
 			// record that the click has been dealt with
 			activeNode.clicked = false;
