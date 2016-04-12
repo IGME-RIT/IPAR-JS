@@ -21,7 +21,7 @@ p.update = function() {
     for(var i=0; i<this.lessonNodeArray.length; i++){
 	var activeNode = this.lessonNodeArray[i]; 
 		// handle click
-		if (activeNode.clicked && this.activeNode.question.currentState == this.activeNode.question.SOLVE_STATE.UNSOLVED) {
+		if (activeNode.clicked && activeNode.question.currentState == activeNode.question.SOLVE_STATE.UNSOLVED) {
 		
 			// check for valid connections
 			if (!activeNode.question.connections) continue;
