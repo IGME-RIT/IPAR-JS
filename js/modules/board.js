@@ -42,10 +42,13 @@ p.update = function() {
 	}
 }
 
-p.draw = function(ctx, center, activeHeight){
+p.draw = function(ctx, center, activeHeight, boardOffset){
     ctx.save();
+    
+    this.position = boardOffset;
     //translate to the center of the screen
     ctx.translate(center.x - this.position.x, center.y - this.position.y);
+    //ctx.translate(boardOffset.x,boardOffset.y);
 	
 	// draw the nodes
     for(var i = 0; i < this.lessonNodeArray.length; i++){

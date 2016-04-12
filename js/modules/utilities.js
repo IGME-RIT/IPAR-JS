@@ -24,14 +24,18 @@ p.clamp = function(value, min, max){
 p.mouseIntersect = function(pMouseState, pElement, pOffsetter, pScale){
     if(pMouseState.relativePosition.x + pOffsetter.x > (pElement.position.x - (pScale*pElement.width)/2) && pMouseState.relativePosition.x + pOffsetter.x < (pElement.position.x + (pScale*pElement.width)/2)){
         if(pMouseState.relativePosition.y + pOffsetter.y > (pElement.position.y - (pScale*pElement.height)/2) && pMouseState.relativePosition.y + pOffsetter.y < (pElement.position.y + (pScale*pElement.height)/2)){
-            pElement.mouseOver = true;
+            //pElement.mouseOver = true;
+            return true;
+            pMouseState.hasTarget = true;
         }
         else{
-            pElement.mouseOver = false;
+            //pElement.mouseOver = false;
+            return false;
         }
     }
     else{
-        pElement.mouseOver = false;
+    	return false;
+        //pElement.mouseOver = false;
     }
 }
 

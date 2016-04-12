@@ -5,6 +5,7 @@ var LessonNode = require('../lessonNode.js');
 var IparDataParser = require('../iparDataParser.js');
 var Question = require('../question.js');
 var Point = require('../point.js');
+var Utilities = require('../utilities.js');
 
 var boardArray;
 var currentBoard;
@@ -15,9 +16,17 @@ var loadingComplete;
 // save the last state of the mouse for checking clicks
 var prevMouseState;
 
+var utilities;
+
+// drag the board
+var mouseStartDragBoard = undefined;
+var boardOffset = {x:0,y:0};
+var prevBoardOffset = {x:0,y:0};
+
 function boardPhase(pUrl){
     loadingComplete = false;
     processData(pUrl);
+    utilities = new Utilities();
 }	
 
 
@@ -58,7 +67,7 @@ function createLessonNodesInBoards(categories) {
 
 var p = boardPhase.prototype;
 
-p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState) {
+p.update = function(ctx, canvas, dt, center, activeHeight, pMouseState, boardOffset) {
     p.act(pMouseState);
     p.draw(ctx, canvas, center, activeHeight);
     if (activeBoardIndex) boardArray[activeBoardIndex].update();
@@ -73,6 +82,15 @@ p.act = function(pMouseState){
 		
 		var nodeChosen = false;
 		for (var i=boardArray[activeBoardIndex].lessonNodeArray.length-1; i>=0; i--) {
+			if (boardArray[activeBoardIndex].lessonNodeArray[i].dragging) {
+				//nodeChosen = true;
+				pMouseState.hasTarget = true;
+				
+			}
+		}
+		
+		
+		for (var i=boardArray[activeBoardIndex].lessonNodeArray.length-1; i>=0; i--) {
 			var lNode = boardArray[activeBoardIndex].lessonNodeArray[i];
 			
 			if (!pMouseState.mouseDown) {
@@ -82,17 +100,22 @@ p.act = function(pMouseState){
 			
 			lNode.mouseOver = false;
 			
-			// if there is already a selected node, do not continue
-			if (nodeChosen) continue;
+			// if there is already a selected node, do not try to select another
+			if (nodeChosen) {  continue; }
 			
-			//consoel.log("node update");
+			//console.log("node update");
 			// if hovering, show hover glow
-			if (pMouseState.relativePosition.x > lNode.position.x-lNode.width/2 
+			/*if (pMouseState.relativePosition.x > lNode.position.x-lNode.width/2 
 			&& pMouseState.relativePosition.x < lNode.position.x+lNode.width/2
 			&& pMouseState.relativePosition.y > lNode.position.y-lNode.height/2
-			&& pMouseState.relativePosition.y < lNode.position.y+lNode.height/2) {
+			&& pMouseState.relativePosition.y < lNode.position.y+lNode.height/2) {*/
+			
+			
+			if (utilities.mouseIntersect(pMouseState,lNode,boardOffset,1)) {
 				lNode.mouseOver = true;
 				nodeChosen = true;
+				pMouseState.hasTarget = true;
+				//console.log(pMouseState.hasTarget);
 				
 				if (pMouseState.mouseDown && !prevMouseState.mouseDown) {
 					// drag
@@ -101,7 +124,6 @@ p.act = function(pMouseState){
 					pMouseState.relativePosition.x - lNode.position.x,
 					pMouseState.relativePosition.y - lNode.position.y
 					);
-					
 				}
 				if (pMouseState.mouseClicked) {
 					// handle click code
@@ -115,13 +137,32 @@ p.act = function(pMouseState){
 			}
 		}
 	}
+	
+	// drag the board around
+	if (!pMouseState.hasTarget) {
+		if (pMouseState.mouseDown) {
+			if (!mouseStartDragBoard) {
+				mouseStartDragBoard = pMouseState.relativePosition;
+				prevBoardOffset.x = boardOffset.x;
+				prevBoardOffset.y = boardOffset.y;
+			}
+			else {
+				boardOffset.x = prevBoardOffset.x - (pMouseState.relativePosition.x - mouseStartDragBoard.x);
+				boardOffset.y = prevBoardOffset.y - (pMouseState.relativePosition.y - mouseStartDragBoard.y);
+				console.log(boardOffset);
+			}
+		} else {
+			mouseStartDragBoard = undefined;
+		}
+    }
+    
 	prevMouseState = pMouseState;
 }
 
 p.draw = function(ctx, canvas, center, activeHeight){
 	// current board = 0;
 	//console.log("draw currentBoard " + currentBoard);
-	if (activeBoardIndex != undefined) boardArray[activeBoardIndex].draw(ctx, center, activeHeight);
+	if (activeBoardIndex != undefined) boardArray[activeBoardIndex].draw(ctx, center, activeHeight, boardOffset);
 }
 
 

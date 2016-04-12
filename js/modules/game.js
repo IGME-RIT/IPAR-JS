@@ -112,6 +112,8 @@ p.act = function(pMouseState, previousMouseState){
     
     
     
+    
+    
     debugLine.innerHTML = "mousePosition: x = " + mouseState.relativePosition.x + ", y = " + mouseState.relativePosition.y + 
     "<br>Clicked = " + mouseState.mouseDown + 
     "<br>Over Canvas = " + mouseState.mouseIn;

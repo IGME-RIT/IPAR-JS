@@ -6,6 +6,7 @@ function mouseState(pPosition, pRelativePosition, pMousedown, pMouseIn, pMouseCl
     this.mouseIn = pMouseIn;
     this.prevMouseDown = pMousedown;
     this.mouseClicked = pMouseClicked;
+    this.hasTarget = false;
 }
 
 var p = mouseState.prototype;
