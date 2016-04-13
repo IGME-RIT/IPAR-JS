@@ -8,6 +8,8 @@ var Point = require('../point.js');
 var Utilities = require('../utilities.js');
 
 var boardArray;
+var maxBoardWidth = 1000;
+var maxBoardHeight = 800;
 var currentBoard;
 var questions;
 var activeBoardIndex;
@@ -148,7 +150,11 @@ p.act = function(pMouseState){
 			}
 			else {
 				boardOffset.x = prevBoardOffset.x - (pMouseState.relativePosition.x - mouseStartDragBoard.x);
+				if (boardOffset.x > maxBoardWidth/2) boardOffset.x = maxBoardWidth/2;
+				if (boardOffset.x < -1*maxBoardWidth/2) boardOffset.x = -1*maxBoardWidth/2;
 				boardOffset.y = prevBoardOffset.y - (pMouseState.relativePosition.y - mouseStartDragBoard.y);
+				if (boardOffset.y > maxBoardHeight/2) boardOffset.y = maxBoardHeight/2;
+				if (boardOffset.y < -1*maxBoardHeight/2) boardOffset.y = -1*maxBoardHeight/2;
 				console.log(boardOffset);
 			}
 		} else {
