@@ -1,4 +1,5 @@
 "use strict"
+var Utilities = require('./utilities.js');
 
 var Question = require("./question.js");
 
@@ -24,9 +25,12 @@ qustionName
 
 // the xml structure that stores the data
 var rawData;
+var utilities;
 
 // constructor
 function iparDataParser(url, callback) {
+    utilities = new Utilities();
+    
     this.categories = [];
     this.questions = [];
     
@@ -83,11 +87,14 @@ p.getCategoriesAndQuestions = function() {
 				// index (may not exhibit expected behavior)
 				questions[i].index = i;
                 
+                //determine scale of the screen
+                var temp = document.querySelector('canvas');
+                
                 //positionPercentX
-                questions[i].positionPercentX = questionElements[i].getAttribute("xPositionPercent")*9;
+                questions[i].positionPercentX = utilities.map(questionElements[i].getAttribute("xPositionPercent"), 0, 100, 0, temp.width);
                 
                 //positionPercentY
-                questions[i].positionPercentY = questionElements[i].getAttribute("yPositionPercent")*8;
+                questions[i].positionPercentY = utilities.map(questionElements[i].getAttribute("yPositionPercent"), 0, 100, 0, temp.height);
 			
 				// correct answer number
 				questions[i].correctAnswer = questionElements[i].getAttribute("correctAnswer");
