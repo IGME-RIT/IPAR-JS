@@ -25,7 +25,6 @@ function DOM_interface() {
 	refs.closeButton.onclick = function() {
 		hideElement(refs.superPanel);
 	}
-	
 }
 
 var p = DOM_interface.prototype;
