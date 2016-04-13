@@ -53,7 +53,7 @@ function createLessonNodesInBoards(categories) {
 		// add a node per question
 		for (var i = 0; i < cat.questions.length; i++) {
 			// create a new lesson node
-			lessonNodes.push(new LessonNode(new Point(cat.questions[i].positionPercentX - 500, cat.questions[i].positionPercentY - 300), cat.questions[i].imageLink, cat.questions[i] ) );
+			lessonNodes.push(new LessonNode(new Point(cat.questions[i].positionPercentX, cat.questions[i].positionPercentY), cat.questions[i].imageLink, cat.questions[i] ) );
 			// attach question object to lesson node
 			lessonNodes[lessonNodes.length-1].question = cat.questions[i];
 			//console.log("image: "+lessonNodes[lessonNodes.length-1].image.getAttribute("src"));
