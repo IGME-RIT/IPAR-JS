@@ -5,6 +5,7 @@ var Point = require('./modules/point.js');
 var MouseState = require('./modules/mouseState.js');
 var Utility = require('./modules/utilities.js');
 var DrawLib = require('./modules/drawLib.js');
+var DOM_interface = require('./modules/DOM_interface.js');
 
 //game objects
 var game;
@@ -27,6 +28,9 @@ var mouseDownTimer;
 var mouseClicked;
 var maxClickDuration; // milliseconds
 
+// html DOM
+var htmlElemHandler;
+
 //persistent utilities
 var prevTime; // date in milliseconds
 var dt; // delta time in milliseconds
@@ -46,6 +50,8 @@ function initializeVariables(){
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     console.log("Canvas Dimensions: " + canvas.width + ", " + canvas.height);
+    
+    htmlElemHandler = new DOM_interface();
     
     header = document.querySelector('header');
     activeHeight = canvas.offsetHeight - header.offsetHeight;
