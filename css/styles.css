@@ -31,19 +31,9 @@ header {
     top: 0px;
 }
 
-#debugLine{
-    color: red;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 10pt;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-}
-
 /* Floating UI buttons for board phase */
 
-.bottomBar {
+#bottomBar {
 	pointer-events: none;
 	width: 100vw;
 	height: 5vw;
@@ -58,7 +48,7 @@ header {
 	margin: 0;
 }
 
-.bottomBar button {
+#bottomBar button {
 	pointer-events: auto;
 	font-size: 1.5vw;
 	width: 10vw;
@@ -71,11 +61,11 @@ header {
 	background-color: white;
 }
 
-.bottomBar button:hover {
+#bottomBar button:hover {
 	background-color: #eee;
 }
 
-.bottomBar button:active {
+#bottomBar button:active {
 	background-color: #f9f9ff;
 }
 
