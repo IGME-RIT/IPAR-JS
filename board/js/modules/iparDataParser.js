@@ -28,7 +28,7 @@ qustionName
 var m = module.exports;
 
 // constructor
-m.parseData = function(url, callback) {
+m.parseData = function(url, windowDiv, callback) {
     
     this.categories = [];
     this.questions = [];
@@ -41,7 +41,7 @@ m.parseData = function(url, callback) {
 
 				// Get the raw data
 				var rawData = Utilities.getXml(this.result);
-				var categories = getCategoriesAndQuestions(rawData, url);
+				var categories = getCategoriesAndQuestions(rawData, url, windowDiv);
 				callback(categories);
 			   
 			};
@@ -54,7 +54,7 @@ m.parseData = function(url, callback) {
 }
 
 // takes the xml structure and fills in the data for the question object
-function getCategoriesAndQuestions(rawData, url) {
+function getCategoriesAndQuestions(rawData, url, windowDiv) {
 	// if there is a case file
 	if (rawData != null) {
 		
@@ -72,7 +72,7 @@ function getCategoriesAndQuestions(rawData, url) {
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
-			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url);
+			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv);
 		}
 		return categories;
 	}

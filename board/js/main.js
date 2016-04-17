@@ -3,12 +3,16 @@
 var Game = require('./modules/game.js');
 var Point = require('./modules/point.js');
 var MouseState = require('./modules/mouseState.js');
-var DOM_interface = require('./modules/DOM_interface.js');
 
 //game objects
 var game;
 var canvas;
 var ctx;
+
+// window div and if paused
+var windowDiv;
+var windowFilm;
+var pausedTime = 0;
 
 //responsiveness
 var center;
@@ -34,11 +38,15 @@ window.onload = function(e){
 
 //initialization, mouse events, and game instantiation
 function initializeVariables(){
+	windowDiv = document.getElementById('window');
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     console.log("Canvas Dimensions: " + canvas.width + ", " + canvas.height);
+    
+	windowFilm = document.getElementById('windowFlim');
+	windowFilm.onclick = function() { windowDiv.innerHTML = ''; };
     
     mousePosition = new Point(0,0);
     relativeMousePosition = new Point(0,0);
@@ -71,7 +79,7 @@ function initializeVariables(){
     prevTime = Date.now();
     dt = 0;
     
-    game = new Game(localStorage['caseFiles']);
+    game = new Game(localStorage['caseFiles'], windowDiv);
 }
 
 //fires once per frame
@@ -90,6 +98,17 @@ function loop(){
     
     // update game
     game.update(ctx, canvas, dt, new MouseState(mousePosition, relativeMousePosition, mouseDown, mouseIn, mouseClicked));
+    
+    // Check if should pause
+    if(game.active && windowDiv.innerHTML!='' && pausedTime++>3){
+    	game.active = false;
+    	windowFilm.style.display = 'block';
+    }
+    else if(pausedTime!=0 && windowDiv.innerHTML==''){
+    	pausedTime = 0;
+    	game.active = true;
+    	windowFilm.style.display = 'none';
+    }
 }
 
 //listens for changes in size of window and adjusts variables accordingly

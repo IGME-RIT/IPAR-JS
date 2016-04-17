@@ -6,17 +6,23 @@ var SOLVE_STATE = Object.freeze({HIDDEN: 0, UNSOLVED: 1, SOLVED: 2});
 var QUESTION_TYPE = Object.freeze({JUSTIFICATION: 1, MULTIPLE_CHOICE: 2, SHORT_RESPONSE: 3, FILE: 4, MESSAGE: 5});
 
 //parameter is a point that denotes starting position
-function Question(xml, resources, url){
+function Question(xml, resources, url, windowDiv){
 	
-	// Set the current state to default at hidden
+	// Set the current state to default at hidden and store the window div
     this.currentState = SOLVE_STATE.HIDDEN;
+    this.windowDiv = windowDiv;
     
-    // Get and save the given index, correct answer, position, reveal threshold, and image link
-    this.correctAnswer = parseInt(xml.getAttribute("correctAnswer"));
+    // Get and save the given index, correct answer, position, reveal threshold, image link, feedback, and connections
+    this.correct = parseInt(xml.getAttribute("correctAnswer"));
     this.positionPercentX = Utilities.map(parseInt(xml.getAttribute("xPositionPercent")), 0, 100, 0, Constants.boardSize.x);
     this.positionPercentY = Utilities.map(parseInt(xml.getAttribute("yPositionPercent")), 0, 100, 0, Constants.boardSize.y);
     this.revealThreshold = parseInt(xml.getAttribute("revealThreshold"));
     this.imageLink = url+xml.getAttribute("imageLink");
+    this.feedbacks = xml.getElementsByTagName("feedback");
+    var connectionElements = xml.getElementsByTagName("connections");
+    this.connections = [];
+    for(var i=0;i<connectionElements.length;i++)
+    	this.connections[i] = parseInt(connectionElements[i].innerHTML);
     
     // Create the windows for this question based on the question type
     this.questionType = parseInt(xml.getAttribute("questionType"));
@@ -42,6 +48,73 @@ function Question(xml, resources, url){
 }
 
 var p = Question.prototype;
+
+p.wrongAnswer = function(num){
+
+  // If feeback display it
+	if(this.feedbacks.length>0)
+		this.feedback.innerHTML = '"'+String.fromCharCode(num + "A".charCodeAt())+
+											'" is not correct <br/>&nbsp;<span class="feedbackI">'+
+											this.feedbacks[num].innerHTML+'</span><br/>';
+	
+}
+
+p.correctAnswer = function(){
+	
+	// If feedback display it
+	if(this.feedbacks.length>0)
+		this.feedback.innerHTML = '"'+String.fromCharCode(this.correct + "A".charCodeAt())+
+											'" is the correct response <br/><span class="feedbackI">'+
+											this.feedbacks[this.correct].innerHTML+'</span><br/>';
+	
+	
+	if(this.questionType===3 && this.justification.value != '')
+		this.feedback.innerHTML = 'Submitted Text:<br/><span class="feedbackI">'+this.justification.value+'</span><br/>';
+	
+	if(this.questionType===1 && this.justification.value != '')
+		this.feedback.innerHTML += 'Submitted Text:<br/><span class="feedbackI">'+this.justification.value+'</span><br/>';
+	
+	if(this.questionType===4){
+		if(this.fileInput.files.length>0)
+			this.feedback.innerHTML = 'Submitted Files:<br/>';
+		else
+			this.feedback.innerHTML = '';
+		for(var i=0;i<this.fileInput.files.length;i++)
+			this.feedback.innerHTML += '<span class="feedbackI">'+this.fileInput.files[i].name+'</span><br/>';
+	}
+  
+  if(this.currentState!=SOLVE_STATE.SOLVED && 
+     (((this.questionType===3 || this.questionType===1) && this.justification.value != '') ||
+      (this.questionType===4 && this.fileInput.files.length>0) ||
+       this.questionType===2)){ 
+    // Set the state of the question to correct
+    this.currentState = SOLVE_STATE.SOLVED;
+  }
+	
+}
+
+p.displayWindows = function(){
+	
+	// Add the windows to the window div
+	var windowNode = this.windowDiv;
+	var exitButton = new Image();
+	exitButton.src = "../img/iconClose.png";
+	exitButton.className = "exit-button";
+	var question = this;
+	exitButton.onclick = function() { question.windowDiv.innerHTML = ''; };
+	if(this.questionType===5){
+		windowNode.appendChild(this.message);
+	    exitButton.style.left = "75vw";
+	}
+	else{
+		windowNode.appendChild(this.task);
+		windowNode.appendChild(this.answer);
+		windowNode.appendChild(this.resource);
+		exitButton.style.left = "85vw";
+	}
+	windowNode.appendChild(exitButton);
+	
+}
 
 p.createTaskWindow = function(xml){
 	
@@ -243,9 +316,9 @@ p.createMessageWindow = function(xml){
 		    question.message.innerHTML = question.message.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
 		    question.message.innerHTML = question.message.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
 	        question.message.getElementsByTagName("button")[0].onclick = function() {
-            question.newState = "correct";
-            question.hideWindows();
-        };
+	        	question.currentState = SOLVE_STATE.SOLVED;
+	        	question.windowDiv.innerHTML = '';
+	        };
 
 	    }
 	}

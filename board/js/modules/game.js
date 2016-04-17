@@ -17,9 +17,10 @@ var mouseSustainedDown;
 var phaseObject;
 
 
-function game(url){
+function game(url, windowDiv){
 	var game = this;
-	DataParser.parseData(url, function(categories){
+	this.active = false;
+	DataParser.parseData(url, windowDiv, function(categories){
 		game.categories = categories;
 		game.createLessonNodes();
 	});
@@ -50,16 +51,18 @@ p.createLessonNodes = function(){
 		var game = this;
 		button.onclick = (function(i){ 
 			return function() {
-				game.activeBoardIndex = i;
+				if(game.active)
+					game.activeBoardIndex = i;
 		}})(i);
 		bottomBar.appendChild(button);
 	}
-	this.activeBoardIndex = 2;
+	this.activeBoardIndex = 0;
+	this.active = true;
 }
 
 p.update = function(ctx, canvas, dt, pMouseState){
-
-	if(this.boardArray){
+	
+	if(this.active){
 	    // mouse
 	    previousMouseState = mouseState;
 	    mouseState = pMouseState;
@@ -85,8 +88,7 @@ p.draw = function(ctx, canvas){
     ctx.restore();
 	
     // Draw the current board
-    console.log(this.boardArray[this.activeBoardIndex]+":"+this.activeBoardIndex+":"+this.boardArray.length);
-	this.boardArray[this.activeBoardIndex].draw(ctx, {x:canvas.offsetWidth/2, y:canvas.offsetHeight/2});
+    this.boardArray[this.activeBoardIndex].draw(ctx, {x:canvas.offsetWidth/2, y:canvas.offsetHeight/2});
     
 }
 

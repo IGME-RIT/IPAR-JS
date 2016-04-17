@@ -1,61 +1,19 @@
-body { 
-	background-color: #15718F;
-	margin: 0;
-	padding: 0;
-}
-
-#content{
-	margin: 0 auto;
-}
-
-#board-buttons {
-	padding: 1vh 1vw;
-	height: 5vh;
-	display: flex;
-	background-color: #2FBFBE;
-	color: white;
-}
-
-#board-buttons button:hover {
-	background-color: #15708E;
-}
-
-#board-buttons button.cur-case {
-	background-color: #0B4D6A;
-}
-
-#board-buttons button:disabled {
-	background-color: #2FBFBE;
-	color: #A2C0C0;
-}
-
-#command-buttons {
-	padding: 1vh 1vw;
-	height: 5vh;
-	display: flex;
-	background-color: #5C5152;
-	float: right;
-}
-
-#command-buttons button:hover {
-	background-color: #808080;
-}
-
-button {
-	border-style: none;
-	background-color: inherit;
-	color: inherit;
-	padding: inherit;
-}
-
-.icon {
-	width: 2vw;
+#windowFlim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.25);
+  display: none;
 }
 
 .window {
   position: fixed;
   width: 30vw;
   min-width: 50vh;
+  z-index: 2;
 }
 
 .windowContent {
@@ -162,10 +120,11 @@ button {
   cursor: pointer;
   top: 5vh;
   height: 5vh;
+  z-index: 2;
 }
 
 .exit-button:hover {
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .feedbackI {

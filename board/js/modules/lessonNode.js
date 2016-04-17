@@ -1,5 +1,6 @@
 "use strict";
 var DrawLib = require('./drawLib.js');
+var Question = require("./question.js");
 
 //parameter is a point that denotes starting position
 function lessonNode(startPosition, imagePath, pQuestion){
@@ -14,8 +15,8 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.width;
     this.height;
     this.question = pQuestion;
-    this.clicked = false;
-    this.linksAwayFromOrigin = 0;
+    this.connections = 0;
+    this.currentState = this.question.currentState;
     
     var that = this;
     //image loading and resizing
@@ -54,6 +55,15 @@ function lessonNode(startPosition, imagePath, pQuestion){
 var p = lessonNode.prototype;
 
 p.draw = function(ctx){
+
+	// Check if question is visible
+	if(this.question.currentState==Question.SOLVE_STATE.HIDDEN){
+		if(this.question.revealThreshold <= this.connections)
+			this.question.currentState = Question.SOLVE_STATE.UNSOLVED;
+		else
+			return;
+	}
+	
     //lessonNode.drawLib.circle(ctx, this.position.x, this.position.y, 10, "red");
     //draw the image, shadow if hovered
     ctx.save();
@@ -91,8 +101,7 @@ p.draw = function(ctx){
 };
 
 p.click = function(mouseState){
-    console.log("node "+this.question.index+" clicked");
-    this.clicked = true;
+    this.question.displayWindows();
 }
 
 module.exports = lessonNode;
