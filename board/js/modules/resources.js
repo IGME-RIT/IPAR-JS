@@ -13,6 +13,9 @@ function Resource(xml, url){
 	    case 1:
 	      this.icon = '../img/iconResourceLink.png';
 	      break;
+	    case 2:
+    	  this.icon = '../img/iconResourceVideo.png';
+	      break;
 	    default:
 	      this.icon = '';
 	      break;
@@ -22,7 +25,7 @@ function Resource(xml, url){
 	  this.title = xml.getAttribute("text");
 
 	  // Last get the link
-	  if(type==1)
+	  if(type>0)
 	    this.link = xml.getAttribute("link");
 	  else
 	    this.link = url+'assets/files/'+xml.getAttribute("link").replace(/ /g, '%20');
