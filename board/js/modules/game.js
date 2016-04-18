@@ -90,7 +90,8 @@ p.draw = function(ctx, canvas){
 	
 	// Draw the background
 	DrawLib.rect(ctx, 0, 0, canvas.width, canvas.height, "#15718F");
-	
+    console.log(this.boardArray[this.activeBoardIndex].boardOffset);
+    
 	// Scale the game
 	ctx.save();
 	ctx.translate(canvas.width/2, canvas.height/2);

@@ -2,6 +2,7 @@
 var DrawLib = require('./drawLib.js');
 var Question = require("./question.js");
 var Constants = require("./constants.js");
+var Point = require('./point.js');
 
 //parameter is a point that denotes starting position
 function lessonNode(startPosition, imagePath, pQuestion){
@@ -83,7 +84,6 @@ p.draw = function(ctx, canvas){
     ctx.drawImage(this.image, this.position.x - this.width/2, this.position.y - this.height/2, this.width, this.height);
     
     //drawing the pin
-	var smaller = this.width < this.height ? this.width : this.height;
     switch (this.question.currentState) {
     	case 1:
     		ctx.fillStyle = "blue";
@@ -94,16 +94,23 @@ p.draw = function(ctx, canvas){
 			ctx.strokeStyle = "yellow";
 			break;
     }
+	var smaller = this.width < this.height ? this.width : this.height;
 	ctx.lineWidth = smaller/32;
 
 	ctx.beginPath();
-	ctx.arc(this.position.x - this.width/2 + smaller*3/16, this.position.y - this.height/2 + smaller*3/16, smaller*3/32, 0, 2*Math.PI);
+	var nodePoint = this.getNodePoint();
+	ctx.arc(nodePoint.x, nodePoint.y, smaller*3/32, 0, 2*Math.PI);
 	ctx.closePath();
 	ctx.fill();
 	ctx.stroke();
     
     ctx.restore();
 };
+
+p.getNodePoint = function(){
+	var smaller = this.width < this.height ? this.width : this.height;
+	return new Point(this.position.x - this.width/2 + smaller*3/16, this.position.y - this.height/2 + smaller*3/16);
+}
 
 p.click = function(mouseState){
     this.question.displayWindows();
