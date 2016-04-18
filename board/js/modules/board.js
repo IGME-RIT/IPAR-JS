@@ -26,7 +26,7 @@ p.move = function(pX, pY){
     this.prevBoardOffset = {x:0,y:0};
 };
 
-p.act = function(pMouseState, scale) {
+p.act = function(pMouseState, scale, dt) {
 	
 	// for each  node
     for(var i=0; i<this.lessonNodeArray.length; i++){
@@ -42,6 +42,10 @@ p.act = function(pMouseState, scale) {
 			activeNode.currentState = activeNode.question.currentState;
 			
 		}
+		
+		// update the node's transition progress
+		if (activeNode.question.currentState == Question.SOLVE_STATE.SOLVED)
+			activeNode.linePercent = Math.min(1,dt/2000 + activeNode.linePercent);
 	}
     
     // hover states
@@ -101,6 +105,8 @@ p.act = function(pMouseState, scale) {
 			lNode.position.x = pMouseState.relativePosition.x - lNode.dragPosition.x;
 			lNode.position.y = pMouseState.relativePosition.y - lNode.dragPosition.y;
 		}
+		
+		
 	}
 	
 	// drag the board around
@@ -185,7 +191,7 @@ p.draw = function(ctx, canvas, center){
         	ctx.beginPath();
         	// translate to start (pin)
         	ctx.moveTo(oPos.x, oPos.y);
-        	ctx.lineTo(cPos.x, cPos.y);
+        	ctx.lineTo(oPos.x + (cPos.x - oPos.x)*this.lessonNodeArray[i].linePercent, oPos.y + (cPos.y - oPos.y)*this.lessonNodeArray[i].linePercent);
         	ctx.closePath();
         	ctx.stroke();
         }

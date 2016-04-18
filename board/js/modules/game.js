@@ -82,7 +82,7 @@ p.update = function(ctx, canvas, dt, pMouseState){
 	    this.draw(ctx, canvas);
 	    
 	    // Update the current board
-	    this.boardArray[this.activeBoardIndex].act(pMouseState, this.scale);
+	    this.boardArray[this.activeBoardIndex].act(pMouseState, this.scale, dt);
 	}
 }
 
