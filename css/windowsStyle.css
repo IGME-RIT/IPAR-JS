@@ -14,19 +14,36 @@
   width: 30vw;
   min-width: 50vh;
   z-index: 2;
+  font-family: Sans-serif;
+}
+
+.window h3 {
+ 	margin-bottom: 0.5em;
+}
+
+.window b {
+	line-height: 1.5em;
+}
+
+.window hr {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .windowContent {
   background-color: #FFFFFF;
   color: 'black';
   min-height: 10vw;
+  padding: 1vw;
+  font-size: 0.9em;
 }
 
 .title {
 	background-color: #2FBFBE;
 	color: #FFFFFF;
 	font-weight: bold;
-	width: 100%;
+	width: calc(100% - 0.8vw);	
+	padding: 0.4vw;
 }
 
 .resource {
