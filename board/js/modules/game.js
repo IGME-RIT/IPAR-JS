@@ -1,9 +1,9 @@
 "use strict";
 var Board = require('./board.js');
 var Point = require('./point.js');
-var DrawLib = require('./drawLib.js');
 var LessonNode = require('./lessonNode.js');
-var Utility = require('./utilities.js');
+var Constants = require('./constants.js');
+var DrawLib = require('./drawlib.js');
 var DataParser = require('./iparDataParser.js');
 
 //mouse management
@@ -60,6 +60,14 @@ p.createLessonNodes = function(){
 	this.active = true;
 }
 
+p.zoom = function(amount){
+	if(this.active){
+		var newZoom = this.boardArray[this.activeBoardIndex].zoom+amount;
+		if(newZoom >= Constants.minZoom && newZoom <= Constants.maxZoom)
+			this.boardArray[this.activeBoardIndex].zoom = newZoom;
+	}
+}
+
 p.update = function(ctx, canvas, dt, pMouseState){
 	
 	if(this.active){
@@ -74,22 +82,26 @@ p.update = function(ctx, canvas, dt, pMouseState){
 	    this.draw(ctx, canvas);
 	    
 	    // Update the current board
-	    this.boardArray[this.activeBoardIndex].act(pMouseState);
+	    this.boardArray[this.activeBoardIndex].act(pMouseState, this.scale);
 	}
 }
 
 p.draw = function(ctx, canvas){
-	//draw debug background
-    ctx.save();
-    DrawLib.clear(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
-    DrawLib.rect(ctx, 0, 0, canvas.offsetWidth, canvas.offsetHeight, "white", false);
-    DrawLib.line(ctx, canvas.offsetWidth/2, 0, canvas.offsetWidth/2, canvas.offsetHeight, 2, "lightgray");
-    DrawLib.line(ctx, 0, canvas.offsetHeight/2, canvas.offsetWidth, canvas.offsetHeight/2, 2, "lightGray");
-    ctx.restore();
+	
+	// Draw the background
+	DrawLib.rect(ctx, 0, 0, canvas.width, canvas.height, "#15718F");
+	
+	// Scale the game
+	ctx.save();
+	ctx.translate(canvas.width/2, canvas.height/2);
+	ctx.scale(this.scale, this.scale);
+	ctx.translate(-canvas.width/2, -canvas.height/2);
+	//ctx.translate(canvas.width*this.scale-canvas.width, canvas.width*this.scale-canvas.width);
 	
     // Draw the current board
     this.boardArray[this.activeBoardIndex].draw(ctx, canvas, {x:canvas.offsetWidth/2, y:canvas.offsetHeight/2});
-    
+
+    ctx.restore();
 }
 
 module.exports = game;

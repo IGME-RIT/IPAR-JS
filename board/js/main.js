@@ -3,6 +3,8 @@
 var Game = require('./modules/game.js');
 var Point = require('./modules/point.js');
 var MouseState = require('./modules/mouseState.js');
+var Constants = require('./modules/constants.js');
+var Utilities = require('./modules/utilities.js');
 
 //game objects
 var game;
@@ -13,9 +15,6 @@ var ctx;
 var windowDiv;
 var windowFilm;
 var pausedTime = 0;
-
-//responsiveness
-var center;
 
 //mouse handling
 var mousePosition;
@@ -45,6 +44,7 @@ function initializeVariables(){
     canvas.height = canvas.offsetHeight;
     console.log("Canvas Dimensions: " + canvas.width + ", " + canvas.height);
     
+    // Setup the window film
 	windowFilm = document.getElementById('windowFlim');
 	windowFilm.onclick = function() { windowDiv.innerHTML = ''; };
     
@@ -79,7 +79,13 @@ function initializeVariables(){
     prevTime = Date.now();
     dt = 0;
     
+    // Create the game
     game = new Game(localStorage['caseFiles'], windowDiv);
+    
+	// Setup the zoom buttons and scale of the game
+	document.getElementById('zoom-in').onclick = function() { game.zoom(.1); };
+	document.getElementById('zoom-out').onclick = function() { game.zoom(-.1); };
+    game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
 }
 
 //fires once per frame
@@ -115,10 +121,14 @@ function loop(){
 window.addEventListener("resize", function(e){
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    center = new Point(canvas.width / 2, canvas.height / 2);
+    
+    // Get the new scale
+    game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
     
     console.log("Canvas Dimensions: " + canvas.width + ", " + canvas.height);
 });
 
-
-
+// Handle zooming
+function zoom(amount){
+	game.zoom(amount);
+}

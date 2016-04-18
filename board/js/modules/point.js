@@ -1,9 +1,27 @@
 "use strict";
-function point(pX, pY){
+function Point(pX, pY){
     this.x = pX;
     this.y = pY;
 }
 
-var p = point.prototype;
+var p = Point.prototype;
 
-module.exports = point;
+p.add = function(pX, pY){
+	if(pY)
+		return new Point(this.x+pX, this.y+pY);
+	else
+		return new Point(this.x+pX.x, this.y+pX.y);
+}
+
+p.mult = function(pX, pY){
+	if(pY)
+		return new Point(this.x*pX, this.y*pY);
+	else
+		return new Point(this.x*pX.x, this.y*pX.y);
+}
+
+p.scale = function(scale){
+	return new Point(this.x*scale, this.y*scale);
+}
+
+module.exports = Point;

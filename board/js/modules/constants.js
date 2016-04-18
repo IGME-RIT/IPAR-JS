@@ -1,10 +1,15 @@
 "use strict";
+var Point = require('./point.js');
 
 //Module export
 var m = module.exports;
 
 // The size of the board in game units at 100% zoom
-m.boardSize = {x:1920, y:1080};
+m.boardSize = new Point(1920, 1080);
 
-// The scale of the board to game view at 100% zoom
-m.boardScale = 2;
+//The size of the board outline in game units at 100% zoom
+m.boardOutline = m.boardSize.x > m.boardSize.y ? m.boardSize.x/20 : m.boardSize.y/20;
+
+// The max and min zoom values
+m.maxZoom = 1.5;
+m.minZoom = 0.5;

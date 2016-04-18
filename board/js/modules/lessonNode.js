@@ -1,6 +1,7 @@
 "use strict";
 var DrawLib = require('./drawLib.js');
 var Question = require("./question.js");
+var Constants = require("./constants.js");
 
 //parameter is a point that denotes starting position
 function lessonNode(startPosition, imagePath, pQuestion){
@@ -9,7 +10,6 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.dragLocation = undefined;
     this.mouseOver = false;
     this.dragging = false;
-    this.scaleFactor = 1;
     this.type = "lessonNode";
     this.image = new Image();
     this.width;
@@ -23,26 +23,26 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.image.onload = function() {
         that.width = that.image.naturalWidth;
         that.height = that.image.naturalHeight;
-        var maxDimension = 100;
+        var maxDimension = Constants.boardSize.scale(0.1);
         //too small?
-        if(that.width < maxDimension && that.height < maxDimension){
+        if(that.width < maxDimension.x && that.height < maxDimension.y){
             var x;
             if(that.width > that.height){
-                x = maxDimension / that.width;
+                x = maxDimension.x / that.width;
             }
             else{
-                x = maxDimension / that.height;
+                x = maxDimension.y / that.height;
             }
             that.width = that.width * x;
             that.height = that.height * x;
         }
-        if(that.width > maxDimension || that.height > maxDimension){
+        if(that.width > maxDimension.x || that.height > maxDimension.y){
             var x;
             if(that.width > that.height){
-                x = that.width / maxDimension;
+                x = that.width / maxDimension.x;
             }
             else{
-                x = that.height / maxDimension;
+                x = that.height / maxDimension.y;
             }
             that.width = that.width / x;
             that.height = that.height / x;
@@ -80,9 +80,10 @@ p.draw = function(ctx, canvas){
 		canvas.style.cursor = 'pointer';
     }
     //drawing the button image
-    ctx.drawImage(this.image, this.position.x - (this.width*this.scaleFactor)/2, this.position.y - (this.height*this.scaleFactor)/2, this.width * this.scaleFactor, this.height * this.scaleFactor);
+    ctx.drawImage(this.image, this.position.x - this.width/2, this.position.y - this.height/2, this.width, this.height);
     
     //drawing the pin
+	var smaller = this.width < this.height ? this.width : this.height;
     switch (this.question.currentState) {
     	case 1:
     		ctx.fillStyle = "blue";
@@ -93,10 +94,10 @@ p.draw = function(ctx, canvas){
 			ctx.strokeStyle = "yellow";
 			break;
     }
-	ctx.lineWidth = 2;
+	ctx.lineWidth = smaller/32;
 
 	ctx.beginPath();
-	ctx.arc(this.position.x - (this.width*this.scaleFactor)/2 + 15,this.position.y - (this.height*this.scaleFactor)/2 + 15,6,0,2*Math.PI);
+	ctx.arc(this.position.x - this.width/2 + smaller*3/16, this.position.y - this.height/2 + smaller*3/16, smaller*3/32, 0, 2*Math.PI);
 	ctx.closePath();
 	ctx.fill();
 	ctx.stroke();

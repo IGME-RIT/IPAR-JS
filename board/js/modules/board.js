@@ -2,6 +2,8 @@
 var Utilities = require('./utilities.js');
 var Point = require('./point.js');
 var Question = require("./question.js");
+var Constants = require("./constants.js");
+var DrawLib = require("./drawlib.js");
 
 //parameter is a point that denotes starting position
 function board(startPosition, lessonNodes){
@@ -9,6 +11,7 @@ function board(startPosition, lessonNodes){
     this.lessonNodeArray = lessonNodes;
     this.boardOffset = {x:0,y:0};
     this.prevBoardOffset = {x:0,y:0};
+    this.zoom = 1;
 }
 
 board.drawLib = undefined;
@@ -23,7 +26,7 @@ p.move = function(pX, pY){
     this.prevBoardOffset = {x:0,y:0};
 };
 
-p.act = function(pMouseState) {
+p.act = function(pMouseState, scale) {
 	
 	// for each  node
     for(var i=0; i<this.lessonNodeArray.length; i++){
@@ -74,9 +77,9 @@ p.act = function(pMouseState) {
 		&& pMouseState.relativePosition.x < lNode.position.x+lNode.width/2
 		&& pMouseState.relativePosition.y > lNode.position.y-lNode.height/2
 		&& pMouseState.relativePosition.y < lNode.position.y+lNode.height/2) {*/
-		
-		
-		if (Utilities.mouseIntersect(pMouseState,lNode,this.boardOffset,1)) {
+		if(i==0)
+			console.log(pMouseState.relativePosition.x+"::"+this.zoom*scale*(lNode.position.x - lNode.width/2 - this.boardOffset.x));
+		if (Utilities.mouseIntersect(pMouseState,lNode,this.boardOffset,this.zoom*scale)) {
 			lNode.mouseOver = true;
 			nodeChosen = true;
 			pMouseState.hasTarget = true;
@@ -132,12 +135,20 @@ p.act = function(pMouseState) {
 
 p.draw = function(ctx, canvas, center){
     ctx.save();
-
+    
     this.position = this.boardOffset;
-    //translate to the center of the screen
+    //translate to the center of the board
     ctx.translate(center.x - this.position.x, center.y - this.position.y);
-    //ctx.translate(this.boardOffset.x,this.boardOffset.y);
+    
+    // Translate to center of screen and scale for zoom then translate back
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.scale(this.zoom, this.zoom);
+    ctx.translate(-canvas.width/2, -canvas.height/2);
 	
+    // Draw the background of the board
+    DrawLib.rect(ctx, 0, 0, Constants.boardSize.x, Constants.boardSize.y, "#D3B185");
+    DrawLib.strokeRect(ctx, -Constants.boardOutline/2, -Constants.boardOutline/2, Constants.boardSize.x+Constants.boardOutline/2, Constants.boardSize.y+Constants.boardOutline/2, Constants.boardOutline, "#CB9966");
+    
 	// draw the nodes
     for(var i = 0; i < this.lessonNodeArray.length; i++){
     

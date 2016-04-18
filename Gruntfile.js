@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     browserify: {
       dist: {
         src: ['board/js/**/*.js'],
-        dest: 'temp/bundle.js',
+        dest: 'build/board/temp/bundle.js',
         options: {
             browserifyOptions: {
                 debug: true
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
     },
     uglify: {
       dist: {
-          src: 'temp/bundle.js',
+          src: 'build/board/temp/bundle.js',
           dest: 'build/board/bundle.min.js'
       }
     },

@@ -21,8 +21,8 @@ m.clamp = function(value, min, max){
 
 //determines whether the mouse is intersecting the active element
 m.mouseIntersect = function(pMouseState, pElement, pOffsetter, pScale){
-    if(pMouseState.relativePosition.x + pOffsetter.x > (pElement.position.x - (pScale*pElement.width)/2) && pMouseState.relativePosition.x + pOffsetter.x < (pElement.position.x + (pScale*pElement.width)/2)){
-        if(pMouseState.relativePosition.y + pOffsetter.y > (pElement.position.y - (pScale*pElement.height)/2) && pMouseState.relativePosition.y + pOffsetter.y < (pElement.position.y + (pScale*pElement.height)/2)){
+    if(pMouseState.relativePosition.x > pScale*(pElement.position.x - pElement.width/2 - pOffsetter.x) && pMouseState.relativePosition.x < pScale*(pElement.position.x + pElement.width/2 - pOffsetter.x)){
+        if(pMouseState.relativePosition.y > pScale*(pElement.position.y - pElement.height/2 - pOffsetter.y) && pMouseState.relativePosition.y < pScale*(pElement.position.y + pElement.height/2 - pOffsetter.y)){
             //pElement.mouseOver = true;
             return true;
             pMouseState.hasTarget = true;
@@ -51,4 +51,9 @@ m.getXml = function(xml){
 		xmlDoc.loadXML(xml);
 	}
 	return xmlDoc;
+}
+
+// gets the scale of the first parameter to the second (with the second fitting inside the first)
+m.getScale = function(virtual, actual){
+	return actual.y/virtual.x*virtual.y < actual.x ? actual.y/virtual.y : actual.x/virtual.x;
 }

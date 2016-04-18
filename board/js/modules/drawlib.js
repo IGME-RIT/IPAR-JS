@@ -19,6 +19,19 @@ m.rect = function(ctx, x, y, w, h, col, centerOrigin) {
     ctx.restore();
 }
 
+m.strokeRect = function(ctx, x, y, w, h, line, col, centerOrigin) {
+    ctx.save();
+    ctx.strokeStyle = col;
+    ctx.lineWidth = line;
+    if(centerOrigin){
+        ctx.strokeRect(x - (w / 2), y - (h / 2), w, h);
+    }
+    else{
+        ctx.strokeRect(x, y, w, h);
+    }
+    ctx.restore();
+}
+
 m.line = function(ctx, x1, y1, x2, y2, thickness, color) {
     ctx.save();
     ctx.beginPath();
