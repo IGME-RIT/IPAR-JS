@@ -51,7 +51,6 @@ p.act = function(pMouseState) {
 		if (this.lessonNodeArray[i].dragging) {
 			//nodeChosen = true;
 			pMouseState.hasTarget = true;
-			
 		}
 	}
 	
@@ -106,6 +105,9 @@ p.act = function(pMouseState) {
 	// drag the board around
 	if (!pMouseState.hasTarget) {
 		if (pMouseState.mouseDown) {
+			canvas.style.cursor = '-webkit-grabbing';
+			canvas.style.cursor = '-moz-grabbing';
+			canvas.style.cursor = 'grabbing';
 			if (!this.mouseStartDragBoard) {
 				this.mouseStartDragBoard = pMouseState.relativePosition;
 				this.prevBoardOffset.x = this.boardOffset.x;
@@ -121,13 +123,14 @@ p.act = function(pMouseState) {
 			}
 		} else {
 			this.mouseStartDragBoard = undefined;
+			canvas.style.cursor = '';
 		}
     }
     
 	this.prevMouseState = pMouseState;
 }
 
-p.draw = function(ctx, center){
+p.draw = function(ctx, canvas, center){
     ctx.save();
 
     this.position = this.boardOffset;
@@ -142,7 +145,7 @@ p.draw = function(ctx, center){
 		if (this.lessonNodeArray[i].question.revealThreshold > this.lessonNodeArray[i].linksAwayFromOrigin) continue;
     	
     	// draw the node itself
-        this.lessonNodeArray[i].draw(ctx);
+        this.lessonNodeArray[i].draw(ctx, canvas);
     }
 
 	// draw the lines

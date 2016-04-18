@@ -54,7 +54,7 @@ function lessonNode(startPosition, imagePath, pQuestion){
 
 var p = lessonNode.prototype;
 
-p.draw = function(ctx){
+p.draw = function(ctx, canvas){
 
 	// Check if question is visible
 	if(this.question.currentState==Question.SOLVE_STATE.HIDDEN){
@@ -70,10 +70,14 @@ p.draw = function(ctx){
     if(this.dragging) {
     	ctx.shadowColor = 'yellow';
         ctx.shadowBlur = 5;
+		canvas.style.cursor = '-webkit-grabbing';
+		canvas.style.cursor = '-moz-grabbing';
+		canvas.style.cursor = 'grabbing';
     }
     else if(this.mouseOver){
         ctx.shadowColor = 'dodgerBlue';
         ctx.shadowBlur = 5;
+		canvas.style.cursor = 'pointer';
     }
     //drawing the button image
     ctx.drawImage(this.image, this.position.x - (this.width*this.scaleFactor)/2, this.position.y - (this.height*this.scaleFactor)/2, this.width * this.scaleFactor, this.height * this.scaleFactor);

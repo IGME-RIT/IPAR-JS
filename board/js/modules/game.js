@@ -88,7 +88,7 @@ p.draw = function(ctx, canvas){
     ctx.restore();
 	
     // Draw the current board
-    this.boardArray[this.activeBoardIndex].draw(ctx, {x:canvas.offsetWidth/2, y:canvas.offsetHeight/2});
+    this.boardArray[this.activeBoardIndex].draw(ctx, canvas, {x:canvas.offsetWidth/2, y:canvas.offsetHeight/2});
     
 }
 
