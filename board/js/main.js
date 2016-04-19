@@ -16,15 +16,6 @@ var windowDiv;
 var windowFilm;
 var pausedTime = 0;
 
-//mouse handling
-var mousePosition;
-var relativeMousePosition;
-var mouseDown;
-var mouseIn;
-var mouseDownTimer;
-var mouseClicked;
-var maxClickDuration; // milliseconds
-
 //persistent utilities
 var prevTime; // date in milliseconds
 var dt; // delta time in milliseconds
@@ -47,40 +38,13 @@ function initializeVariables(){
     // Setup the window film
 	windowFilm = document.getElementById('windowFlim');
 	windowFilm.onclick = function() { windowDiv.innerHTML = ''; };
-    
-    mousePosition = new Point(0,0);
-    relativeMousePosition = new Point(0,0);
-    
-    //event listeners for mouse interactions with the canvas
-    canvas.addEventListener("mousemove", function(e){
-        var boundRect = canvas.getBoundingClientRect();
-        mousePosition = new Point(e.clientX - boundRect.left, e.clientY - boundRect.top);
-        relativeMousePosition = new Point(mousePosition.x - (canvas.offsetWidth/2.0), mousePosition.y - (canvas.offsetHeight/2.0));        
-    });
-    mouseDown = false;
-    canvas.addEventListener("mousedown", function(e){
-        mouseDown = true;
-    });
-    canvas.addEventListener("mouseup", function(e){
-        mouseDown = false;
-    });
-    mouseIn = false;
-    mouseDownTimer = 0;
-    mouseClicked = false;
-    maxClickDuration = 200;
-    canvas.addEventListener("mouseover", function(e){
-        mouseIn = true;
-    });
-    canvas.addEventListener("mouseout", function(e){
-        mouseIn = false;
-        mouseDown = false;
-    });
-    
+	
+	// Setup dt
     prevTime = Date.now();
     dt = 0;
     
     // Create the game
-    game = new Game(localStorage['caseFiles'], windowDiv);
+    game = new Game(localStorage['caseFiles'], canvas, windowDiv);
     
 	// Setup the zoom buttons and scale of the game
 	document.getElementById('zoom-in').onclick = function() { game.zoom(.1); };
@@ -93,17 +57,12 @@ function loop(){
 	// loop
     window.requestAnimationFrame(loop.bind(this));
     
-    // update delta time
+	// update delta time
     dt = Date.now() - prevTime;
     prevTime = Date.now();
     
-    // check mouse click
-    mouseClicked = false;
-    if (mouseDown) { mouseDownTimer += dt; }
-    else { if (mouseDownTimer > 0 && mouseDownTimer < maxClickDuration) { mouseClicked = true; } mouseDownTimer = 0; }
-    
     // update game
-    game.update(ctx, canvas, dt, new MouseState(mousePosition, relativeMousePosition, mouseDown, mouseIn, mouseClicked));
+    game.update(ctx, canvas, dt);
     
     // Check if should pause
     if(game.active && windowDiv.innerHTML!='' && pausedTime++>3){
@@ -127,8 +86,3 @@ window.addEventListener("resize", function(e){
     
     console.log("Canvas Dimensions: " + canvas.width + ", " + canvas.height);
 });
-
-// Handle zooming
-function zoom(amount){
-	game.zoom(amount);
-}

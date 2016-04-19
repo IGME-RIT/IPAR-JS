@@ -26,7 +26,7 @@ p.move = function(pX, pY){
     this.prevBoardOffset = {x:0,y:0};
 };
 
-p.act = function(pMouseState, scale) {
+p.act = function(pMouseState, dt) {
 	
 	// for each  node
     for(var i=0; i<this.lessonNodeArray.length; i++){
@@ -48,28 +48,17 @@ p.act = function(pMouseState, scale) {
 	//for(var i = 0; i < boardArray.length; i++){
 		// loop through lesson nodes to check for hover
 		// update board
-		
-	var nodeChosen = false;
-	for (var i=this.lessonNodeArray.length-1; i>=0; i--) {
-		if (this.lessonNodeArray[i].dragging) {
-			//nodeChosen = true;
-			pMouseState.hasTarget = true;
-		}
+	
+    if (!pMouseState.mouseDown && this.target) {
+		this.target.dragPosition = undefined; // clear drag behavior
+		this.target.dragging = false;
+		this.target = null;
 	}
-	
-	
-	for (var i=this.lessonNodeArray.length-1; i>=0; i--) {
+    
+	for (var i=this.lessonNodeArray.length-1, nodeChosen; i>=0 && this.target==null; i--) {
 		var lNode = this.lessonNodeArray[i];
 		
-		if (!pMouseState.mouseDown) {
-			lNode.dragPosition = undefined; // clear drag behavior
-			lNode.dragging = false;
-		} 
-		
 		lNode.mouseOver = false;
-		
-		// if there is already a selected node, do not try to select another
-		if (nodeChosen) {  continue; }
 		
 		//console.log("node update");
 		// if hovering, show hover glow
@@ -77,48 +66,51 @@ p.act = function(pMouseState, scale) {
 		&& pMouseState.relativePosition.x < lNode.position.x+lNode.width/2
 		&& pMouseState.relativePosition.y > lNode.position.y-lNode.height/2
 		&& pMouseState.relativePosition.y < lNode.position.y+lNode.height/2) {*/
-		if (Utilities.mouseIntersect(pMouseState,lNode,this.boardOffset,scale*this.zoom)) {
+		if (Utilities.mouseIntersect(pMouseState,lNode,this.boardOffset)) {
 			lNode.mouseOver = true;
-			nodeChosen = true;
-			pMouseState.hasTarget = true;
+			this.target = lNode;
 			//console.log(pMouseState.hasTarget);
-			
-			if (pMouseState.mouseDown && !this.prevMouseState.mouseDown) {
+		}
+	}
+	if(this.target){
+
+		if(!this.target.dragging){
+			if (pMouseState.mouseDown) {
 				// drag
-				lNode.dragging = true;
-				lNode.dragPosition = new Point(
-				pMouseState.relativePosition.x - lNode.position.x,
-				pMouseState.relativePosition.y - lNode.position.y
+				this.target.dragging = true;
+				this.target.dragPosition = new Point(
+				pMouseState.virtualPosition.x - this.target.position.x,
+				pMouseState.virtualPosition.y - this.target.position.y
 				);
 			}
 			if (pMouseState.mouseClicked) {
 				// handle click code
-				lNode.click(pMouseState);
+				this.target.click(pMouseState);
 			}
 		}
-		// if the user is dragging a node, allow the mouse to control its movement
-		if (lNode.dragging) {
-			lNode.position.x = pMouseState.relativePosition.x - lNode.dragPosition.x;
-			lNode.position.y = pMouseState.relativePosition.y - lNode.dragPosition.y;
+		else{
+			this.target.position.x = pMouseState.virtualPosition.x - this.target.dragPosition.x;
+			this.target.position.y = pMouseState.virtualPosition.y - this.target.dragPosition.y;
 		}
+		
 	}
 	
 	// drag the board around
-	if (!pMouseState.hasTarget) {
+	if (this.target==null) {
 		if (pMouseState.mouseDown) {
 			canvas.style.cursor = '-webkit-grabbing';
 			canvas.style.cursor = '-moz-grabbing';
 			canvas.style.cursor = 'grabbing';
 			if (!this.mouseStartDragBoard) {
-				this.mouseStartDragBoard = pMouseState.relativePosition;
+				this.mouseStartDragBoard = pMouseState.virtualPosition;
 				this.prevBoardOffset.x = this.boardOffset.x;
 				this.prevBoardOffset.y = this.boardOffset.y;
 			}
 			else {
-				this.boardOffset.x = this.prevBoardOffset.x - (pMouseState.relativePosition.x - this.mouseStartDragBoard.x);
+				this.boardOffset.x = this.prevBoardOffset.x - (pMouseState.virtualPosition.x - this.mouseStartDragBoard.x);
 				if (this.boardOffset.x > this.maxBoardWidth/2) this.boardOffset.x = this.maxBoardWidth/2;
 				if (this.boardOffset.x < -1*this.maxBoardWidth/2) this.boardOffset.x = -1*this.maxBoardWidth/2;
-				this.boardOffset.y = this.prevBoardOffset.y - (pMouseState.relativePosition.y - this.mouseStartDragBoard.y);
+				this.boardOffset.y = this.prevBoardOffset.y - (pMouseState.virtualPosition.y - this.mouseStartDragBoard.y);
 				if (this.boardOffset.y > this.maxBoardHeight/2) this.boardOffset.y = this.maxBoardHeight/2;
 				if (this.boardOffset.y < -1*this.maxBoardHeight/2) this.boardOffset.y = -1*this.maxBoardHeight/2;
 			}
@@ -127,11 +119,9 @@ p.act = function(pMouseState, scale) {
 			canvas.style.cursor = '';
 		}
     }
-    
-	this.prevMouseState = pMouseState;
 }
 
-p.draw = function(ctx, canvas, center){
+p.draw = function(ctx, canvas){
     ctx.save();
     
 
@@ -142,7 +132,7 @@ p.draw = function(ctx, canvas, center){
     
     this.position = this.boardOffset;
     //translate to the center of the board
-    ctx.translate(center.x - this.position.x, center.y - this.position.y);
+    ctx.translate(canvas.width/2 - this.position.x, canvas.height/2 - this.position.y);
     
 	
     // Draw the background of the board

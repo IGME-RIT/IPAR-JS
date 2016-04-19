@@ -5,6 +5,7 @@ var LessonNode = require('./lessonNode.js');
 var Constants = require('./constants.js');
 var DrawLib = require('./drawlib.js');
 var DataParser = require('./iparDataParser.js');
+var MouseState = require('./mouseState.js');
 
 //mouse management
 var mouseState;
@@ -17,9 +18,10 @@ var mouseSustainedDown;
 var phaseObject;
 
 
-function game(url, windowDiv){
+function game(url, canvas, windowDiv){
 	var game = this;
 	this.active = false;
+	this.mouseState = new MouseState(canvas);
 	DataParser.parseData(url, windowDiv, function(categories){
 		game.categories = categories;
 		game.createLessonNodes();
@@ -68,21 +70,17 @@ p.zoom = function(amount){
 	}
 }
 
-p.update = function(ctx, canvas, dt, pMouseState){
+p.update = function(ctx, canvas, dt){
 	
 	if(this.active){
 	    // mouse
-	    previousMouseState = mouseState;
-	    mouseState = pMouseState;
-	    mouseTarget = 0;
-	    if(typeof previousMouseState === 'undefined'){
-	        previousMouseState = mouseState;
-	    }
+		this.mouseState.update(dt, this.scale*this.boardArray[this.activeBoardIndex].zoom);
+
 	    //draw stuff
 	    this.draw(ctx, canvas);
 	    
 	    // Update the current board
-	    this.boardArray[this.activeBoardIndex].act(pMouseState, this.scale);
+	    this.boardArray[this.activeBoardIndex].act(this.mouseState, dt);
 	}
 }
 
@@ -90,7 +88,6 @@ p.draw = function(ctx, canvas){
 	
 	// Draw the background
 	DrawLib.rect(ctx, 0, 0, canvas.width, canvas.height, "#15718F");
-    console.log(this.boardArray[this.activeBoardIndex].boardOffset);
     
 	// Scale the game
 	ctx.save();
@@ -100,7 +97,7 @@ p.draw = function(ctx, canvas){
 	//ctx.translate(canvas.width*this.scale-canvas.width, canvas.width*this.scale-canvas.width);
 	
     // Draw the current board
-    this.boardArray[this.activeBoardIndex].draw(ctx, canvas, {x:canvas.offsetWidth/2, y:canvas.offsetHeight/2});
+    this.boardArray[this.activeBoardIndex].draw(ctx, canvas);
 
     ctx.restore();
 }

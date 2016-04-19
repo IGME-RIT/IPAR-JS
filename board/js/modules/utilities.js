@@ -20,9 +20,9 @@ m.clamp = function(value, min, max){
 }
 
 //determines whether the mouse is intersecting the active element
-m.mouseIntersect = function(pMouseState, pElement, pOffsetter, pScale){
-    if(pMouseState.relativePosition.x > pScale*(pElement.position.x - pElement.width/2 - pOffsetter.x) && pMouseState.relativePosition.x < pScale*(pElement.position.x + pElement.width/2 - pOffsetter.x)){
-        if(pMouseState.relativePosition.y > pScale*(pElement.position.y - pElement.height/2 - pOffsetter.y) && pMouseState.relativePosition.y < pScale*(pElement.position.y + pElement.height/2 - pOffsetter.y)){
+m.mouseIntersect = function(pMouseState, pElement, pOffsetter){
+    if(pMouseState.virtualPosition.x > pElement.position.x - pElement.width/2 - pOffsetter.x && pMouseState.virtualPosition.x < pElement.position.x + pElement.width/2 - pOffsetter.x){
+        if(pMouseState.virtualPosition.y > pElement.position.y - pElement.height/2 - pOffsetter.y && pMouseState.virtualPosition.y < pElement.position.y + pElement.height/2 - pOffsetter.y){
             //pElement.mouseOver = true;
             return true;
             pMouseState.hasTarget = true;
