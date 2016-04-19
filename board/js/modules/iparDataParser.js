@@ -2,6 +2,7 @@
 var Category = require("./category.js");
 var Resource = require("./resources.js");
 var Utilities = require('./utilities.js');
+var Constants = require('./constants.js');
 var Question = require('./question.js');
 window.resolveLocalFileSystemURL  = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
 
@@ -103,8 +104,14 @@ function assignQuestionStates(categories, questionElems) {
 			// store tag for easy reference
 			var qElem = questionElems[tally];
 			
+			// state
 			q.currentState = stateConverter[qElem.getAttribute("questionState")];
+			// xpos
+			q.positionPercentX = Utilities.map(parseInt(qElem.getAttribute("positionPercentX")), 0, 100, 0, Constants.boardSize.x);
+			// ypos
+			q.positionPercentY = Utilities.map(parseInt(qElem.getAttribute("positionPercentY")), 0, 100, 0, Constants.boardSize.y);
 			
+			// increment total
 			tally++;
 		}
 	}
