@@ -176,6 +176,8 @@ p.draw = function(ctx, canvas){
         	var cPos = connection.getNodePoint();
         	
         	// draw the line
+        	ctx.lineWidth = 0.002;
+        	ctx.strokeStyle = "black";
         	ctx.beginPath();
         	// translate to start (pin)
         	ctx.moveTo(oPos.x, oPos.y);
