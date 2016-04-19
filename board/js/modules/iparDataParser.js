@@ -2,6 +2,7 @@
 var Category = require("./category.js");
 var Resource = require("./resources.js");
 var Utilities = require('./utilities.js');
+var Question = require('./question.js');
 window.resolveLocalFileSystemURL  = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
 
 // Parses the xml case files
@@ -24,6 +25,13 @@ questionText
 qustionName
 */
 
+// conversion
+var stateConverter = {
+	"hidden" : Question.SOLVE_STATE.HIDDEN,
+	"unsolved" :  Question.SOLVE_STATE.UNSOLVED,
+	"correct" :  Question.SOLVE_STATE.SOLVED
+}
+
 // Module export
 var m = module.exports;
 
@@ -37,11 +45,38 @@ m.parseData = function(url, windowDiv, callback) {
     window.resolveLocalFileSystemURL(url+'active/caseFile.ipardata', function(fileEntry) {
 		fileEntry.file(function(file) {
 			var reader = new FileReader();
+			
+			// hook up callback
 			reader.onloadend = function() {
 
 				// Get the raw data
 				var rawData = Utilities.getXml(this.result);
 				var categories = getCategoriesAndQuestions(rawData, url, windowDiv);
+				loadSaveProgress(categories, url, windowDiv, callback);
+			   
+			};
+			reader.readAsText(file);
+		   
+		}, function(e){
+			console.log("Error: "+e.message);
+		});
+	});
+}
+
+function loadSaveProgress(categories, url, windowDiv, callback) {
+    var questions = [];
+    
+	// get XML
+    window.resolveLocalFileSystemURL(url+'active/saveFile.ipardata', function(fileEntry) {
+		fileEntry.file(function(file) {
+			var reader = new FileReader();
+			
+			// hook up callback
+			reader.onloadend = function() {
+
+				// Get the save data
+				var saveData = Utilities.getXml(this.result);
+				assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 				callback(categories);
 			   
 			};
@@ -51,6 +86,29 @@ m.parseData = function(url, windowDiv, callback) {
 			console.log("Error: "+e.message);
 		});
 	});
+}
+
+function assignQuestionStates(categories, questionElems) {
+	console.log(questionElems);
+	
+	var tally = 0; // track total index in nested loop
+	
+	// all questions
+	for (var i=0; i<categories.length; i++) {
+		for (var j=0; j<categories[i].questions.length; j++) {
+		
+			// store question  for easy reference
+			var q = categories[i].questions[j];
+			
+			// store tag for easy reference
+			var qElem = questionElems[tally];
+			
+			q.currentState = stateConverter[qElem.getAttribute("questionState")];
+			
+			
+			tally++;
+		}
+	}
 }
 
 // takes the xml structure and fills in the data for the question object

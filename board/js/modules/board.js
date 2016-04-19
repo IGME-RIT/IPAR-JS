@@ -40,12 +40,12 @@ p.act = function(pMouseState, dt) {
 			
 			// Update the node's state
 			activeNode.currentState = activeNode.question.currentState;
-			
 		}
 		
 		// update the node's transition progress
 		if (activeNode.question.currentState == Question.SOLVE_STATE.SOLVED)
 			activeNode.linePercent = Math.min(1,dt/2000 + activeNode.linePercent);
+			console.log(activeNode.question.revealThreshold);	
 	}
     
     // hover states
@@ -126,14 +126,15 @@ p.act = function(pMouseState, dt) {
 }
 
 p.draw = function(ctx, canvas){
-    ctx.save();
     
+    // save canvas state because we are about to alter properties
+    ctx.save();   
 
     // Translate to center of screen and scale for zoom then translate back
     ctx.translate(canvas.width/2, canvas.height/2);
     ctx.scale(this.zoom, this.zoom);
     ctx.translate(-canvas.width/2, -canvas.height/2);
-    
+    // move the board to where the user dragged it
     this.position = this.boardOffset;
     //translate to the center of the board
     ctx.translate(canvas.width/2 - this.position.x, canvas.height/2 - this.position.y);
@@ -146,8 +147,8 @@ p.draw = function(ctx, canvas){
 	// draw the nodes
     for(var i = 0; i < this.lessonNodeArray.length; i++){
     
-    	// temporarily hide all but the first question
-		if (this.lessonNodeArray[i].question.revealThreshold > this.lessonNodeArray[i].linksAwayFromOrigin) continue;
+    	// temporarily hide all but the first question						// something is wrong here, linksAwayFromOrigin does not exist anymore
+		//if (this.lessonNodeArray[i].question.revealThreshold > this.lessonNodeArray[i].linksAwayFromOrigin) continue;
     	
     	// draw the node itself
         this.lessonNodeArray[i].draw(ctx, canvas);
@@ -159,15 +160,17 @@ p.draw = function(ctx, canvas){
 		// only show lines from solved questions
 		if (this.lessonNodeArray[i].question.currentState!=Question.SOLVE_STATE.SOLVED) continue;
 		
-		// get the pin poistion
+		// get the pin position
         var oPos = this.lessonNodeArray[i].getNodePoint();
         
 		// set line style
 		ctx.strokeStyle = "rgba(0,0,105,0.2)";
 		ctx.lineWidth = 1;
         
+        // draw lines
         for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
         	
+        	// -1 becase node connection index values are 1-indexed but connections is 0-indexed
 			if (this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].question.currentState==Question.SOLVE_STATE.HIDDEN) continue;
         	
         	// go to the index in the array that corresponds to the connected node on this board and save its position

@@ -5,6 +5,22 @@ var Constants = require('./constants.js');
 var SOLVE_STATE = Object.freeze({HIDDEN: 0, UNSOLVED: 1, SOLVED: 2});
 var QUESTION_TYPE = Object.freeze({JUSTIFICATION: 1, MULTIPLE_CHOICE: 2, SHORT_RESPONSE: 3, FILE: 4, MESSAGE: 5});
 
+/* Question properties:
+currentState: SOLVE_STATE
+windowDiv: element
+correct: int
+positionPercentX: float
+positionPercentY: float
+revealThreshold: int
+imageLink: string
+feedbacks: string[]
+connectionElements: element[]
+connections: int[]
+questionType: SOLVE_STATE
+justification: string
+wrongAnswer: string
+correctAnswer: string
+*/
 //parameter is a point that denotes starting position
 function Question(xml, resources, url, windowDiv){
 	
