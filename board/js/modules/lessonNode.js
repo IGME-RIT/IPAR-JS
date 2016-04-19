@@ -18,6 +18,7 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.question = pQuestion;
     this.connections = 0;
     this.currentState = this.question.currentState;
+    this.linePercent = 0;
     
     var that = this;
     //image loading and resizing

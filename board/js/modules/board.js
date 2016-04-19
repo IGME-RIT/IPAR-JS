@@ -42,6 +42,10 @@ p.act = function(pMouseState, dt) {
 			activeNode.currentState = activeNode.question.currentState;
 			
 		}
+		
+		// update the node's transition progress
+		if (activeNode.question.currentState == Question.SOLVE_STATE.SOLVED)
+			activeNode.linePercent = Math.min(1,dt/2000 + activeNode.linePercent);
 	}
     
     // hover states
@@ -93,7 +97,7 @@ p.act = function(pMouseState, dt) {
 			this.target.position.y = pMouseState.virtualPosition.y - this.target.dragPosition.y;
 		}
 		
-	}
+  }
 	
 	// drag the board around
 	if (this.target==null) {
@@ -175,7 +179,7 @@ p.draw = function(ctx, canvas){
         	ctx.beginPath();
         	// translate to start (pin)
         	ctx.moveTo(oPos.x, oPos.y);
-        	ctx.lineTo(cPos.x, cPos.y);
+        	ctx.lineTo(oPos.x + (cPos.x - oPos.x)*this.lessonNodeArray[i].linePercent, oPos.y + (cPos.y - oPos.y)*this.lessonNodeArray[i].linePercent);
         	ctx.closePath();
         	ctx.stroke();
         }
@@ -184,9 +188,4 @@ p.draw = function(ctx, canvas){
     ctx.restore();
 };
 
-module.exports = board;
-
-//this is an object named Board and this is its javascript
-//var Board = require('./objects/board.js');
-//var b = new Board();
-    
+module.exports = board;    

@@ -60,7 +60,7 @@ header {
 }
 
 #bottomBar button {
-	width: 10vw;
+	width: 14vw;
 	height: 5vh;
 	display: inline;
 	margin: -2vh 1vw;
@@ -81,7 +81,7 @@ header {
 
 .buttonBar button {
 	pointer-events: auto;
-	font-size: 1.5vw;
+	font-size: 0.9vw;
 	border: none;
 	border-radius: 0.7vw;
 	box-shadow: 0px 0px 5px rgba(0,0,0,0.6);
