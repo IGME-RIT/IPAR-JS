@@ -11,7 +11,7 @@ function board(startPosition, lessonNodes){
     this.lessonNodeArray = lessonNodes;
     this.boardOffset = {x:0,y:0};
     this.prevBoardOffset = {x:0,y:0};
-    this.zoom = 1;
+    this.zoom = Constants.startZoom;
 }
 
 board.drawLib = undefined;

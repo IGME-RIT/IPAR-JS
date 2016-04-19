@@ -25,30 +25,33 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.image.onload = function() {
         that.width = that.image.naturalWidth;
         that.height = that.image.naturalHeight;
-        var maxDimension = Constants.boardSize.scale(0.1);
+        var maxDimension = Constants.boardSize.x/10;
         //too small?
-        if(that.width < maxDimension.x && that.height < maxDimension.y){
+        if(that.width < maxDimension && that.height < maxDimension){
             var x;
             if(that.width > that.height){
-                x = maxDimension.x / that.width;
+                x = maxDimension / that.width;
             }
             else{
-                x = maxDimension.y / that.height;
+                x = maxDimension / that.height;
             }
             that.width = that.width * x;
             that.height = that.height * x;
         }
-        if(that.width > maxDimension.x || that.height > maxDimension.y){
+        if(that.width > maxDimension || that.height > maxDimension){
             var x;
             if(that.width > that.height){
-                x = that.width / maxDimension.x;
+                x = that.width / maxDimension;
             }
             else{
-                x = that.height / maxDimension.y;
+                x = that.height / maxDimension;
             }
             that.width = that.width / x;
             that.height = that.height / x;
         }
+        
+        that.position.x += that.width/2;
+        that.position.y += that.height/2;
     };
     
     this.image.src = imagePath;
