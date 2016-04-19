@@ -9,9 +9,10 @@ var DrawLib = require("./drawlib.js");
 function board(startPosition, lessonNodes){
     this.position = startPosition;
     this.lessonNodeArray = lessonNodes;
-    this.boardOffset = {x:0,y:0};
+    this.boardOffset = startPosition;
     this.prevBoardOffset = {x:0,y:0};
     this.zoom = Constants.startZoom;
+    this.stage = 0;
 }
 
 board.drawLib = undefined;

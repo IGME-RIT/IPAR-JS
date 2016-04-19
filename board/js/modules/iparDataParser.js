@@ -78,7 +78,8 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 				// Get the save data
 				var saveData = Utilities.getXml(this.result);
 				assignQuestionStates(categories, saveData.getElementsByTagName("question"));
-				callback(categories);
+				var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
+				callback(categories, stage);
 			   
 			};
 			reader.readAsText(file);

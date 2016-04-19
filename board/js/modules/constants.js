@@ -13,4 +13,4 @@ m.boardOutline = m.boardSize.x > m.boardSize.y ? m.boardSize.x/20 : m.boardSize.
 // The max and min zoom values
 m.maxZoom = 2.0;
 m.minZoom = 0.5;
-m.startZoom = 1.5;
+m.startZoom = 0.7;
