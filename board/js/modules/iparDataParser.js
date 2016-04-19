@@ -105,7 +105,6 @@ function assignQuestionStates(categories, questionElems) {
 			
 			q.currentState = stateConverter[qElem.getAttribute("questionState")];
 			
-			
 			tally++;
 		}
 	}
