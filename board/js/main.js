@@ -11,10 +11,11 @@ var game;
 var canvas;
 var ctx;
 
-// window div and if paused
+// window div, film, zoom and if paused
 var windowDiv;
 var windowFilm;
 var pausedTime = 0;
+var zoomSlider;
 
 //persistent utilities
 var prevTime; // date in milliseconds
@@ -46,9 +47,22 @@ function initializeVariables(){
     // Create the game
     game = new Game(localStorage['caseFiles'], canvas, windowDiv);
     
-	// Setup the zoom buttons and scale of the game
-	document.getElementById('zoom-in').onclick = function() { game.zoom(.1); };
-	document.getElementById('zoom-out').onclick = function() { game.zoom(-.1); };
+	// Setup the zoom buttons/slider and scale of the game
+    zoomSlider = document.getElementById('zoom-slider');
+	zoomSlider.oninput = function(){
+		game.updateZoom(-parseFloat(zoomSlider.value)); 
+	};
+    document.getElementById('zoom-in').onclick = function() {
+    	zoomSlider.stepDown();
+		game.updateZoom(-parseFloat(zoomSlider.value)); 
+    };
+	document.getElementById('zoom-out').onclick = function() { 
+		zoomSlider.stepUp(); 
+		game.updateZoom(-parseFloat(zoomSlider.value)); 
+	};
+	game.onChangeBoard = function() {
+		changeZoomSlider(parseFloat(zoomSlider.value)-game.getZoom());
+	};
     game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
 }
 

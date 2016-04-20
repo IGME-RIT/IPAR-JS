@@ -53,8 +53,11 @@ p.createLessonNodes = function(){
 		var game = this;
 		button.onclick = (function(i){ 
 			return function() {
-				if(game.active)
+				if(game.active){
 					game.activeBoardIndex = i;
+					if(game.onChangeBoard)
+						game.onChangeBoard();
+				}
 		}})(i);
 		bottomBar.appendChild(button);
 	}
@@ -62,12 +65,13 @@ p.createLessonNodes = function(){
 	this.active = true;
 }
 
-p.zoom = function(amount){
-	if(this.active){
-		var newZoom = this.boardArray[this.activeBoardIndex].zoom+amount;
-		if(newZoom >= Constants.minZoom && newZoom <= Constants.maxZoom)
-			this.boardArray[this.activeBoardIndex].zoom = newZoom;
-	}
+p.updateZoom = function(newZoom){
+	if(this.active)
+		this.boardArray[this.activeBoardIndex].zoom = newZoom;
+}
+
+p.getZoom = function(){
+	return this.boardArray[this.activeBoardIndex].zoom;
 }
 
 p.update = function(ctx, canvas, dt){
