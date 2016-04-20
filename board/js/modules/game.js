@@ -22,7 +22,7 @@ function game(url, canvas, windowDiv){
 	var game = this;
 	this.active = false;
 	this.mouseState = new MouseState(canvas);
-	DataParser.parseData(url, windowDiv, function(categories){
+	DataParser.parseData(url, windowDiv, function(categories, stage){
 		game.categories = categories;
 		game.createLessonNodes();
 	});
@@ -47,7 +47,7 @@ p.createLessonNodes = function(){
 		}
 
 		// create a board
-		this.boardArray.push(new Board(new Point(0,0), this.lessonNodes));
+		this.boardArray.push(new Board(new Point(canvas.width/(2*this.scale),canvas.height/(2*this.scale)), this.lessonNodes));
 		var button = document.createElement("BUTTON");
 		button.innerHTML = this.categories[i].name;
 		var game = this;

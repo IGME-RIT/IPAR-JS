@@ -3,6 +3,7 @@ var DrawLib = require('./drawLib.js');
 var Question = require("./question.js");
 var Constants = require("./constants.js");
 var Point = require('./point.js');
+var Question = require('./question.js');
 
 //parameter is a point that denotes starting position
 function lessonNode(startPosition, imagePath, pQuestion){
@@ -19,6 +20,9 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.connections = 0;
     this.currentState = this.question.currentState;
     this.linePercent = 0;
+    
+    // skip animations for solved
+    if (pQuestion.currentState == Question.SOLVE_STATE.SOLVED) this.linePercent = 1;
     
     var that = this;
     //image loading and resizing
