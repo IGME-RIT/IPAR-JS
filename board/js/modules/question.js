@@ -233,7 +233,7 @@ p.createAnswerWindow = function(xml, window){
 	  if(this.answers[i].className == "wrong"){
 		this.answers[i].num = i;
         this.answers[i].onclick = function(){
-          questions.disabled = true;
+          this.disabled = true;
 		  question.wrongAnswer(this.num);
 	    };
       }

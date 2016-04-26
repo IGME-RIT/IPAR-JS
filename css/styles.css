@@ -92,6 +92,10 @@ header {
 	background-color: #eee;
 }
 
+.buttonBar button:disabled {
+	background-color: white;
+}
+
 .buttonBar button:focus {
 	outline: 0;
 }

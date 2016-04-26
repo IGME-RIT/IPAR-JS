@@ -59,7 +59,8 @@ p.createLessonNodes = function(){
 						game.onChangeBoard();
 				}
 		}})(i);
-		button.disabled = true;
+		if(!this.boardArray[this.boardArray.length-1].finished)
+			button.disabled = true;
 		bottomBar.appendChild(button);
 		this.boardArray[this.boardArray.length-1].button = button;
 	}

@@ -13,7 +13,17 @@ function board(startPosition, lessonNodes){
     this.prevBoardOffset = {x:0,y:0};
     this.zoom = Constants.startZoom;
     this.stage = 0;
-    this.finished = false;
+    
+
+	// Check if all node's are solved
+	var done = true;
+	for(var i=0;i<this.lessonNodeArray.length && done;i++)
+		if(this.lessonNodeArray[i].currentState!=Question.SOLVE_STATE.SOLVED)
+			done = false;
+	if(done)
+		this.finished = true;
+	else
+		this.finished = false;
 }
 
 //prototype
@@ -50,7 +60,7 @@ p.act = function(pMouseState, dt) {
 				this.finished = true;
 			
 		}
-		
+
 		// update the node's transition progress
 		if (activeNode.question.currentState == Question.SOLVE_STATE.SOLVED)
 			activeNode.linePercent = Math.min(1,dt/2000 + activeNode.linePercent);
@@ -187,8 +197,6 @@ p.draw = function(ctx, canvas){
         	var cPos = connection.getNodePoint();
         	
         	// draw the line
-        	ctx.lineWidth = 0.002;
-        	ctx.strokeStyle = "black";
         	ctx.beginPath();
         	// translate to start (pin)
         	ctx.moveTo(oPos.x, oPos.y);
