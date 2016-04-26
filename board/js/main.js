@@ -34,8 +34,7 @@ function initializeVariables(){
     ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    console.log("Canvas Dimensions: " + canvas.width + ", " + canvas.height);
-    
+
     // Setup the window film
 	windowFilm = document.getElementById('windowFlim');
 	windowFilm.onclick = function() { windowDiv.innerHTML = ''; };
@@ -98,5 +97,4 @@ window.addEventListener("resize", function(e){
     // Get the new scale
     game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
     
-    console.log("Canvas Dimensions: " + canvas.width + ", " + canvas.height);
 });

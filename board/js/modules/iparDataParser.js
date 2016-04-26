@@ -95,19 +95,23 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 }
 
 function assignQuestionStates(categories, questionElems) {
-	console.log(questionElems);
 	
 	var tally = 0; // track total index in nested loop
 	
 	// all questions
 	for (var i=0; i<categories.length; i++) {
-		for (var j=0; j<categories[i].questions.length; j++) {
+		for (var j=0; j<categories[i].questions.length; j++, tally++) {
 		
 			// store question  for easy reference
 			var q = categories[i].questions[j];
 			
 			// store tag for easy reference
 			var qElem = questionElems[tally];
+			
+			// If position is less than zero don't load the question
+			if(parseInt(qElem.getAttribute("positionPercentX"))<0 || 
+					parseInt(qElem.getAttribute("positionPercentY"))<0)
+				continue;
 			
 			// state
 			q.currentState = stateConverter[qElem.getAttribute("questionState")];
@@ -125,8 +129,6 @@ function assignQuestionStates(categories, questionElems) {
 			// ypos
 			q.positionPercentY = Utilities.map(parseInt(qElem.getAttribute("positionPercentY")), 0, 100, 0, Constants.boardSize.y);
 			
-			// increment total
-			tally++;
 		}
 	}
 }

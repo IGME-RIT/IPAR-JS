@@ -13,9 +13,8 @@ function board(startPosition, lessonNodes){
     this.prevBoardOffset = {x:0,y:0};
     this.zoom = Constants.startZoom;
     this.stage = 0;
+    this.finished = false;
 }
-
-board.drawLib = undefined;
 
 //prototype
 var p = board.prototype;
@@ -41,12 +40,20 @@ p.act = function(pMouseState, dt) {
 			
 			// Update the node's state
 			activeNode.currentState = activeNode.question.currentState;
+			
+			// Check if all node's are solved
+			var done = true;
+			for(var i=0;i<this.lessonNodeArray.length && done;i++)
+				if(this.lessonNodeArray[i].currentState!=Question.SOLVE_STATE.SOLVED)
+					done = false;
+			if(done)
+				this.finished = true;
+			
 		}
 		
 		// update the node's transition progress
 		if (activeNode.question.currentState == Question.SOLVE_STATE.SOLVED)
 			activeNode.linePercent = Math.min(1,dt/2000 + activeNode.linePercent);
-			console.log(activeNode.question.revealThreshold);	
 	}
     
     // hover states

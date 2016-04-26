@@ -129,14 +129,19 @@ function proceed(){
 					curCase.setAttribute("profileFirst", firstNameInput.value);
 					curCase.setAttribute("profileLast", lastNameInput.value);
 					curCase.setAttribute("profileMail", emailInput.value);
+					var questions = curCase.getElementsByTagName("question");
+					for(var i=0;i<questions.length;i++)
+						questions[i].setAttribute("positionPercentX", "-1");
 					var xmlFinal = new XMLSerializer().serializeToString(xml);
 					
 					// Write the result back to file
 					fileEntry.createWriter(function(fileWriter) {
 						
-						// Write the new xml and load the current board
+						// Write the new xml and then load the current board
+						fileWriter.onwriteend = function(e) {
+							document.location = "../board/";
+					    };
 						fileWriter.write(new Blob([xmlFinal], {type : 'text/xml'}));
-						document.location = "../board/";
 						
 				    }, function(e){
 						console.log("Error: "+e.message);

@@ -59,10 +59,14 @@ p.createLessonNodes = function(){
 						game.onChangeBoard();
 				}
 		}})(i);
+		button.disabled = true;
 		bottomBar.appendChild(button);
+		this.boardArray[this.boardArray.length-1].button = button;
 	}
 	this.activeBoardIndex = 0;
 	this.active = true;
+	this.boardArray[this.activeBoardIndex].button.disabled = false;
+	
 }
 
 p.updateZoom = function(newZoom){
@@ -85,6 +89,12 @@ p.update = function(ctx, canvas, dt){
 	    
 	    // Update the current board
 	    this.boardArray[this.activeBoardIndex].act(this.mouseState, dt);
+	    
+	    // Check if new board available
+	    if(this.activeBoardIndex < this.boardArray.length-1 &&
+	    		this.boardArray[this.activeBoardIndex+1].button.disabled && 
+	    		this.boardArray[this.activeBoardIndex].finished)
+	    	this.boardArray[this.activeBoardIndex+1].button.disabled = false;
 	}
 }
 

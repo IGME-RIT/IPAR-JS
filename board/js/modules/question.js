@@ -44,7 +44,6 @@ function Question(xml, resources, url, windowDiv, windows){
     this.questionType = parseInt(xml.getAttribute("questionType"));
     this.justification = this.questionType==1 || this.questionType==3;
 	if(this.questionType!=5){
-		console.log(JSON.stringify(windows));
 		this.createTaskWindow(xml, windows.taskWindow);
 		this.createResourceWindow(xml, resources, windows.resourceWindow, windows.resource);
 	}

@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	// Load if the case has a save
-	console.log(caseFiles+'active/saveFile.ipardata');
 	window.resolveLocalFileSystemURL(caseFiles+'active/saveFile.ipardata', function(fileEntry) {
 		fileEntry.file(function(file) {
 			
@@ -97,10 +96,7 @@ function back(){
 
 // Create new case session
 function start(){
-	if(caseStatus=='0')
-		document.location = "../profile/?new=true";
-	else if(confirm('Are you sure you want to start a new case? When you save this case you will no longer have any of your old data!'))
-		document.location = "../profile/?new=true";
+	document.location = "../profile/?new=true";
 }
 
 // Resume an old case session
