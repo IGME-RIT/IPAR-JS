@@ -22,7 +22,7 @@ wrongAnswer: string
 correctAnswer: string
 */
 //parameter is a point that denotes starting position
-function Question(xml, resources, url, windowDiv){
+function Question(xml, resources, url, windowDiv, windows){
 	
 	// Set the current state to default at hidden and store the window div
     this.currentState = SOLVE_STATE.HIDDEN;
@@ -44,20 +44,21 @@ function Question(xml, resources, url, windowDiv){
     this.questionType = parseInt(xml.getAttribute("questionType"));
     this.justification = this.questionType==1 || this.questionType==3;
 	if(this.questionType!=5){
-		this.createTaskWindow(xml);
-		this.createResourceWindow(xml, resources);
+		console.log(JSON.stringify(windows));
+		this.createTaskWindow(xml, windows.taskWindow);
+		this.createResourceWindow(xml, resources, windows.resourceWindow, windows.resource);
 	}
 	switch(this.questionType){
 		case 5:
-			this.createMessageWindow(xml);
+			this.createMessageWindow(xml, windows.messageWindow);
 			break;
 		case 4:
-			this.createFileWindow();
+			this.createFileWindow(windows.fileWindow);
 			break;
 		case 3:
 		case 2:
 		case 1:
-			this.createAnswerWindow(xml);
+			this.createAnswerWindow(xml, windows.answerWindow);
 			break;
 	}
     
@@ -76,6 +77,11 @@ p.wrongAnswer = function(num){
 }
 
 p.correctAnswer = function(){
+	
+	// Disable all the answer buttons
+	if(this.answers)
+		for(var i=0;i<this.answers.length;i++)
+			this.answers[i].disabled = true;
 	
 	// If feedback display it
 	if(this.feedbacks.length>0)
@@ -132,214 +138,157 @@ p.displayWindows = function(){
 	
 }
 
-p.createTaskWindow = function(xml){
+p.createTaskWindow = function(xml, window){
 	
-	// Get the template for task windows
-	var question = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Create the task window 
-	    	question.task = document.createElement("DIV");
-	        question.task.className = "window";
-	        question.task.style.top = "10vh";
-	        question.task.style.left = "5vw";
-	        question.task.innerHTML = request.responseText;
-	        question.task.innerHTML = question.task.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerHTML.replace(/\n/g, '<br/>'));
-	        question.task.innerHTML = question.task.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
-	        question.task.innerHTML = question.task.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
-	        question.feedback = question.task.getElementsByClassName("feedback")[0];
-	    }
-	}
-	request.open("GET", "taskWindow.html", true);
-	request.send();
+	// Create the task window 
+	this.task = document.createElement("DIV");
+    this.task.className = "window";
+    this.task.style.top = "10vh";
+    this.task.style.left = "5vw";
+    this.task.innerHTML = window;
+    this.task.innerHTML = this.task.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerHTML.replace(/\n/g, '<br/>'));
+    this.task.innerHTML = this.task.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
+    this.task.innerHTML = this.task.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
+    this.feedback = this.task.getElementsByClassName("feedback")[0];
 }
 
-p.createResourceWindow = function(xml, resourceFiles){
+p.createResourceWindow = function(xml, resourceFiles, window, resourceElement){
 	
-	// Get the template for resource windows
-	var question = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Create the resource window 
-	    	question.resource = document.createElement("DIV");
-			question.resource.className = "window";
-			question.resource.style.top = "55vh";
-			question.resource.style.left = "5vw";
-			question.resource.innerHTML = request.responseText;
-	    	
-	    	// Get the template for individual resouces if any
-	    	var resources = xml.getElementsByTagName("resourceIndex");
-		    if(resources.length > 0){
-				var request2 = new XMLHttpRequest();
-				request2.onreadystatechange = function() {
-				    if (request2.readyState == 4 && request2.status == 200) {
-				    	
-				    	// Get the html for each resource and then add the result to the window
-				    	var resourceHTML = '';
-					    for(var i=0;i<resources.length;i++){
-				    		var curResource = request2.responseText.replace("%icon%", resourceFiles[parseInt(resources[i].innerHTML)].icon);
-					    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerHTML)].title);
-					    	curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerHTML)].link);
-					    	resourceHTML += curResource;
-					    }
-					  	question.resource.innerHTML = question.resource.innerHTML.replace("%resources%", resourceHTML);
-				        
-				    }
-				}
-				request2.open("GET", "resource.html", true);
-				request2.send();
-	    	}
-	    	else{
-	    		// Display that there aren't any resources
-	    		question.resource.innerHTML = question.resource.innerHTML.replace("%resources%", "No resources have been provided for this task.");
-	    		question.resource.getElementsByClassName("windowContent")[0].style.color = "grey";
-	    		question.resource.getElementsByClassName("windowContent")[0].style.backgroundColor = "#FFFFFF";
-	    		question.resource.getElementsByClassName("windowContent")[0].className += ", center";
-	    	}
-	        
+	// Create the resource window 
+	this.resource = document.createElement("DIV");
+	this.resource.className = "window";
+	this.resource.style.top = "55vh";
+	this.resource.style.left = "5vw";
+	this.resource.innerHTML = window;
+	
+	// Get the template for individual resouces if any
+	var resources = xml.getElementsByTagName("resourceIndex");
+    if(resources.length > 0){
+    	
+    	// Get the html for each resource and then add the result to the window
+    	var resourceHTML = '';
+	    for(var i=0;i<resources.length;i++){
+    		var curResource = resourceElement.replace("%icon%", resourceFiles[parseInt(resources[i].innerHTML)].icon);
+	    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerHTML)].title);
+	    	curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerHTML)].link);
+	    	resourceHTML += curResource;
 	    }
-	};
-	request.open("GET", "resourceWindow.html", true);
-	request.send();
+	  	this.resource.innerHTML = this.resource.innerHTML.replace("%resources%", resourceHTML);
+		        
+	}
+	else{
+		// Display that there aren't any resources
+		this.resource.innerHTML = this.resource.innerHTML.replace("%resources%", "No resources have been provided for this task.");
+		this.resource.getElementsByClassName("windowContent")[0].style.color = "grey";
+		this.resource.getElementsByClassName("windowContent")[0].style.backgroundColor = "#FFFFFF";
+		this.resource.getElementsByClassName("windowContent")[0].className += ", center";
+	}
 }
 
-p.createAnswerWindow = function(xml){
+p.createAnswerWindow = function(xml, window){
 	
-	// Get the template for answer windows
-	var question = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Create the answer window 
-	    	question.answer = document.createElement("DIV");
-		    question.answer.className = "window";
-		    question.answer.style.top = "10vh";
-		    question.answer.style.left = "50vw";
-		    question.answer.innerHTML = request.responseText;
-	        
-	        // Create the text element if any
-	        var submit;
-	        if(question.justification){
-	        	question.justification = document.createElement("textarea");
-	        	question.justification.submit = document.createElement("button");
-	        	question.justification.submit.className = "submit";
-	        	question.justification.submit.innerHTML = "Submit";
-		        question.justification.submit.disabled = true;
-		        question.justification.submit.onclick = function() {
-		        	question.correctAnswer();
-		    	}
-		    	question.justification.addEventListener('input', function() {
-		    		if(question.justification.value.length > 0)
-		    			question.justification.submit.disabled = false;
-		    		else
-		    			question.justification.submit.disabled = true;
-		    	}, false);
-	        }
-	        
-	        // Create and get all the answer elements
-	        var answers = [];
-	        var answersXml = xml.getElementsByTagName("answer");
-	        var correct = parseInt(xml.getAttribute("correctAnswer"));
-	        for(var i=0;i<answersXml.length;i++){
-	        	if(question.justification)
-	        		question.justification.disabled = true;
-	        	answers[i] = document.createElement("button");
-	        	if(correct===i)
-	        		answers[i].className = "correct";
-	        	else
-	        		answers[i].className = "wrong";
-	        	answers[i].innerHTML = String.fromCharCode(i + "A".charCodeAt())+". "+answersXml[i].innerHTML;
-	        }
-	        
-	        // Create the events for the answers
-	        for(var i=0;i<answers.length;i++){
-	        	if(answers[i].className == "wrong"){
-	        		answers[i].num = i;
-              answers[i].onclick = function(){
-                this.disabled = true;
-	        			question.wrongAnswer(this.num);
-	        		};
-	        	}
-	        	else{
-	        		answers[i].onclick = function(){
-                for(var j=0;j<answers.length;j++)
-                  answers[j].disabled = true;
-                if(question.justification)
-                  question.justification.disabled = false;
-                  question.correctAnswer();
-              };
-	        	}
-	        }
-	        
-	        // Add the answers to the window
-          for(var i=0;i<answers.length;i++)
-            question.answer.getElementsByClassName("windowContent")[0].appendChild(answers[i]);
-	        if(question.justification){
-	        	question.answer.getElementsByClassName("windowContent")[0].appendChild(question.justification);
-	        	question.answer.getElementsByClassName("windowContent")[0].appendChild(question.justification.submit);
-	        }
-	    }
-	}
-	request.open("GET", "answerWindow.html", true);
-	request.send();
+	// Create the answer window 
+	this.answer = document.createElement("DIV");
+    this.answer.className = "window";
+    this.answer.style.top = "10vh";
+    this.answer.style.left = "50vw";
+    this.answer.innerHTML = window;
+    
+    // Create the text element if any
+    var question = this;
+    var submit;
+    if(this.justification){
+    	this.justification = document.createElement("textarea");
+    	this.justification.submit = document.createElement("button");
+    	this.justification.submit.className = "submit";
+    	this.justification.submit.innerHTML = "Submit";
+        this.justification.submit.disabled = true;
+        this.justification.submit.onclick = function() {
+        	question.correctAnswer();
+    	};
+    	this.justification.addEventListener('input', function() {
+    		if(question.justification.value.length > 0)
+    			question.justification.submit.disabled = false;
+    		else
+    			question.justification.submit.disabled = true;
+    	}, false);
+    }
+    
+    // Create and get all the answer elements
+    this.answers = [];
+    var answersXml = xml.getElementsByTagName("answer");
+    var correct = parseInt(xml.getAttribute("correctAnswer"));
+    for(var i=0;i<answersXml.length;i++){
+    	if(this.justification)
+    		this.justification.disabled = true;
+    	this.answers[i] = document.createElement("button");
+    	if(correct===i)
+    		this.answers[i].className = "correct";
+    	else
+    		this.answers[i].className = "wrong";
+    	this.answers[i].innerHTML = String.fromCharCode(i + "A".charCodeAt())+". "+answersXml[i].innerHTML;
+    }
+    
+    // Create the events for the answers
+    for(var i=0;i<this.answers.length;i++){
+	  if(this.answers[i].className == "wrong"){
+		this.answers[i].num = i;
+        this.answers[i].onclick = function(){
+          questions.disabled = true;
+		  question.wrongAnswer(this.num);
+	    };
+      }
+      else{
+    	this.answers[i].onclick = function(){
+	      if(question.justification)
+	        question.justification.disabled = false;
+	      question.correctAnswer();
+	    };
+      }
+    }
+    
+    // Add the answers to the window
+    for(var i=0;i<this.answers.length;i++)
+      this.answer.getElementsByClassName("windowContent")[0].appendChild(this.answers[i]);
+    if(this.justification){
+    	this.answer.getElementsByClassName("windowContent")[0].appendChild(this.justification);
+    	this.answer.getElementsByClassName("windowContent")[0].appendChild(this.justification.submit);
+    }
 }
 
-p.createFileWindow = function(){
+p.createFileWindow = function(window){
 	
-	// Get the template for file windows
-	var question = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Create the file window 
-	    	question.answer = document.createElement("DIV");
-		    question.answer.className = "window";
-		    question.answer.style.top = "10vh";
-		    question.answer.style.left = "50vw";
-		    question.answer.innerHTML = request.responseText;
-		    question.fileInput = question.answer.getElementsByTagName("input")[0];
-		    question.fileInput.onchange = function(){
-			    question.correctAnswer();
-	        };
-	        
-	    }
-	}
-	request.open("GET", "fileWindow.html", true);
-	request.send();
+	// Create the file window 
+	this.answer = document.createElement("DIV");
+    this.answer.className = "window";
+    this.answer.style.top = "10vh";
+    this.answer.style.left = "50vw";
+    this.answer.innerHTML = window;
+    this.fileInput = this.answer.getElementsByTagName("input")[0];
+    var question = this;
+    this.fileInput.onchange = function(){
+	    question.correctAnswer();
+    };
+    
 }
 
-p.createMessageWindow = function(xml){
+p.createMessageWindow = function(xml, window){
 	
-	// Get the template for file windows
-	var question = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Create the file window 
-	    	question.message = document.createElement("DIV");
-		    question.message.className = "window";
-		    question.message.style.top = "10vh";
-		    question.message.style.left = "40vw";
-		    question.message.innerHTML = request.responseText;
-		    question.message.innerHTML = question.message.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerHTML.replace(/\n/g, '<br/>'));
-		    question.message.innerHTML = question.message.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
-		    question.message.innerHTML = question.message.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
-	        question.message.getElementsByTagName("button")[0].onclick = function() {
-	        	question.currentState = SOLVE_STATE.SOLVED;
-	        	question.windowDiv.innerHTML = '';
-	        };
+	// Create the file window 
+	this.message = document.createElement("DIV");
+    this.message.className = "window";
+    this.message.style.top = "10vh";
+    this.message.style.left = "40vw";
+    this.message.innerHTML = window;
+    this.message.innerHTML = this.message.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerHTML.replace(/\n/g, '<br/>'));
+    this.message.innerHTML = this.message.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
+    this.message.innerHTML = this.message.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
+    var question = this;
+    this.message.getElementsByTagName("button")[0].onclick = function() {
+    	question.currentState = SOLVE_STATE.SOLVED;
+    	question.windowDiv.innerHTML = '';
+    };
 
-	    }
-	}
-	request.open("GET", "messageWindow.html", true);
-	request.send();
 }
 
 module.exports = Question;

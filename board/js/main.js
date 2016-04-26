@@ -61,7 +61,8 @@ function initializeVariables(){
 		game.updateZoom(-parseFloat(zoomSlider.value)); 
 	};
 	game.onChangeBoard = function() {
-		changeZoomSlider(-parseFloat(zoomSlider.value)-game.getZoom());
+		zoomSlider.value = -game.getZoom();
+		game.updateZoom(-parseFloat(zoomSlider.value)); 
 	};
     game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
 }

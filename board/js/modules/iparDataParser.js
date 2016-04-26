@@ -4,6 +4,7 @@ var Resource = require("./resources.js");
 var Utilities = require('./utilities.js');
 var Constants = require('./constants.js');
 var Question = require('./question.js');
+var QuestionWindows = require('./questionWindows.js');
 window.resolveLocalFileSystemURL  = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
 
 // Parses the xml case files
@@ -42,26 +43,29 @@ m.parseData = function(url, windowDiv, callback) {
     this.categories = [];
     this.questions = [];
     
-	// get XML
-    window.resolveLocalFileSystemURL(url+'active/caseFile.ipardata', function(fileEntry) {
-		fileEntry.file(function(file) {
-			var reader = new FileReader();
-			
-			// hook up callback
-			reader.onloadend = function() {
+    // Load the question windows first
+    var windows = new QuestionWindows(function(){
+    	// get XML
+        window.resolveLocalFileSystemURL(url+'active/caseFile.ipardata', function(fileEntry) {
+    		fileEntry.file(function(file) {
+    			var reader = new FileReader();
+    			
+    			// hook up callback
+    			reader.onloadend = function() {
 
-				// Get the raw data
-				var rawData = Utilities.getXml(this.result);
-				var categories = getCategoriesAndQuestions(rawData, url, windowDiv);
-				loadSaveProgress(categories, url, windowDiv, callback);
-			   
-			};
-			reader.readAsText(file);
-		   
-		}, function(e){
-			console.log("Error: "+e.message);
-		});
-	});
+    				// Get the raw data
+    				var rawData = Utilities.getXml(this.result);
+    				var categories = getCategoriesAndQuestions(rawData, url, windowDiv, windows);
+    				loadSaveProgress(categories, url, windowDiv, callback);
+    			    
+    			};
+    			reader.readAsText(file);
+    		   
+    		}, function(e){
+    			console.log("Error: "+e.message);
+    		});
+    	});
+    });
 }
 
 function loadSaveProgress(categories, url, windowDiv, callback) {
@@ -107,6 +111,15 @@ function assignQuestionStates(categories, questionElems) {
 			
 			// state
 			q.currentState = stateConverter[qElem.getAttribute("questionState")];
+			
+			// justification
+			if(q.justification)
+				q.justification.value = qElem.getAttribute("justification");
+			
+			// Call correct answer if state is correct
+			if(q.currentState==Question.SOLVE_STATE.SOLVED)
+			  q.correctAnswer();
+				
 			// xpos
 			q.positionPercentX = Utilities.map(parseInt(qElem.getAttribute("positionPercentX")), 0, 100, 0, Constants.boardSize.x);
 			// ypos
@@ -119,7 +132,7 @@ function assignQuestionStates(categories, questionElems) {
 }
 
 // takes the xml structure and fills in the data for the question object
-function getCategoriesAndQuestions(rawData, url, windowDiv) {
+function getCategoriesAndQuestions(rawData, url, windowDiv, windows) {
 	// if there is a case file
 	if (rawData != null) {
 		
@@ -137,7 +150,7 @@ function getCategoriesAndQuestions(rawData, url, windowDiv) {
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
-			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv);
+			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv, windows);
 		}
 		return categories;
 	}
