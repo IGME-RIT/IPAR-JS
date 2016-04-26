@@ -5,6 +5,8 @@ var Constants = require("./constants.js");
 var Point = require('./point.js');
 var Question = require('./question.js');
 
+var CHECK_IMAGE = "../img/iconPostItCheck.png";
+
 //parameter is a point that denotes starting position
 function lessonNode(startPosition, imagePath, pQuestion){
     
@@ -14,6 +16,7 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.dragging = false;
     this.type = "lessonNode";
     this.image = new Image();
+    this.check = new Image();
     this.width;
     this.height;
     this.question = pQuestion;
@@ -59,6 +62,7 @@ function lessonNode(startPosition, imagePath, pQuestion){
     };
     
     this.image.src = imagePath;
+    this.check.src = CHECK_IMAGE;
 }
 
 var p = lessonNode.prototype;
@@ -67,8 +71,10 @@ p.draw = function(ctx, canvas){
 
 	// Check if question is visible
 	if(this.question.currentState==Question.SOLVE_STATE.HIDDEN){
-		if(this.question.revealThreshold <= this.connections)
+		if(this.question.revealThreshold <= this.connections){
 			this.question.currentState = Question.SOLVE_STATE.UNSOLVED;
+			this.currentState = this.question.currentState;
+		}
 		else
 			return;
 	}
@@ -98,6 +104,7 @@ p.draw = function(ctx, canvas){
 			ctx.strokeStyle = "cyan";
 			break;
      	case 2:
+     		ctx.drawImage(this.check, this.position.x + this.width/2 - Constants.boardSize.x/50, this.position.y + this.height/2 - Constants.boardSize.x/50, Constants.boardSize.x/50, Constants.boardSize.x/50);
     		ctx.fillStyle = "green";
 			ctx.strokeStyle = "yellow";
 			break;
