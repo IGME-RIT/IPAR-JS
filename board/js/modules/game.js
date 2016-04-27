@@ -72,6 +72,9 @@ p.createLessonNodes = function(){
 	if(game.onChangeBoard)
 		game.onChangeBoard();
 	this.updateNode();
+	
+	// ready to save
+	DataParser.prepareZip(this.boardArray);
 }
 
 p.updateZoom = function(newZoom){
