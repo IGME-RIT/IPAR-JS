@@ -110,6 +110,10 @@ p.correctAnswer = function(){
        this.questionType===2)){ 
     // Set the state of the question to correct
     this.currentState = SOLVE_STATE.SOLVED;
+    // if there is a proceed button
+    if (this.proceedElement) { 
+		this.proceedElement.style.display = "block"; // animate proceed button
+	}
   }
 	
 }
@@ -133,11 +137,19 @@ p.displayWindows = function(){
 		windowNode.appendChild(this.resource);
 		exitButton.style.left = "85vw";
 	}
+	if(this.currentState === SOLVE_STATE.SOLVED && this.questionType != QUESTION_TYPE.MESSAGE)  {
+		// if there is a proceed button
+		if (this.proceedElement) { 
+			this.proceedElement.style.display = "block"; // animate proceed button
+		}
+	}
+	
 	windowNode.appendChild(exitButton);
 	
 }
 
 p.createTaskWindow = function(xml, window){
+	this.proceedElement = document.getElementById("proceedContainer");
 	
 	// Create the task window 
 	this.task = document.createElement("DIV");

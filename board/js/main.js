@@ -14,6 +14,9 @@ var ctx;
 // window div, film, zoom and if paused
 var windowDiv;
 var windowFilm;
+var proceedContainer;
+var proceedLong;
+var proceedRound;
 var pausedTime = 0;
 var zoomSlider;
 
@@ -32,6 +35,9 @@ function initializeVariables(){
 	windowDiv = document.getElementById('window');
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    proceedContainer = document.getElementById('proceedContainer');
+    proceedLong = document.getElementById('proceedBtnLong');
+    proceedRound = document.getElementById('proceedBtnRound');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
@@ -86,6 +92,7 @@ function loop(){
     	pausedTime = 0;
     	game.active = true;
     	windowFilm.style.display = 'none';
+    	document.getElementById("proceedContainer").style.display = "none";
     }
 }
 

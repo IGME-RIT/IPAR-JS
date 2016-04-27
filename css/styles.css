@@ -112,3 +112,113 @@ header {
     right: 0;
     margin-bottom: 20vh;
 }
+
+.downloadLink {
+	display: block;
+	font-size: 1.5vw;
+	width: 20vw;
+	height: 4vw;
+	border-radius: 1vw;
+	/*border: solid 0.1vw #ddd;*/
+	box-shadow: 0 0 1vw black;
+	background-color: white;
+	text-align: center;
+	vertical-align: middle;
+	position: fixed;
+	top: 35vh;
+	left: 40vw;
+	padding-top: 2vw;
+}
+
+.saveBtn {
+	background-color: rgba(0,0,0,0);
+	border: none;
+	position: fixed; 
+	left: 1vw;
+	top: 2vh;
+}
+
+#proceedContainer {
+	position: fixed;
+	left: 49vw;
+	top: 64vh;
+	
+}
+
+
+
+.proceedEndWidth {
+	display: block;
+	width: 20vw;
+	padding: 1vw 4vw 1vw 2vw;
+}
+
+@keyframes proceedWidth {
+    from { width: 0vw; padding: 1vw 0vw 1vw 2vw; }
+}
+
+#proceedBtnLong {
+	background-color: #2FBFBE;
+	box-shadow: 0 0 0.5vw black;
+	position: absolute;
+
+	font-weight: bold;
+	font-family: arial;
+	font-size: 2vw;
+	left: 5.2vw;
+	top: 0.8vh;
+	border: none;
+	color: white;
+	/*transition: padding 1s, width 1s;
+	transition-timing-function: linear;*/
+	overflow: hidden;
+	display: block;
+	width: 20vw; 
+	padding: 1vw 4vw 1vw 2vw;
+	animation-name: proceedWidth;
+	animation-duration: 1s;
+	animation-iteration-count: 1;
+}
+
+.proceedStartLeft {
+	left: 3.8vw;
+}
+
+.proceedEndLeft {
+	left: 22vw;
+}
+
+.hidden {
+	display: none;
+	left: 3.8vw;
+	width: 12vw;
+	padding: 1vw 4vw 1vw 2vw;
+}
+
+@keyframes proceedLeft {
+    from { left: 3.8vw }
+}
+
+
+#proceedBtnRound {
+	background-color: #2FBFBE;
+	box-shadow: 0 0 0.5vw black;
+	position: absolute;
+	left: 22vw;
+	width: 5vw;
+	height: 5vw;
+	border-radius: 100%;
+	top: 0vh;
+	animation-name: proceedLeft;
+	animation-duration: 1s;
+	animation-iteration-count: 1;
+}
+
+#rightArrow {
+	position: absolute;
+	left: 37%;
+	top: 13%;
+	font-size: 3vw;
+	color: white;
+	font-weight: bold;
+}
