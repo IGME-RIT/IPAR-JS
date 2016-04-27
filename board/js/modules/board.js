@@ -118,8 +118,10 @@ p.act = function(pMouseState, dt) {
 				}
 			}
 			else{
-				this.target.position.x = pMouseState.virtualPosition.x - this.target.dragPosition.x;
-				this.target.position.y = pMouseState.virtualPosition.y - this.target.dragPosition.y;
+				var naturalX = pMouseState.virtualPosition.x - this.target.dragPosition.x;
+				this.target.position.x = Math.max(Constants.boardOutline,Math.min(naturalX,Constants.boardSize.x - Constants.boardOutline));
+				var naturalY = pMouseState.virtualPosition.y - this.target.dragPosition.y;
+				this.target.position.y = Math.max(Constants.boardOutline,Math.min(naturalY,Constants.boardSize.y - Constants.boardOutline));
 			}
 			
 	  }
