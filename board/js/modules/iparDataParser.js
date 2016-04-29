@@ -58,7 +58,13 @@ m.parseData = function(url, windowDiv, callback) {
     				// Get the raw data
     				var rawData = Utilities.getXml(this.result);
     				var categories = getCategoriesAndQuestions(rawData, url, windowDiv, windows);
-    				loadSaveProgress(categories, url, windowDiv, callback);
+    				// load the most recent version
+    				var cookieHasMostRecentVersion = (document.cookie.length > 0);
+    				if (cookieHasMostRecentVersion) {
+    					loadSaveFromCookie(categories, callback);
+    				} else {
+    					loadSaveProgress(categories, url, windowDiv, callback);
+    				}
     			    
     			};
     			reader.readAsText(file);
@@ -85,7 +91,7 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 				var saveData = Utilities.getXml(this.result);
 				assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 				var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
-				callback(categories, stage);
+				callback(categories, stage); // maybe stage + 1 would be better because they are not zero indexed?
 			   
 			};
 			reader.readAsText(file);
@@ -96,8 +102,16 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 	});
 }
 
+function loadSaveFromCookie(categories, callback) {
+	// Get the save data
+	var saveData = Utilities.getXml(document.cookie.replace("cookieSave=",""));
+	assignQuestionStates(categories, saveData.getElementsByTagName("question"));
+	var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
+	callback(categories, stage);
+}
+
 function assignQuestionStates(categories, questionElems) {
-	
+	console.log("qelems: " + questionElems.length);
 	var tally = 0; // track total index in nested loop
 	
 	// all questions
@@ -196,7 +210,7 @@ m.prepareZip = function(myBoards) {
 m.recreateCaseFile = function(zip, boards, callback) {
 
 	// create save file text
-	var dataToSave = m.createXMLSaveFile(boards);
+	var dataToSave = m.createXMLSaveFile(boards, true);
 	
 	console.log ("saveData.ipar data created");
 	
@@ -205,13 +219,16 @@ m.recreateCaseFile = function(zip, boards, callback) {
 }
 
 // creates the xml
-m.createXMLSaveFile = function(boards) {
+m.createXMLSaveFile = function(boards, includeNewline) {
+	// newline
+	var nl;
+	includeNewline ? nl = "\n" : nl = "";
 	// header
-	var output = '<?xml version="1.0" encoding="utf-8"?>\n';
+	var output = '<?xml version="1.0" encoding="utf-8"?>' + nl;
 	// case data
-	output += '<case categoryIndex="3" caseStatus="1" profileFirst="j" profileLast="j" profileMail="j">\n';
+	output += '<case categoryIndex="3" caseStatus="1" profileFirst="j" profileLast="j" profileMail="j">' + nl;
 	// questions header
-	output += '<questions>\n';
+	output += '<questions>' + nl;
 	
 	// loop through questions
 	for (var i=0; i<boards.length; i++) {
@@ -241,12 +258,11 @@ m.createXMLSaveFile = function(boards) {
 			output += 'positionPercentY="' + Utilities.map(q.positionPercentY, 0, Constants.boardSize.y, 0, 100) + '" ';
 			
 			// tag end
-			output += '/>\n';
+			output += '/>' + nl;
 		}
 	}
-	
-	output += "</questions>\n";
-	output += "</case>\n";
+	output += "</questions>" + nl;
+	output += "</case>" + nl;
 	return output;
 }
 

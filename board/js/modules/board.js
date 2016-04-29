@@ -13,9 +13,11 @@ function board(startPosition, lessonNodes){
     this.prevBoardOffset = {x:0,y:0};
     this.zoom = Constants.startZoom;
     this.stage = 0;
+    this.lastSaveTime = 0; // assume no cookie
     
+    //if (document.cookie) this.loadCookie(); 
 
-	// Check if all node's are solved
+	// Check if all nodes are solved
 	var done = true;
 	for(var i=0;i<this.lessonNodeArray.length && done;i++)
 		if(this.lessonNodeArray[i].currentState!=Question.SOLVE_STATE.SOLVED)
@@ -71,7 +73,7 @@ p.act = function(pMouseState, dt) {
 	}
     
     // Check mouse events if given a mouse state
-    if(pMouseState){
+    if(pMouseState) {
 	    
 	    // hover states
 		//for(var i = 0; i < boardArray.length; i++){
@@ -120,8 +122,10 @@ p.act = function(pMouseState, dt) {
 			else{
 				var naturalX = pMouseState.virtualPosition.x - this.target.dragPosition.x;
 				this.target.position.x = Math.max(Constants.boardOutline,Math.min(naturalX,Constants.boardSize.x - Constants.boardOutline));
+				this.target.question.positionPercentX = this.target.position.x;
 				var naturalY = pMouseState.virtualPosition.y - this.target.dragPosition.y;
 				this.target.position.y = Math.max(Constants.boardOutline,Math.min(naturalY,Constants.boardSize.y - Constants.boardOutline));
+				this.target.question.positionPercentY = this.target.position.y;
 			}
 			
 	  }
@@ -165,6 +169,7 @@ p.draw = function(ctx, canvas){
     // move the board to where the user dragged it
     this.position = this.boardOffset;
     //translate to the center of the board
+    //console.log(this);
     ctx.translate(canvas.width/2 - this.position.x, canvas.height/2 - this.position.y);
     
 	
@@ -255,5 +260,29 @@ p.moveTowards = function(point, dt, speed){
 	else
 		this.boardOffset.y = point.y;
 }
+
+/*p.updateCookie = function() {
+	this.lastSaveTime = Date.now();
+	document.cookie = 'boardState=' + JSON.stringify(this) + '; expires=Thu, 18 Dec 2222 12:00:00 UTC';
+}
+
+p.loadCookie = function() {
+	//console.log(document.cookie.replace("boardState=",""));
+	var temp = JSON.parse(document.cookie.replace("boardState=",""));
+	//console.log(temp.lessonNodeArray.length);
+	this.position = temp.position;
+    //this.lessonNodeArray = temp.lessonNodeArray; JSON does not have functions so this is bad
+    this.boardOffset = temp.boardOffset;
+    this.prevBoardOffset = temp.prevBoardOffset;
+    this.zoom = Constants.startZoom;
+    this.stage = temp.stage;
+    this.lastSaveTime = temp.lastSaveTime;
+    for (var i=0; i<this.lessonNodeArray.length; i++) {
+    	var newLNode = this.lessonNodeArray[i];
+    	var savedLNode = temp.lessonNodeArray[i];
+    	newLNode.position = savedLNode.position;
+    	newLNode.question.currentState = savedLNode.question.currentState;
+    }
+}*/
 
 module.exports = board;    
