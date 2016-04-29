@@ -95,7 +95,7 @@ p.update = function(ctx, canvas, dt){
 		
 		if (this.mouseState.mouseClicked) {
 			localStorage.setItem("autosave",DataParser.createXMLSaveFile(this.boardArray, false));
-			console.log(localStorage.getItem("autosave"));
+			//console.log(localStorage.getItem("autosave"));
 		}
 		
 	    // Update the current board (give it the mouse only if not zooming)

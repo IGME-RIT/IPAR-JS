@@ -39,6 +39,9 @@ var reverseStateConverter = ["hidden", "unsolved", "correct"];
 // Module export
 var m = module.exports;
 
+// stores an array of all the files for rezipping
+var allEntries;
+
 // constructor
 m.parseData = function(url, windowDiv, callback) {
     
@@ -65,7 +68,7 @@ m.parseData = function(url, windowDiv, callback) {
     				} else {
     					loadSaveProgress(categories, url, windowDiv, callback);
     				}
-    			    
+    			    window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, recursivelyReadFiles, errorHandler);
     			};
     			reader.readAsText(file);
     		   
@@ -76,6 +79,7 @@ m.parseData = function(url, windowDiv, callback) {
     });
 }
 
+// load the save from the filesytem sandbox
 function loadSaveProgress(categories, url, windowDiv, callback) {
     var questions = [];
     
@@ -102,6 +106,7 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 	});
 }
 
+// load the save from the localStorage
 function loadAutosave(autosave, categories, callback) {
 	// Get the save data
 	var saveData = Utilities.getXml(autosave);
@@ -110,6 +115,7 @@ function loadAutosave(autosave, categories, callback) {
 	callback(categories, stage);
 }
 
+// set the question states
 function assignQuestionStates(categories, questionElems) {
 	console.log("qelems: " + questionElems.length);
 	var tally = 0; // track total index in nested loop
@@ -175,8 +181,7 @@ function getCategoriesAndQuestions(rawData, url, windowDiv, windows) {
 	return null
 }
 
-
-// called when the game is loaded, add onclick to save button
+// called when the game is loaded, add onclick to save button that actually does the saving
 m.prepareZip = function(myBoards) {
 	//var content = zip.generate();
 	
@@ -187,24 +192,23 @@ m.prepareZip = function(myBoards) {
 	if (JSZip.support.blob) {
 		console.log("supports blob");
 		
-		// create download function
-		function saveIPAR(boards) {
-		
-			// create zip
-			var zip = new JSZip();
-
-			// create the case file like when we loaded
-			var data = m.recreateCaseFile(zip, boards, selectSaveLocation);
-		
-			return false;
-			//location.href="data:application/zip;base64,"+content;
-		}
-		
 		// link download to click
 		blobLink.onclick = function() { saveIPAR(myBoards); };
   	}
 }
 
+// create download function
+function saveIPAR(boards) {
+
+	// create zip
+	var zip = new JSZip();
+
+	// create the case file like when we loaded
+	var data = m.recreateCaseFile(zip, boards, getAllContents);
+
+	return false;
+	//location.href="data:application/zip;base64,"+content;
+}
 
 // creates a case file for zipping
 m.recreateCaseFile = function(zip, boards, callback) {
@@ -215,6 +219,7 @@ m.recreateCaseFile = function(zip, boards, callback) {
 	console.log ("saveData.ipar data created");
 	
 	if (callback) callback(dataToSave);
+	else return dataToSave;
 	
 }
 
@@ -266,6 +271,57 @@ m.createXMLSaveFile = function(boards, includeNewline) {
 	return output;
 }
 
+function createZip(data, blobs) {
+	var zip = new JSZip();
+	allEntries.forEach(function(fileEntry) {
+		//zip.file(fileEntry.name,fileEntry
+		if (fileEntry.isFile) {
+			//console.log("blob " + getBlobFromFileEntry(fileEntry));
+		}
+	});
+	// backslashes per zip file protocol
+	zip.file("case\\active\\saveFile.ipardata",data);
+	// download the file
+	download(zip);
+}
+
+function getAllContents(data) {
+	var blobs = [];
+	var fileCount = 0;
+	allEntries.forEach(function(fileEntry) {
+		//zip.file(fileEntry.name,fileEntry
+		if (fileEntry.isFile) {
+			fileCount++
+			// Get a File object representing the file,
+			// then use FileReader to read its contents.
+			//console.log(fileEntry);
+			fileEntry.file(function(file) {
+			   var reader = new FileReader();
+
+			   reader.onloadend = function(e) {
+					console.log(this.result);
+				 	blobs.push(this.result);
+				 	if (blobs.length == fileCount) {
+				 		createZip(data,blobs); // will this work?
+				 	}
+			   };
+
+			   reader.readAsBinaryString(file);
+			}, errorHandler);
+		}
+	});
+}
+
+/* here's the general outline of what is happening:
+selectSaveLocation was the old way of doing things
+now we use createZip
+ - when this whole thing starts, we request a file system and save all the entries (directories and files) to the allEntries variable
+ - then we get the blobs using readAsBinaryString and store those in an array when we are saving 
+  - - could do that on page load to save time later..?
+ - anyway, then we - in theory - take the blobs and use zip.file(entry.name, blob) to recreate the structure
+ - and finally we download the zip with download()
+ 
+*/
 
 
 function selectSaveLocation (data) {
@@ -353,4 +409,59 @@ function download(zip) {
 	}, function (err) {
 		blobLink.innerHTML += " " + err;
 	});
+}
+
+
+
+
+
+
+/************* BLEH **************/
+
+
+
+function errorHandler() {
+	//do nothing
+	console.log("yo we got errors");
+}
+
+// helper function for recursivelyReadFiles
+function toArray(list) {
+  return Array.prototype.slice.call(list || [], 0);
+}
+
+function recursivelyReadFiles(fs) {
+	console.log("recursivelyReadFiles called");
+
+  var dirReader = fs.root.createReader();
+  var entries = [];
+
+  // Call the reader.readEntries() until no more results are returned.
+  var readEntries = function(reader) {
+     reader.readEntries (function(results) {
+      if (!results.length) {
+        // all entries found
+        saveEntries(entries);
+      } else {
+      	console.log("bla");
+      	var resultsArray = toArray(results)
+        entries = entries.concat(resultsArray);
+        for (var i=0; i<resultsArray.length; i++) {
+        	console.log("is directory ? " + resultsArray[i].isDirectory);
+        	if (resultsArray[i].isDirectory) {
+        		var recursiveReader = resultsArray[i].createReader();
+        		readEntries(recursiveReader);
+        	}
+        }
+        readEntries(reader);
+      }
+    }, errorHandler);
+  };
+
+  readEntries(dirReader); // Start reading dirs.
+
+}
+
+function saveEntries(entries) {
+	allEntries = entries;
 }
