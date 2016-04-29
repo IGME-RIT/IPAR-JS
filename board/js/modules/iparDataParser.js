@@ -59,9 +59,9 @@ m.parseData = function(url, windowDiv, callback) {
     				var rawData = Utilities.getXml(this.result);
     				var categories = getCategoriesAndQuestions(rawData, url, windowDiv, windows);
     				// load the most recent version
-    				var cookieHasMostRecentVersion = (document.cookie.length > 0);
-    				if (cookieHasMostRecentVersion) {
-    					loadSaveFromCookie(categories, callback);
+    				var autosave = localStorage.getItem("autosave");
+    				if (autosave) {
+    					loadAutosave(autosave, categories, callback);
     				} else {
     					loadSaveProgress(categories, url, windowDiv, callback);
     				}
@@ -102,9 +102,9 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 	});
 }
 
-function loadSaveFromCookie(categories, callback) {
+function loadAutosave(autosave, categories, callback) {
 	// Get the save data
-	var saveData = Utilities.getXml(document.cookie.replace("cookieSave=",""));
+	var saveData = Utilities.getXml(autosave);
 	assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 	var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
 	callback(categories, stage);

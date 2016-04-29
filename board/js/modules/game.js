@@ -93,8 +93,9 @@ p.update = function(ctx, canvas, dt){
 	    // Update the mouse state
 		this.mouseState.update(dt, this.scale*this.boardArray[this.activeBoardIndex].zoom);
 		
-		if (this.mouseState.mouseClicked) {document.cookie = "cookieSave=" + DataParser.createXMLSaveFile(this.boardArray, false) + "; expires=Thu, 18 Dec 2222 12:00:00 UTC";
-		console.log(document.cookie);
+		if (this.mouseState.mouseClicked) {
+			localStorage.setItem("autosave",DataParser.createXMLSaveFile(this.boardArray, false));
+			console.log(localStorage.getItem("autosave"));
 		}
 		
 	    // Update the current board (give it the mouse only if not zooming)
