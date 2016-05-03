@@ -42,7 +42,6 @@ var m = module.exports;
 // stores an array of all the files for rezipping
 var allEntries;
 
-
 // 						LOADING
 // *****************************************************
 
@@ -66,8 +65,8 @@ m.parseData = function(url, windowDiv, callback) {
     				var rawData = Utilities.getXml(this.result);
     				var categories = getCategoriesAndQuestions(rawData, url, windowDiv, windows);
     				// load the most recent version
-    				var autosave = localStorage.getItem("autosave");
-    				if (autosave) {
+    				//var autosave = localStorage.getItem("autosave");
+    				if (false) {
     					loadAutosave(autosave, categories, callback);
     				} else {
     					loadSaveProgress(categories, url, windowDiv, callback);
@@ -316,11 +315,11 @@ function getAllContents(data) {
 			   reader.onloadend = function(e) {
 			   
 			   		var arrayBufferView = new Uint8Array( this.result ); // fingers crossed
-			   		console.log(arrayBufferView);
+			   		//console.log(arrayBufferView);
 			   		
 					//console.log(this.result);
 				 	blobs.push(arrayBufferView);
-				 	names.push(fileEntry.name);
+				 	names.push(fileEntry.fullPath.replace(new RegExp('\/','g'),'\\').substring(1));
 				 	if (blobs.length == fileCount) {
 				 		createZip(data,blobs,names); // will this work?
 				 	}
@@ -466,12 +465,16 @@ function recursivelyReadFiles(fs) {
       	var resultsArray = toArray(results)
         entries = entries.concat(resultsArray);
         for (var i=0; i<resultsArray.length; i++) {
-        	console.log("is directory ? " + resultsArray[i].isDirectory);
+        	//console.log("is directory ? " + resultsArray[i].isDirectory);
         	if (resultsArray[i].isDirectory) {
+        		//directoryString += resultsArray[i].
         		var recursiveReader = resultsArray[i].createReader();
         		readEntries(recursiveReader);
+        	} else {
+        		
         	}
         }
+        //nameStructure = {};
         readEntries(reader);
       }
     }, errorHandler);
@@ -485,5 +488,6 @@ function recursivelyReadFiles(fs) {
 
 function saveEntries(entries, callback) {
 	allEntries = entries;
+	//console.log(allEntries);
 	if (callback) callback();
 }
