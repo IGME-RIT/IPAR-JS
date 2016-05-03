@@ -42,7 +42,11 @@ var m = module.exports;
 // stores an array of all the files for rezipping
 var allEntries;
 
-// constructor
+
+// 						LOADING
+// *****************************************************
+
+// load the file entry and parse the xml
 m.parseData = function(url, windowDiv, callback) {
     
     this.categories = [];
@@ -68,6 +72,7 @@ m.parseData = function(url, windowDiv, callback) {
     				} else {
     					loadSaveProgress(categories, url, windowDiv, callback);
     				}
+    				// prepare for saving by reading the files right when the program starts
     			    window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, recursivelyReadFiles, errorHandler);
     			};
     			reader.readAsText(file);
@@ -181,13 +186,16 @@ function getCategoriesAndQuestions(rawData, url, windowDiv, windows) {
 	return null
 }
 
+//						 SAVING
+// *******************************************************
+
 // called when the game is loaded, add onclick to save button that actually does the saving
 m.prepareZip = function(myBoards) {
 	//var content = zip.generate();
 	
 	console.log("prepare zip");
 	
-	// code from site
+	// code from JSZip site
 	var blobLink = document.getElementById('blob');
 	if (JSZip.support.blob) {
 		console.log("supports blob");
@@ -197,29 +205,28 @@ m.prepareZip = function(myBoards) {
   	}
 }
 
-// create download function
+// create IPAR file and download it
 function saveIPAR(boards) {
 
-	// create zip
-	var zip = new JSZip();
+	// error handling
+	if (!allEntries) {
+		alert("CANNOT SAVE: file data did not load"); return; 
+	}
 
-	// create the case file like when we loaded
-	var data = m.recreateCaseFile(zip, boards, getAllContents);
-
-	return false;
-	//location.href="data:application/zip;base64,"+content;
+	// create the case file like the one we loaded
+	getAllContents(m.recreateCaseFile(boards));
 }
 
 // creates a case file for zipping
-m.recreateCaseFile = function(zip, boards, callback) {
+m.recreateCaseFile = function(boards) {
 
 	// create save file text
 	var dataToSave = m.createXMLSaveFile(boards, true);
 	
 	console.log ("saveData.ipar data created");
 	
-	if (callback) callback(dataToSave);
-	else return dataToSave;
+	//if (callback) callback(dataToSave);
+	return dataToSave;
 	
 }
 
@@ -271,13 +278,20 @@ m.createXMLSaveFile = function(boards, includeNewline) {
 	return output;
 }
 
-function createZip(data, blobs) {
+function createZip(data, blobs, names) {
+	console.log("create zip run");
+	
 	var zip = new JSZip();
-	allEntries.forEach(function(fileEntry) {
+	/*allEntries.forEach(function(fileEntry) {
 		//zip.file(fileEntry.name,fileEntry
 		if (fileEntry.isFile) {
 			//console.log("blob " + getBlobFromFileEntry(fileEntry));
+			zip.file(fileEntry.name,fileEntry
 		}
+	});*/
+	// zip each file one by one
+	blobs.forEach(function(blob,i) {
+		zip.file(names[i],blob);
 	});
 	// backslashes per zip file protocol
 	zip.file("case\\active\\saveFile.ipardata",data);
@@ -287,6 +301,7 @@ function createZip(data, blobs) {
 
 function getAllContents(data) {
 	var blobs = [];
+	var names = [];
 	var fileCount = 0;
 	allEntries.forEach(function(fileEntry) {
 		//zip.file(fileEntry.name,fileEntry
@@ -299,14 +314,19 @@ function getAllContents(data) {
 			   var reader = new FileReader();
 
 			   reader.onloadend = function(e) {
-					console.log(this.result);
-				 	blobs.push(this.result);
+			   
+			   		var arrayBufferView = new Uint8Array( this.result ); // fingers crossed
+			   		console.log(arrayBufferView);
+			   		
+					//console.log(this.result);
+				 	blobs.push(arrayBufferView);
+				 	names.push(fileEntry.name);
 				 	if (blobs.length == fileCount) {
-				 		createZip(data,blobs); // will this work?
+				 		createZip(data,blobs,names); // will this work?
 				 	}
 			   };
 
-			   reader.readAsBinaryString(file);
+			   reader.readAsArrayBuffer(file);
 			}, errorHandler);
 		}
 	});
@@ -324,7 +344,7 @@ now we use createZip
 */
 
 
-function selectSaveLocation (data) {
+/*function selectSaveLocation (data) {
 
 	console.log("selectSaveLocation");
 
@@ -369,7 +389,7 @@ function selectSaveLocation (data) {
 			
 		}, false);
 	}
-}
+}*/
 
 function download(zip) {
 	console.log("downloading");
@@ -427,7 +447,7 @@ function errorHandler() {
 
 // helper function for recursivelyReadFiles
 function toArray(list) {
-  return Array.prototype.slice.call(list || [], 0);
+	return Array.prototype.slice.call(list || [], 0);
 }
 
 function recursivelyReadFiles(fs) {
@@ -443,7 +463,6 @@ function recursivelyReadFiles(fs) {
         // all entries found
         saveEntries(entries);
       } else {
-      	console.log("bla");
       	var resultsArray = toArray(results)
         entries = entries.concat(resultsArray);
         for (var i=0; i<resultsArray.length; i++) {
@@ -457,11 +476,14 @@ function recursivelyReadFiles(fs) {
       }
     }, errorHandler);
   };
+  
+  
 
   readEntries(dirReader); // Start reading dirs.
 
 }
 
-function saveEntries(entries) {
+function saveEntries(entries, callback) {
 	allEntries = entries;
+	if (callback) callback();
 }
