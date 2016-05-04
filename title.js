@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			// Create a reader and read the zip
 			var reader = new FileReader();
 			reader.onload = function(event){
+			
+				localStorage.setItem("autosave","");
 				
 				// Create a worker for unzipping the file
 				var zipWorker = new Worker("lib/unzip.js");

@@ -65,8 +65,8 @@ m.parseData = function(url, windowDiv, callback) {
     				var rawData = Utilities.getXml(this.result);
     				var categories = getCategoriesAndQuestions(rawData, url, windowDiv, windows);
     				// load the most recent version
-    				//var autosave = localStorage.getItem("autosave");
-    				if (false) {
+    				var autosave = localStorage.getItem("autosave");
+    				if (autosave) {
     					loadAutosave(autosave, categories, callback);
     				} else {
     					loadSaveProgress(categories, url, windowDiv, callback);

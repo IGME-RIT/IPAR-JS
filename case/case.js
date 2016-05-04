@@ -97,6 +97,7 @@ function back(){
 // Create new case session
 function start(){
 	document.location = "../profile/?new=true";
+	window.localStorage.set("autosave","");
 }
 
 // Resume an old case session
