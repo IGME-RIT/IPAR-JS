@@ -57,6 +57,7 @@ function lessonNode(startPosition, imagePath, pQuestion){
             that.height = that.height / x;
         }
         
+
         that.position.x += that.width/2;
         that.position.y += that.height/2;
     };

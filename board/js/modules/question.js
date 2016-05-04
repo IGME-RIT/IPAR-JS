@@ -35,6 +35,8 @@ function Question(xml, resources, url, windowDiv, windows){
     this.revealThreshold = parseInt(xml.getAttribute("revealThreshold"));
     this.imageLink = url+xml.getAttribute("imageLink");
     this.feedbacks = xml.getElementsByTagName("feedback");
+    this.blob = null; // no upload by default
+    this.fileName = "";
     var connectionElements = xml.getElementsByTagName("connections");
     this.connections = [];
     for(var i=0;i<connectionElements.length;i++)
@@ -277,9 +279,27 @@ p.createFileWindow = function(window){
     this.answer.innerHTML = window;
     this.fileInput = this.answer.getElementsByTagName("input")[0];
     var question = this;
-    this.fileInput.onchange = function(){
+    this.fileInput.addEventListener("change", function(event){
+    		// Make sure a valid file was chosen (currently not implemented)
+			if(false){
+				alert("You didn't choose an ipar file! you can only load ipar files!");
+				return;
+			}
+			
+			/*// Create a reader and read the zip
+			var reader = new FileReader();
+			reader.onload = function(event){
+				console.log(event);
+			};
+			// read the first file
+			reader.readAsArrayBuffer(event.target.files[0]);*/
+			
+			question.fileName = event.target.files[0].name;
+			question.blob = event.target.files[0].slice();
+
+			
 	    question.correctAnswer();
-    };
+    });
     
 }
 

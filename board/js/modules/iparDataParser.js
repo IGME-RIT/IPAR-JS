@@ -211,9 +211,18 @@ function saveIPAR(boards) {
 	if (!allEntries) {
 		alert("CANNOT SAVE: file data did not load"); return; 
 	}
-
+	// 1)
+	// get the files that the user uploaded 
+	var uploadedFiles = getAllSubmissions(boards);
+	
+	// 2)
 	// create the case file like the one we loaded
-	getAllContents(m.recreateCaseFile(boards));
+	var caseFile = m.recreateCaseFile(boards);
+	
+	// 3) (ASYNC)
+	// recreate the case file using FileSystem, then download it
+	getAllContents(caseFile, uploadedFiles);
+	
 }
 
 // creates a case file for zipping
@@ -277,7 +286,7 @@ m.createXMLSaveFile = function(boards, includeNewline) {
 	return output;
 }
 
-function createZip(data, blobs, names) {
+function createZip(data, blobs, names, subs) {
 	console.log("create zip run");
 	
 	var zip = new JSZip();
@@ -292,13 +301,40 @@ function createZip(data, blobs, names) {
 	blobs.forEach(function(blob,i) {
 		zip.file(names[i],blob);
 	});
+	// zip submitted files
+	subs.names.forEach(function(subName,i) {
+		zip.file("case\\active\\submitted\\"+subName,subs.blobs[i]);
+	});
+	
 	// backslashes per zip file protocol
 	zip.file("case\\active\\saveFile.ipardata",data);
 	// download the file
 	download(zip);
 }
 
-function getAllContents(data) {
+function getAllSubmissions(boards) {
+	var names = [];
+	var blobs = [];
+	
+	// loop through questions
+	for (var i=0; i<boards.length; i++) {
+		for (var j=0; j<boards[i].lessonNodeArray.length; j++) {
+			// shorthand
+			var q = boards[i].lessonNodeArray[j].question;
+			
+			if (q.fileName && q.blob) {
+				names.push(q.fileName);
+				blobs.push(q.blob);
+			}
+		}
+	}
+	return {
+		"names" : names,
+		"blobs" : blobs
+	}
+}
+
+function getAllContents(data, subs) {
 	var blobs = [];
 	var names = [];
 	var fileCount = 0;
@@ -321,7 +357,7 @@ function getAllContents(data) {
 				 	blobs.push(arrayBufferView);
 				 	names.push(fileEntry.fullPath.replace(new RegExp('\/','g'),'\\').substring(1));
 				 	if (blobs.length == fileCount) {
-				 		createZip(data,blobs,names); // will this work?
+				 		createZip(data,blobs,names,subs);
 				 	}
 			   };
 
@@ -430,12 +466,7 @@ function download(zip) {
 	});
 }
 
-
-
-
-
-
-/************* BLEH **************/
+/************* READ FILES **************/
 
 
 
