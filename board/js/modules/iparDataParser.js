@@ -322,12 +322,14 @@ function getAllSubmissions(boards) {
 			// shorthand
 			var q = boards[i].lessonNodeArray[j].question;
 			
+			// add blobs to an array
 			if (q.fileName && q.blob) {
 				names.push(q.fileName);
 				blobs.push(q.blob);
 			}
 		}
 	}
+	// return object 
 	return {
 		"names" : names,
 		"blobs" : blobs

@@ -65,6 +65,16 @@ function Question(xml, resources, url, windowDiv, windows){
     
 }
 
+p.showPrevSubmittedFiles = function(files) {
+	// acknowledge submitted files in task window
+	if(files.length>0)
+		this.feedback.innerHTML = 'Submitted Files:<br/>';
+	else
+		this.feedback.innerHTML = '';
+	for(var i=0;i<files;i++)
+		this.feedback.innerHTML += '<span class="feedbackI">'+files[i].name+'</span><br/>';
+}
+
 var p = Question.prototype;
 
 p.wrongAnswer = function(num){
