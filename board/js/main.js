@@ -89,10 +89,7 @@ function loop(){
     	windowFilm.style.display = 'block';
     }
     else if(pausedTime!=0 && windowDiv.innerHTML==''){
-    	pausedTime = 0;
-    	game.active = true;
-    	windowFilm.style.display = 'none';
-    	document.getElementById("proceedContainer").style.display = "none";
+    	windowClosed();
     }
 }
 
@@ -105,3 +102,16 @@ window.addEventListener("resize", function(e){
     game.scale = Utilities.getScale(Constants.boardSize, new Point(canvas.width, canvas.height));
     
 });
+
+// Called when the question window closes
+function windowClosed(){
+	
+	// Unpause the game and fully close the window
+	pausedTime = 0;
+	game.active = true;
+	windowFilm.style.display = 'none';
+	proceedContainer.style.display = "none";
+	
+	game.windowClosed();
+	
+}

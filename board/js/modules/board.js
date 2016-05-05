@@ -261,28 +261,9 @@ p.moveTowards = function(point, dt, speed){
 		this.boardOffset.y = point.y;
 }
 
-/*p.updateCookie = function() {
-	this.lastSaveTime = Date.now();
-	document.cookie = 'boardState=' + JSON.stringify(this) + '; expires=Thu, 18 Dec 2222 12:00:00 UTC';
+p.windowClosed = function(){
+	console.log("window closed");
 }
 
-p.loadCookie = function() {
-	//console.log(document.cookie.replace("boardState=",""));
-	var temp = JSON.parse(document.cookie.replace("boardState=",""));
-	//console.log(temp.lessonNodeArray.length);
-	this.position = temp.position;
-    //this.lessonNodeArray = temp.lessonNodeArray; JSON does not have functions so this is bad
-    this.boardOffset = temp.boardOffset;
-    this.prevBoardOffset = temp.prevBoardOffset;
-    this.zoom = Constants.startZoom;
-    this.stage = temp.stage;
-    this.lastSaveTime = temp.lastSaveTime;
-    for (var i=0; i<this.lessonNodeArray.length; i++) {
-    	var newLNode = this.lessonNodeArray[i];
-    	var savedLNode = temp.lessonNodeArray[i];
-    	newLNode.position = savedLNode.position;
-    	newLNode.question.currentState = savedLNode.question.currentState;
-    }
-}*/
 
 module.exports = board;    

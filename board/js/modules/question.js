@@ -65,6 +65,8 @@ function Question(xml, resources, url, windowDiv, windows){
     
 }
 
+var p = Question.prototype;
+
 p.showPrevSubmittedFiles = function(files) {
 	// acknowledge submitted files in task window
 	if(files.length>0)
@@ -74,8 +76,6 @@ p.showPrevSubmittedFiles = function(files) {
 	for(var i=0;i<files;i++)
 		this.feedback.innerHTML += '<span class="feedbackI">'+files[i].name+'</span><br/>';
 }
-
-var p = Question.prototype;
 
 p.wrongAnswer = function(num){
 

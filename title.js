@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			var reader = new FileReader();
 			reader.onload = function(event){
 			
+				// since the user is loading a fresh file, clear the autosave (soon we won't use this at all)
 				localStorage.setItem("autosave","");
 				
 				// Create a worker for unzipping the file

@@ -6,6 +6,7 @@ var Constants = require('./constants.js');
 var DrawLib = require('./drawlib.js');
 var DataParser = require('./iparDataParser.js');
 var MouseState = require('./mouseState.js');
+var FileManager = require('./fileManager.js');
 
 //mouse management
 var mouseState;
@@ -21,7 +22,7 @@ function game(url, canvas, windowDiv){
 	var game = this;
 	this.active = false;
 	this.mouseState = new MouseState(canvas);
-	DataParser.parseData(url, windowDiv, function(categories, stage){
+	FileManager.loadCase(url, windowDiv, function(categories, stage){
 		game.categories = categories;
 		game.createLessonNodes();
 	});
@@ -74,7 +75,7 @@ p.createLessonNodes = function(){
 	this.updateNode();
 	
 	// ready to save
-	DataParser.prepareZip(this.boardArray);
+	FileManager.prepareZip(this.boardArray);
 }
 
 p.updateZoom = function(newZoom){
@@ -191,6 +192,10 @@ p.draw = function(ctx, canvas){
 
 p.updateNode = function(){
 	this.zoomin = true;
+}
+
+p.windowClosed = function() {
+	this.boardArray[this.activeBoardIndex].windowClosed();
 }
 
 module.exports = game;
