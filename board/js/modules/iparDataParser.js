@@ -41,9 +41,8 @@ var m = module.exports;
 
 // stores an array of all the files for rezipping
 var allEntries;
-
-// 						LOADING
-// *****************************************************
+				
+// ********************** LOADING ************************
 
 // load the file entry and parse the xml
 m.parseData = function(url, windowDiv, callback) {
@@ -185,8 +184,19 @@ function getCategoriesAndQuestions(rawData, url, windowDiv, windows) {
 	return null
 }
 
-//						 SAVING
-// *******************************************************
+					 
+// ********************** SAVING ************************
+
+/* here's the general outline of what is happening:
+selectSaveLocation was the old way of doing things
+now we use createZip
+ - when this whole thing starts, we request a file system and save all the entries (directories and files) to the allEntries variable
+ - then we get the blobs using readAsBinaryString and store those in an array when we are saving 
+  - - could do that on page load to save time later..?
+ - anyway, then we - in theory - take the blobs and use zip.file(entry.name, blob) to recreate the structure
+ - and finally we download the zip with download()
+ 
+*/
 
 // called when the game is loaded, add onclick to save button that actually does the saving
 m.prepareZip = function(myBoards) {
@@ -369,17 +379,6 @@ function getAllContents(data, subs) {
 	});
 }
 
-/* here's the general outline of what is happening:
-selectSaveLocation was the old way of doing things
-now we use createZip
- - when this whole thing starts, we request a file system and save all the entries (directories and files) to the allEntries variable
- - then we get the blobs using readAsBinaryString and store those in an array when we are saving 
-  - - could do that on page load to save time later..?
- - anyway, then we - in theory - take the blobs and use zip.file(entry.name, blob) to recreate the structure
- - and finally we download the zip with download()
- 
-*/
-
 
 /*function selectSaveLocation (data) {
 
@@ -468,9 +467,8 @@ function download(zip) {
 	});
 }
 
+
 /************* READ FILES **************/
-
-
 
 function errorHandler() {
 	//do nothing
