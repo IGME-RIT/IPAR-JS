@@ -4,7 +4,6 @@ var Point = require('./point.js');
 var Question = require("./question.js");
 var Constants = require("./constants.js");
 var DrawLib = require("./drawlib.js");
-var FileManager = require('./fileManager.js');
 
 //parameter is a point that denotes starting position
 function board(startPosition, lessonNodes){
@@ -16,6 +15,7 @@ function board(startPosition, lessonNodes){
     this.stage = 0;
     this.lastSaveTime = 0; // assume no cookie
     this.lastQuestion = null;
+    this.lastQuestionNum = -1;
     
     //if (document.cookie) this.loadCookie(); 
 
@@ -120,6 +120,7 @@ p.act = function(pMouseState, dt) {
 					// handle click code
 					this.target.click(pMouseState);
 					this.lastQuestion = this.target.question;
+					this.lastQuestionNum = i;
 				}
 			}
 			else{
@@ -269,7 +270,14 @@ p.windowClosed = function(){
 	// if it is file type
 	if (this.lastQuestion.questionType == 4) {
 		// add a file to the file system
-		FileManager.addFileToSystem(this.lastQuestion.fileName,this.lastQuestion.blob);
+		var name = this.lastQuestion.fileName;
+		var blob = this.lastQuestion.blob;
+		var lastQuestionNum = this.lastQuestionNum;
+		return { 
+			blob: blob, 
+			num: lastQuestionNum, 
+			ext: name.substring( name.lastIndexOf("."), name.length)
+		}
 	}
 }
 

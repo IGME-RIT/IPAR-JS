@@ -195,7 +195,12 @@ p.updateNode = function(){
 }
 
 p.windowClosed = function() {
-	this.boardArray[this.activeBoardIndex].windowClosed();
+	var fileToStore = this.boardArray[this.activeBoardIndex].windowClosed();
+	if (fileToStore) {
+		FileManager.addNewFileToSystem(		  // need to store number of files
+			""+this.activeBoardIndex+"-"+fileToStore.num+"-"+"0"+fileToStore.ext,
+			fileToStore.blob);
+	}
 }
 
 module.exports = game;

@@ -214,6 +214,16 @@ header {
 	animation-iteration-count: 1;
 }
 
+#proceedContainer:hover #proceedBtnRound {
+	cursor: pointer;
+	box-shadow: 0 0 0.5vw white;
+}
+
+#proceedContainer:hover #proceedBtnLong {
+	cursor: pointer;
+	box-shadow: 0 0 0.5vw white;
+}
+
 #rightArrow {
 	position: absolute;
 	left: 37%;

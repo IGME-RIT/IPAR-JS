@@ -57,3 +57,10 @@ m.getXml = function(xml){
 m.getScale = function(virtual, actual){
 	return actual.y/virtual.x*virtual.y < actual.x ? actual.y/virtual.y : actual.x/virtual.x;
 }
+
+m.replaceAll = function (str, target, replacement) {
+	while (str.indexOf(target) < 0) {
+		str = str.replace(target,replacement);
+	}
+	return str;
+}

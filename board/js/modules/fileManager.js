@@ -16,7 +16,7 @@ var fileSystem = null;
 
 var baseDir = null;
 
-var addFileObject = { filename: "", blob: "", callback: undefined};
+var addFileData = { filename: "", blob: "", callback: undefined};
 
 // stores an array of all the files for rezipping
 var allEntries;
@@ -146,7 +146,7 @@ function saveIPAR(boards) {
 	var caseFile = Parser.recreateCaseFile(boards);
 	
 	// 3) (ASYNC)
-	// recreate the case file using FileSystem, then download it
+	// recreate the IPAR file using FileSystem, then download it
 	getAllContents(caseFile, uploadedFiles);
 	
 }
@@ -188,7 +188,7 @@ function getAllSubmissions(boards) {
 			}
 		}
 	}
-	// return object 
+	// return submissions object 
 	return {
 		"names" : names,
 		"blobs" : blobs
@@ -328,7 +328,7 @@ function saveEntries(entries, callback) {
 
 /***************** CACHING *******************/
 
-m.addFileToSystem2 = function(filename, data, callback){
+m.addFileToSystem = function(filename, data, callback){
 
 	console.log("fs: " + fileSystem.root);
 	
@@ -360,47 +360,70 @@ m.addFileToSystem2 = function(filename, data, callback){
 	if (callback) callback( file.toURL() );
 }
 
-// the problem is submitting a file with the correct name
-m.addFileToSystem = function(filename, data, callback){
-	addFileObject.filename = filename;
-	addFileObject.data = data;
-	addFileObject.callback = callback;
+// filename must be the full desired path for this to work
+m.addNewFileToSystem = function(filename, data, callback){
+	// if the path uses backslashes
+	if (filename.indexOf("\\") > -1) 
+		filename = Utilities.replaceAll(filename,"\\","/");
+	// if there is no path
+	if (filename.indexOf("/") < 0) filename = "case/active/submitted/"+filename;
+	
+	// store the data in an module-scope object so that all of the callback functions can make use of it
+	addFileData.filename = filename;
+	addFileData.data = data;
+	addFileData.callback = callback;
+	
+	// debug
 	console.log("addFileToSystem("+filename+", "+data+", "+callback+")");
 	//retrieveBaseDir(function(dir) { addFileToDir(filename, dir, callback); } );
-					// callback
+	
+	// find the directoryEntry that will contain the file and call addFileToDir with the result
 	retrieveBottomDir(addFileToDir);
 }
 
+// gets the directory of interest
 function retrieveBottomDir(callback) {
 	//window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, function(fs) { setFileSystem(fs, callback); }, errorHandler);
 	console.log("base URL: " + baseURL);
-	window.resolveLocalFileSystemURL(baseURL+"/active/submitted/", callback);
+	var name = addFileData.filename;
+	// extract the path of the directory to put the file in from the file name
+	var extension = name.substring(0,name.lastIndexOf("/"));
+	// "case" is already part of the base url
+	if (extension.indexOf("case/") > -1) {
+		extension = extension.substring(5);
+	}
+	
+	// debug
+	console.log("ext: " + extension);
+	
+	// get the directory entry from the filesystem callback
+	window.resolveLocalFileSystemURL(baseURL+extension, callback);
 }
 
+// add the file
 function addFileToDir(dir) {
-	var filename = addFileObject.filename;
-	var callback = addFileObject.callback;
-	console.log("addFileToDir("+filename+", "+dir+", "+callback+")");
-	var dirs = filename.substr( 0, filename.lastIndexOf('\\') ).split('\\');
+
+	// shorthand
+	var filename = addFileData.filename;
+	
+	// debug
+	console.log("addFileToDir("+filename+", "+dir+")");
+	
+	// relic from legacy code
 	var curDir = dir;
-	console.log(dirs);
+	
+	// debug
 	console.log("curdir: "  + curDir.name);
-	for(var i=1;i<dirs.length;i++) {
-		console.log(dirs[i]);
-		
-		console.log(curDir.getDirectory(dirs[i])); 
-		curDir = curDir.getDirectory(dirs[i], {create: false, exclusive: false});
-	}
-	console.log("final curdir: "  + curDir.name);
 	
 	// Make sure not working with an empty directory
 	if(filename.endsWith('\\'))
 		return;
 
-	
 	// Create the file
-	//var file = curDir.getFile(filename.substr(filename.lastIndexOf('\\')+1), {create: true});
-	var file = curDir.getFile(filename, {create: true}, createWriter); // function(fileEntry) { writeFile(fileEntry, callback); });
+	var file = curDir.getFile(filename.substr(filename.lastIndexOf('/')+1), {create: true}, createWriter);
+	
+	
+	//var file = curDir.getFile(filename, {create: true}, createWriter); // function(fileEntry) { writeFile(fileEntry, callback); });
 	/*console.log(file);
 	//file.createWriter().write(new Blob([data], {type: getMimeType(filename)}));
 	// data is a blob in this case
@@ -421,12 +444,12 @@ function writeFile(fileWriter) {
 	console.log(fileWriter);
 	fileWriter.onwriteend = function (e) { console.log("write completed"); }
 	fileWriter.onerror = function (e) { console.log("writer error: " + e.toString()); }
-	fileWriter.write(new Blob([addFileObject.data], {type: getMimeType(addFileObject.filename)}));
+	//fileWriter.write(new Blob([addFileData.data], {type: getMimeType(addFileData.filename)}));
 	// data is a blob in this case
-	fileWriter.write(addFileObject.data);
+	fileWriter.write(addFileData.data);
 	
 	// Return the url to the file
-	if (callback) callback( file.toURL() );
+	if (addFileData.callback) callback( file.toURL() );
 }
 
 function setBase(entry, callback) {
