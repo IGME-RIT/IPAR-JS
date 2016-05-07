@@ -1,4 +1,7 @@
 "use strict";
+
+document.documentElement.requestFullScreen = document.documentElement.requestFullScreen || document.documentElement.webkitRequestFullScreen || document.documentElement.mozRequestFullScreen;
+
 //imports
 var Game = require('./modules/game.js');
 var Point = require('./modules/point.js');
@@ -123,6 +126,14 @@ window.addEventListener('mousewheel',function(event){
 	game.updateZoom(-parseFloat(zoomSlider.value)); 
 	event.preventDefault();
     return false; 
+}, false);
+
+// Listen for touch for fullscreen
+window.addEventListener('touchstart', function(event){
+	
+	if(window.matchMedia("only screen and (max-width: 760px)"))
+		document.documentElement.requestFullScreen();
+	
 }, false);
 
 // Called when the question window closes
