@@ -121,6 +121,7 @@ window.addEventListener('mousewheel',function(event){
     else
     	zoomSlider.stepUp();
 	game.updateZoom(-parseFloat(zoomSlider.value)); 
+	event.preventDefault();
     return false; 
 }, false);
 
