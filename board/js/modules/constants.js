@@ -20,3 +20,6 @@ m.zoomMoveSpeed = 0.75;
 
 // The speed of the line animation
 m.lineSpeed = 0.002;
+
+// The time between zoom checks
+m.pinchSpeed = .0025;

@@ -19,6 +19,7 @@ var proceedLong;
 var proceedRound;
 var pausedTime = 0;
 var zoomSlider;
+var pinchStart = 0;
 
 //persistent utilities
 var prevTime; // date in milliseconds
@@ -85,6 +86,13 @@ function loop(){
     
     // update game
     game.update(ctx, canvas, dt);
+    
+    if(game.mouseState.zoomDiff!=0){
+    	zoomSlider.value = pinchStart + game.mouseState.zoomDiff * Constants.pinchSpeed;
+    	game.updateZoom(-parseFloat(zoomSlider.value)); 
+    }
+    else
+    	pinchStart = Number(zoomSlider.value);
     
     // Check if should pause
     if(game.active && windowDiv.innerHTML!='' && pausedTime++>3){
