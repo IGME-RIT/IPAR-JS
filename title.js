@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				alert("You didn't choose an ipar file! you can only load ipar files!");
 				return;
 			}
+			console.log(event.target.files[0]);
+			localStorage['caseName'] = event.target.files[0].name;
 		
 			// Set the button to disabled so that it can't be pressed while loading
 			loadButton.disabled = true;
