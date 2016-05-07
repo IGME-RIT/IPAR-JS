@@ -16,16 +16,24 @@ function mouseState(canvas){
     
     //event listeners for mouse interactions with the canvas
     var mouseState = this;
-    canvas.addEventListener("mousemove", function(e){
-        var boundRect = canvas.getBoundingClientRect();
-        mousePosition = new Point(e.clientX - boundRect.left, e.clientY - boundRect.top);
-        relativeMousePosition = new Point(mousePosition.x - (canvas.offsetWidth/2.0), mousePosition.y - (canvas.offsetHeight/2.0));        
+    canvas.addEventListener("mousemove", updatePosition);
+    canvas.addEventListener("touchmove", function(e){
+        updatePosition(e.changedTouches[0]);
     });
     this.mouseDown = false;
     canvas.addEventListener("mousedown", function(e){
     	mouseState.mouseDown = true;
     });
+    canvas.addEventListener("touchstart", function(e){
+        updatePosition(e.changedTouches[0]);
+        setTimeout(function(){
+        	mouseState.mouseDown = true;
+        });
+    });
     canvas.addEventListener("mouseup", function(e){
+    	mouseState.mouseDown = false;
+    });
+    canvas.addEventListener("touchend", function(e){
     	mouseState.mouseDown = false;
     });
     this.mouseIn = false;
@@ -40,6 +48,12 @@ function mouseState(canvas){
     	mouseState.mouseDown = false;
     });
 	
+}
+
+function updatePosition(e){
+	var boundRect = canvas.getBoundingClientRect();
+    mousePosition = new Point(e.clientX - boundRect.left, e.clientY - boundRect.top);
+    relativeMousePosition = new Point(mousePosition.x - (canvas.offsetWidth/2.0), mousePosition.y - (canvas.offsetHeight/2.0));
 }
 
 var p = mouseState.prototype;
