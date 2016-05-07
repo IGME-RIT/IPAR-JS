@@ -4,6 +4,7 @@ var Point = require('./point.js');
 // private variables
 var mousePosition, relativeMousePosition;
 var mouseDownTimer, maxClickDuration;
+var mouseWheelVal;
 var prevTime, dt;
 var scale;
 

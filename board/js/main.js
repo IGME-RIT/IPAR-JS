@@ -103,6 +103,16 @@ window.addEventListener("resize", function(e){
     
 });
 
+//listens for mouse wheel
+window.addEventListener('mousewheel',function(event){
+    if(event.deltaY<0)
+    	zoomSlider.stepDown();
+    else
+    	zoomSlider.stepUp();
+	game.updateZoom(-parseFloat(zoomSlider.value)); 
+    return false; 
+}, false);
+
 // Called when the question window closes
 function windowClosed(){
 	
