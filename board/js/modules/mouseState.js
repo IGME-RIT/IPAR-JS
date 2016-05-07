@@ -16,24 +16,32 @@ function mouseState(canvas){
     
     //event listeners for mouse interactions with the canvas
     var mouseState = this;
-    canvas.addEventListener("mousemove", updatePosition);
+    canvas.addEventListener("mousemove", function(e){
+    	e.preventDefault();
+        updatePosition(e);
+    });
     canvas.addEventListener("touchmove", function(e){
+    	e.preventDefault();
         updatePosition(e.changedTouches[0]);
     });
     this.mouseDown = false;
     canvas.addEventListener("mousedown", function(e){
+    	e.preventDefault();
     	mouseState.mouseDown = true;
     });
     canvas.addEventListener("touchstart", function(e){
+    	e.preventDefault();
         updatePosition(e.changedTouches[0]);
         setTimeout(function(){
         	mouseState.mouseDown = true;
         });
     });
     canvas.addEventListener("mouseup", function(e){
+    	e.preventDefault();
     	mouseState.mouseDown = false;
     });
     canvas.addEventListener("touchend", function(e){
+    	e.preventDefault();
     	mouseState.mouseDown = false;
     });
     this.mouseIn = false;
