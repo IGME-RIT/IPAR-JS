@@ -16,6 +16,7 @@ body {
 }
 
 button {
+	display: block;
 	background-color: #15718F;
 	color: white;
 	width: 20vw;

@@ -26,12 +26,15 @@ var dt; // delta time in milliseconds
 
 //fires when the window loads
 window.onload = function(e){
+	
     initializeVariables();
     loop();
+	
 }
 
 //initialization, mouse events, and game instantiation
 function initializeVariables(){
+	
 	windowDiv = document.getElementById('window');
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');

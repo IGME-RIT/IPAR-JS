@@ -8,7 +8,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['*.html', '*.js', '*.md', 'data/**/*', 'css/**/*', 'images/**/*', 'lib/**/*', 'img/*', 'board/*', 'case/*', 'profile/*'],
+          src: ['*.html', '*.ipar', '*.js', '*.md', 'data/**/*', 'css/**/*', 'images/**/*', 'lib/**/*', 'img/*', 'board/*', 'case/*', 'profile/*'],
           dest: 'build/',
           filter: 'isFile'
         }]
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         tasks: ['browserify']
       },
       other: {
-    	files: ['*.html', '*.js', '*.md', 'data/**/*', 'css/**/*', 'images/**/*', 'lib/**/*', 'img/*', 'board/*.*', 'case/*.*', 'profile/*.*'],
+    	files: ['*.html', '*.ipar', '*.js', '*.md', 'data/**/*', 'css/**/*', 'images/**/*', 'lib/**/*', 'img/*', 'board/*.*', 'case/*.*', 'profile/*.*'],
         tasks: ['copy']
       },
       livereload: {

@@ -12,6 +12,45 @@ document.addEventListener('DOMContentLoaded', function() {
 		// Get the load button and input
 		var loadInput = document.getElementById('load-input');
 		var loadButton = document.getElementById('load-button');
+		var demoButton = document.getElementById('demo-button');
+		
+		// When click the demo clear cache open board page
+		demoButton.onclick = function() {
+			
+			// Set the button to disabled so that it can't be pressed while loading
+			loadButton.disabled = true;
+			loadInput.disabled = true;
+			demoButton.disabled = true;
+			
+			var request = new XMLHttpRequest();
+			request.responseType = "arraybuffer";
+			request.onreadystatechange = function() {
+			  if (request.readyState == 4 && request.status == 200) {
+				  	
+				 	// since the user is loading a fresh file, clear the autosave (soon we won't use this at all)
+					localStorage.setItem("autosave","");
+					localStorage['caseName'] = "demo.ipar";
+					
+					// Create a worker for unzipping the file
+					var zipWorker = new Worker("lib/unzip.js");
+					zipWorker.onmessage = function(message) {
+						
+						// Save the base url to local storage
+						var baseURL = JSON.parse(message.data)['case\\active\\caseFile.ipardata'];
+						localStorage['caseFiles'] = baseURL.substr(0, baseURL.length-'active/caseFiles.ipardata'.length+1);
+						
+						// call the callback
+						document.location = "board/";
+						
+					}
+					
+					// Start the worker
+					zipWorker.postMessage(request.response);
+			  }
+			};
+			request.open("GET", "demo.ipar", true);
+			request.send();
+		}
 		
 		// When click the load button call the load input
 		loadButton.onclick = function() {
@@ -32,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			// Set the button to disabled so that it can't be pressed while loading
 			loadButton.disabled = true;
 			loadInput.disabled = true;
+			demoButton.disabled = true;
 			
 			// Create a reader and read the zip
 			var reader = new FileReader();
