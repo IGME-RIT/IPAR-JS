@@ -16,6 +16,8 @@ var fileSystem = null;
 
 var baseDir = null;
 
+var boardsReference = null;
+
 var addFileData = { filename: "", blob: "", callback: undefined};
 
 // stores an array of all the files for rezipping
@@ -49,8 +51,7 @@ m.loadCase = function(url, windowDiv, callback) {
     				} else {
     					loadSaveProgress(categories, url, windowDiv, callback);
     				}
-    				// prepare for saving by reading the files right when the program starts
-    			    window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, recursivelyReadFiles, errorHandler);
+    				
     			};
     			reader.readAsText(file);
     		   
@@ -133,22 +134,40 @@ m.prepareZip = function(myBoards) {
 // create IPAR file and download it
 function saveIPAR(boards) {
 
-	// error handling
+	// store in module scope for reference in callback
+	boardsReference = boards;
+
+	// prepare for saving by loading the files into memory first
+    window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, saveStage1, errorHandler);
+	
+}
+
+// this is a callback that takes 1 argument and 
+// then passes multiple arguments to the useful callback function 
+function saveStage1(fs) {
+	recursivelyReadFiles(fs, saveStage2);
+}
+
+// this is a callback that takes 1 argument and 
+// then passes multiple arguments to the useful callback function 
+function saveStage2() {
+	console.log("ss2 run");
+
+	// error handling: check if the save data loaded
 	if (!allEntries) {
 		alert("CANNOT SAVE: file data did not load"); return; 
 	}
 	// 1)
 	// get the files that the user uploaded 
-	var uploadedFiles = getAllSubmissions(boards);
+	var uploadedFiles = getAllSubmissions(boardsReference);
 	
 	// 2)
 	// create the case file like the one we loaded
-	var caseFile = Parser.recreateCaseFile(boards);
+	var caseFile = Parser.recreateCaseFile(boardsReference);
 	
 	// 3) (ASYNC)
 	// recreate the IPAR file using FileSystem, then download it
 	getAllContents(caseFile, uploadedFiles);
-	
 }
 
 function createZip(data, blobs, names, subs) {
@@ -281,49 +300,83 @@ function toArray(list) {
 	return Array.prototype.slice.call(list || [], 0);
 }
 
-function recursivelyReadFiles(fs) {
+// Loads all the files by recursively calling readEntries 
+//  on DirectoryEntries in the FileSystem 
+// Uses helper functions to determine when it is finished
+//  since the callbacks do not return in order
+function recursivelyReadFiles(fs, callback) {
+	
 	console.log("recursivelyReadFiles called");
 	
+	var dirReader = fs.root.createReader();
+	var entries = [];
+	
+	// all entries found
+	RunOnAllFilesLoaded(saveEntries, entries);
+	if (callback) RunOnAllFilesLoaded(callback);
+	
 	fileSystem = fs;
-
-  var dirReader = fs.root.createReader();
-  var entries = [];
 
   // Call the reader.readEntries() until no more results are returned.
   var readEntries = function(reader) {
      reader.readEntries (function(results) {
-      if (!results.length) {
-        // all entries found
-        saveEntries(entries);
-      } else {
-      	var resultsArray = toArray(results)
-        entries = entries.concat(resultsArray);
-        for (var i=0; i<resultsArray.length; i++) {
-        	//console.log("is directory ? " + resultsArray[i].isDirectory);
-        	if (resultsArray[i].isDirectory) {
-        		//directoryString += resultsArray[i].
-        		var recursiveReader = resultsArray[i].createReader();
-        		readEntries(recursiveReader);
-        	} else {
-        		
-        	}
-        }
-        //nameStructure = {};
-        readEntries(reader);
-      }
+		  if (!results.length) {
+			// done here
+			DequeueLoaded(entries);
+		  } else {
+			var resultsArray = toArray(results)
+			entries = entries.concat(resultsArray);
+			for (var i=0; i<resultsArray.length; i++) {
+				//console.log("is directory ? " + resultsArray[i].isDirectory);
+				if (resultsArray[i].isDirectory) {
+					//directoryString += resultsArray[i].
+					var recursiveReader = resultsArray[i].createReader();
+					QueueLoaded();
+					readEntries(recursiveReader);
+				}
+			}
+			//nameStructure = {};
+			//QueueLoaded();
+			readEntries(reader);
+		  }
     }, errorHandler);
   };
-  
-  
 
+  QueueLoaded();
   readEntries(dirReader); // Start reading dirs.
 
 }
 
-function saveEntries(entries, callback) {
+// adds functions and arguments to be called when all files are loaded
+var onLoadedFunctions = [];
+function RunOnAllFilesLoaded(callback, arg1) {
+	onLoadedFunctions.push(callback);
+}
+
+// add another level to wait for
+var recursionLevelsQueued = 0;
+function QueueLoaded() {
+	recursionLevelsQueued++;
+	console.log("added, queue: "+recursionLevelsQueued);
+}
+
+// this level is done, remove it from the queue
+function DequeueLoaded(entries) {
+	recursionLevelsQueued--;
+	// if this is the last recursive call to come in
+	if (recursionLevelsQueued == 0) {
+		// run all the functions
+		onLoadedFunctions.forEach(function(f,i) {
+			console.log("running callback "+i);
+			f(entries);
+		});
+	}
+	console.log("subtracted, queue: "+recursionLevelsQueued);
+}
+
+function saveEntries(entries) {
 	allEntries = entries;
-	//console.log(allEntries);
-	if (callback) callback(allEntries);
+	console.log(allEntries);
 }
 
 /***************** CACHING *******************/
