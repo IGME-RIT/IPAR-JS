@@ -155,9 +155,9 @@ m.createXMLSaveFile = function(boards, includeNewline) {
 			// revealBuffer
 			output += 'revealBuffer="0" '; // and this
 			// positionPercentX
-			output += 'positionPercentX="' + Utilities.map(q.positionPercentX, 0, Constants.boardSize.x, 0, 100) + '" ';
+			output += 'positionPercentX="' + Utilities.map(q.positionPercentX - boards[i].lessonNodeArray[j].width/2, 0, Constants.boardSize.x, 0, 100) + '" ';
 			// positionPercentY
-			output += 'positionPercentY="' + Utilities.map(q.positionPercentY, 0, Constants.boardSize.y, 0, 100) + '" ';
+			output += 'positionPercentY="' + Utilities.map(q.positionPercentY - boards[i].lessonNodeArray[j].height/2, 0, Constants.boardSize.y, 0, 100) + '" ';
 			
 			// tag end
 			output += '/>' + nl;
