@@ -94,10 +94,10 @@ p.update = function(ctx, canvas, dt){
 	    // Update the mouse state
 		this.mouseState.update(dt, this.scale*this.boardArray[this.activeBoardIndex].zoom);
 		
-		if (this.mouseState.mouseClicked) {
-			localStorage.setItem("autosave",DataParser.createXMLSaveFile(this.boardArray, false));
+		/*if (this.mouseState.mouseClicked) {
+			//localStorage.setItem("autosave",DataParser.createXMLSaveFile(this.boardArray, false));
 			//console.log(localStorage.getItem("autosave"));
-		}
+		}*/
 		
 	    // Update the current board (give it the mouse only if not zooming)
 	    this.boardArray[this.activeBoardIndex].act((this.zoomin || this.zoomout ? null : this.mouseState), dt);
@@ -201,6 +201,7 @@ p.windowClosed = function() {
 			""+this.activeBoardIndex+"-"+fileToStore.num+"-"+"0"+fileToStore.ext,
 			fileToStore.blob);
 	}
+	FileManager.addNewFileToSystem("case\\active\\saveFile.ipardata", DataParser.createXMLSaveFile(this.boardArray, true));
 }
 
 module.exports = game;

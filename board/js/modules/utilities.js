@@ -59,7 +59,7 @@ m.getScale = function(virtual, actual){
 }
 
 m.replaceAll = function (str, target, replacement) {
-	while (str.indexOf(target) < 0) {
+	while (str.indexOf(target) > -1) {
 		str = str.replace(target,replacement);
 	}
 	return str;

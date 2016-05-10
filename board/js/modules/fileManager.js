@@ -413,12 +413,15 @@ m.addFileToSystem = function(filename, data, callback){
 	if (callback) callback( file.toURL() );
 }
 
-// filename must be the full desired path for this to work
+// Filename must be the full desired path for this to work
+//  otherwise the function it will assume that the file is a submission
 m.addNewFileToSystem = function(filename, data, callback){
 	// if the path uses backslashes
-	if (filename.indexOf("\\") > -1) 
+	if (filename.indexOf("\\") > -1) {
 		filename = Utilities.replaceAll(filename,"\\","/");
-	// if there is no path
+	}
+
+	// if there is no path, assume submission
 	if (filename.indexOf("/") < 0) filename = "case/active/submitted/"+filename;
 	
 	// store the data in an module-scope object so that all of the callback functions can make use of it
@@ -427,7 +430,7 @@ m.addNewFileToSystem = function(filename, data, callback){
 	addFileData.callback = callback;
 	
 	// debug
-	console.log("addFileToSystem("+filename+", "+data+", "+callback+")");
+	//console.log("addFileToSystem("+filename+", "+data+", "+callback+")");
 	//retrieveBaseDir(function(dir) { addFileToDir(filename, dir, callback); } );
 	
 	// find the directoryEntry that will contain the file and call addFileToDir with the result
@@ -498,8 +501,15 @@ function writeFile(fileWriter) {
 	fileWriter.onwriteend = function (e) { console.log("write completed"); }
 	fileWriter.onerror = function (e) { console.log("writer error: " + e.toString()); }
 	//fileWriter.write(new Blob([addFileData.data], {type: getMimeType(addFileData.filename)}));
-	// data is a blob in this case
-	fileWriter.write(addFileData.data);
+	
+	var blob = addFileData.data;
+	// check for plain text and convert
+	if ( !(blob instanceof Blob) ) {
+		blob = new Blob([blob], {type : 'text/plain'});
+	}
+	
+	// data must be a blob to use this function	
+	fileWriter.write(blob);
 	
 	// Return the url to the file
 	if (addFileData.callback) callback( file.toURL() );
