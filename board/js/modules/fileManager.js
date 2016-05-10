@@ -45,18 +45,14 @@ m.loadCase = function(url, windowDiv, callback) {
     				var rawData = Utilities.getXml(this.result);
     				var categories = Parser.getCategoriesAndQuestions(rawData, url, windowDiv, windows);
     				// load the most recent version
-    				var autosave = localStorage.getItem("autosave");
-    				if (autosave) {
-    					loadAutosave(autosave, categories, callback);
-    				} else {
-    					loadSaveProgress(categories, url, windowDiv, callback);
-    				}
+   					loadSaveProgress(categories, url, windowDiv, callback);
+    				
     				
     			};
     			reader.readAsText(file);
     		   
     		}, function(e){
-    			console.log("Error: "+e.message);
+    			//console.log("Error: "+e.message);
     		});
     	});
     });
@@ -87,7 +83,7 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 			reader.readAsText(file);
 		   
 		}, function(e){
-			console.log("Error: "+e.message);
+			//console.log("Error: "+e.message);
 		});
 	});
 }
@@ -119,12 +115,12 @@ now we use createZip
 m.prepareZip = function(myBoards) {
 	//var content = zip.generate();
 	
-	console.log("prepare zip");
+	//console.log("prepare zip");
 	
 	// code from JSZip site
 	var blobLink = document.getElementById('blob');
 	if (JSZip.support.blob) {
-		console.log("supports blob");
+		//console.log("supports blob");
 		
 		// link download to click
 		blobLink.onclick = function() { saveIPAR(myBoards); };
@@ -151,7 +147,7 @@ function saveStage1(fs) {
 // this is a callback that takes 1 argument and 
 // then passes multiple arguments to the useful callback function 
 function saveStage2() {
-	console.log("ss2 run");
+	//console.log("ss2 run");
 
 	// error handling: check if the save data loaded
 	if (!allEntries) {
@@ -171,7 +167,7 @@ function saveStage2() {
 }
 
 function createZip(data, blobs, names, subs) {
-	console.log("create zip run");
+	//console.log("create zip run");
 	
 	var zip = new JSZip();
 
@@ -248,8 +244,8 @@ function getAllContents(data, subs) {
 }
 
 function download(zip) {
-	console.log("downloading");
-	console.log(zip.generateAsync);
+	//console.log("downloading");
+	//console.log(zip.generateAsync);
 	
 	var content = zip.generateAsync({type:"blob"}).then(
 	function (blob) {
@@ -292,7 +288,7 @@ function download(zip) {
 
 function errorHandler() {
 	//do nothing
-	console.log("yo we got errors");
+	//console.log("yo we got errors");
 }
 
 // helper function for recursivelyReadFiles
@@ -306,7 +302,7 @@ function toArray(list) {
 //  since the callbacks do not return in order
 function recursivelyReadFiles(fs, callback) {
 	
-	console.log("recursivelyReadFiles called");
+	//console.log("recursivelyReadFiles called");
 	
 	var dirReader = fs.root.createReader();
 	var entries = [];
@@ -357,7 +353,7 @@ function RunOnAllFilesLoaded(callback, arg1) {
 var recursionLevelsQueued = 0;
 function QueueLoaded() {
 	recursionLevelsQueued++;
-	console.log("added, queue: "+recursionLevelsQueued);
+	//console.log("added, queue: "+recursionLevelsQueued);
 }
 
 // this level is done, remove it from the queue
@@ -367,23 +363,23 @@ function DequeueLoaded(entries) {
 	if (recursionLevelsQueued == 0) {
 		// run all the functions
 		onLoadedFunctions.forEach(function(f,i) {
-			console.log("running callback "+i);
+			//console.log("running callback "+i);
 			f(entries);
 		});
 	}
-	console.log("subtracted, queue: "+recursionLevelsQueued);
+	//console.log("subtracted, queue: "+recursionLevelsQueued);
 }
 
 function saveEntries(entries) {
 	allEntries = entries;
-	console.log(allEntries);
+	//console.log(allEntries);
 }
 
 /***************** CACHING *******************/
 
 m.addFileToSystem = function(filename, data, callback){
 
-	console.log("fs: " + fileSystem.root);
+	//console.log("fs: " + fileSystem.root);
 	
 	if (!fileSystem) {
 		retrieveFileSystem(function() { m.addFileToSystem(filename, data, callback); });
@@ -394,7 +390,7 @@ m.addFileToSystem = function(filename, data, callback){
 	var dirs = filename.substr(0, filename.lastIndexOf('\\')).split('\\');
 	var curDir = fileSystem.root;
 	for(var i=0;i<dirs.length;i++) {
-		console.log(curDir.getDirectory(dirs[i])); 
+		//console.log(curDir.getDirectory(dirs[i])); 
 		curDir = curDir.getDirectory(dirs[i], {create: true, exclusive: false});
 	}
 	
@@ -440,7 +436,7 @@ m.addNewFileToSystem = function(filename, data, callback){
 // gets the directory of interest
 function retrieveBottomDir(callback) {
 	//window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, function(fs) { setFileSystem(fs, callback); }, errorHandler);
-	console.log("base URL: " + baseURL);
+	//console.log("base URL: " + baseURL);
 	var name = addFileData.filename;
 	// extract the path of the directory to put the file in from the file name
 	var extension = name.substring(0,name.lastIndexOf("/"));
@@ -450,7 +446,7 @@ function retrieveBottomDir(callback) {
 	}
 	
 	// debug
-	console.log("ext: " + extension);
+	//console.log("ext: " + extension);
 	
 	// get the directory entry from the filesystem callback
 	window.resolveLocalFileSystemURL(baseURL+extension, callback);
@@ -463,13 +459,13 @@ function addFileToDir(dir) {
 	var filename = addFileData.filename;
 	
 	// debug
-	console.log("addFileToDir("+filename+", "+dir+")");
+	//console.log("addFileToDir("+filename+", "+dir+")");
 	
 	// relic from legacy code
 	var curDir = dir;
 	
 	// debug
-	console.log("curdir: "  + curDir.name);
+	//console.log("curdir: "  + curDir.name);
 	
 	// Make sure not working with an empty directory
 	if(filename.endsWith('\\'))
@@ -492,27 +488,34 @@ function addFileToDir(dir) {
 }
 
 function createWriter(file) {
-	console.log(file);
+	//console.log(file);
 	file.createWriter(writeFile);
 }
 
 function writeFile(fileWriter) {
-	console.log(fileWriter);
-	fileWriter.onwriteend = function (e) { console.log("write completed"); }
-	fileWriter.onerror = function (e) { console.log("writer error: " + e.toString()); }
-	//fileWriter.write(new Blob([addFileData.data], {type: getMimeType(addFileData.filename)}));
-	
 	var blob = addFileData.data;
 	// check for plain text and convert
 	if ( !(blob instanceof Blob) ) {
 		blob = new Blob([blob], {type : 'text/plain'});
 	}
 	
-	// data must be a blob to use this function	
-	fileWriter.write(blob);
+	// used for shorter files
+	fileWriter.truncate(0);
+
+	//console.log(fileWriter);
+	fileWriter.onwriteend = function (e) { 
+		if (fileWriter.length == 0) {
+			fileWriter.write(blob);
+		} else {
+			// data must be a blob to use this function	
+			console.log("write completed"); 
+		}
+	}
+	fileWriter.onerror = function (e) { console.log("writer error: " + e.toString()); }
+	//fileWriter.write(new Blob([addFileData.data], {type: getMimeType(addFileData.filename)}));
 	
 	// Return the url to the file
-	if (addFileData.callback) callback( file.toURL() );
+	if (addFileData.callback) addFileData.callback( file.toURL() );
 }
 
 function setBase(entry, callback) {
@@ -559,7 +562,7 @@ function getMimeType(file){
 
 /*function selectSaveLocation (data) {
 
-	console.log("selectSaveLocation");
+	//console.log("selectSaveLocation");
 
 	// Make sure the need APIs are supported
 	if(!window.File || !window.FileReader || !window.FileList || !window.Blob || !window.ArrayBuffer || !window.Worker){
@@ -567,7 +570,7 @@ function getMimeType(file){
 		//document.getElementById("load-button").disabled = true;
 	}
 	else{
-		console.log ("selectingSaveLocation");
+		//console.log ("selectingSaveLocation");
 	
 		// Get the load button and input
 		var loadInput = document.getElementById('load-input');

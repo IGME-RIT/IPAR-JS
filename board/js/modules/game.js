@@ -197,8 +197,8 @@ p.updateNode = function(){
 p.windowClosed = function() {
 	var fileToStore = this.boardArray[this.activeBoardIndex].windowClosed();
 	if (fileToStore) {
-		FileManager.addNewFileToSystem(		  // need to store number of files
-			""+this.activeBoardIndex+"-"+fileToStore.num+"-"+"0"+fileToStore.ext,
+		FileManager.addNewFileToSystem(		  // need to encode number of files
+			""+this.activeBoardIndex+"-"+fileToStore.num+"-"+"0."+fileToStore.ext,
 			fileToStore.blob);
 	}
 	FileManager.addNewFileToSystem("case\\active\\saveFile.ipardata", DataParser.createXMLSaveFile(this.boardArray, true));

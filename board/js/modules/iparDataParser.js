@@ -36,6 +36,10 @@ var stateConverter = {
 // conversion
 var reverseStateConverter = ["hidden", "unsolved", "correct"];
 
+var firstName = "unassigned";
+var lastName = "unassigned";
+var email = "email";
+
 // Module export
 var m = module.exports;
 				
@@ -86,6 +90,11 @@ m.getCategoriesAndQuestions = function(rawData, url, windowDiv, windows) {
 	// if there is a case file
 	if (rawData != null) {
 		
+		// Get player data 
+		firstName = rawData.getElementsByTagName("case")[0].getAttribute("profileFirst");
+		lastName = rawData.getElementsByTagName("case")[0].getAttribute("profileLast");
+		rawData.getElementsByTagName("case")[0].getAttribute("profileMail");
+		
 		// First load the resources
 		var resourceElements = rawData.getElementsByTagName("resourceList")[0].getElementsByTagName("resource");
 		var resources = [];
@@ -128,7 +137,7 @@ m.createXMLSaveFile = function(boards, includeNewline) {
 	// header
 	var output = '<?xml version="1.0" encoding="utf-8"?>' + nl;
 	// case data
-	output += '<case categoryIndex="3" caseStatus="1" profileFirst="j" profileLast="j" profileMail="j">' + nl;
+	output += '<case categoryIndex="3" caseStatus="1" profileFirst="'+ firstName +'" profileLast="' + lastName + '" profileMail="'+ email +'">' + nl;
 	// questions header
 	output += '<questions>' + nl;
 	
