@@ -33,7 +33,7 @@ m.loadCase = function(url, windowDiv, callback) {
     
     // Load the question windows first
     var windows = new QuestionWindows(function(){
-    	// get XML
+    	// get XML CASE file
         window.resolveLocalFileSystemURL(url+'active/caseFile.ipardata', function(fileEntry) {
     		fileEntry.file(function(file) {
     			var reader = new FileReader();
@@ -41,13 +41,12 @@ m.loadCase = function(url, windowDiv, callback) {
     			// hook up callback
     			reader.onloadend = function() {
 
-    				// Get the raw data
-    				var rawData = Utilities.getXml(this.result);
-    				var categories = Parser.getCategoriesAndQuestions(rawData, url, windowDiv, windows);
-    				// load the most recent version
+    				// Get the xml data
+    				var xmlData = Utilities.getXml(this.result);
+    				var categories = Parser.getCategoriesAndQuestions(xmlData, url, windowDiv, windows);
+    				
+    				// load the most recent progress from saveFile.ipardata
    					loadSaveProgress(categories, url, windowDiv, callback);
-    				
-    				
     			};
     			reader.readAsText(file);
     		   
@@ -62,7 +61,7 @@ m.loadCase = function(url, windowDiv, callback) {
 function loadSaveProgress(categories, url, windowDiv, callback) {
     var questions = [];
     
-	// get XML
+	// get XML SAVE file
     window.resolveLocalFileSystemURL(url+'active/saveFile.ipardata', function(fileEntry) {
 		fileEntry.file(function(file) {
 			var reader = new FileReader();
@@ -72,6 +71,8 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 
 				// Get the save data
 				var saveData = Utilities.getXml(this.result);
+				// alert user if there is an error
+				if (!saveData) { alert ("ERROR no save data found, or save data was unreadable"); return; }
 				// parse the save data
 				Parser.assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 				// progress
@@ -88,6 +89,7 @@ function loadSaveProgress(categories, url, windowDiv, callback) {
 	});
 }
 
+// DO NOT USE THIS
 // load the save from the localStorage
 function loadAutosave(autosave, categories, callback) {
 	// Get the save data
@@ -249,12 +251,7 @@ function download(zip) {
 	
 	var content = zip.generateAsync({type:"blob"}).then(
 	function (blob) {
-		//console.log(blob);
-		//saveAs(blob, "hello.zip");
-		//var url = window.URL.createObjectURL(blob);
-		//window.location.assign(url);
-		
-		
+		//console.log(blob);		
 		
 		var a = document.createElement("a");
 		
@@ -558,51 +555,3 @@ function getMimeType(file){
 			return 'text/plain';
 	}
 }
-
-
-/*function selectSaveLocation (data) {
-
-	//console.log("selectSaveLocation");
-
-	// Make sure the need APIs are supported
-	if(!window.File || !window.FileReader || !window.FileList || !window.Blob || !window.ArrayBuffer || !window.Worker){
-		alert('The File APIs need to load files are not supported in this browser!');
-		//document.getElementById("load-button").disabled = true;
-	}
-	else{
-		//console.log ("selectingSaveLocation");
-	
-		// Get the load button and input
-		var loadInput = document.getElementById('load-input');
-
-		// load input is hidden, so click it
-		loadInput.click();
-		
-		// When load input file is chosen, load the file
-		loadInput.addEventListener('change', function(event){
-			
-			// Make sure a ipar file was choosen
-			if(!loadInput.value.endsWith("ipar")){
-				alert("You didn't choose an ipar file! you can only load ipar files!");
-				return;
-			}
-			
-			// Save the zip file's name to local storage 
-			// NOTE: this will overwrite the old name, 
-			//    so if the user chooses a different file, this could lead to errors
-			localStorage['caseName'] = loadInput.files[0].name;
-			
-			// Read the zip
-			JSZip.loadAsync(loadInput.files[0])
-			.then(function(zip) {
-				// backslashes per zip file protocol
-				zip.file("case\\active\\saveFile.ipardata",data);
-				// download the file
-				download(zip);
-			});
-
-			//reader.readAsArrayBuffer(event.target.files[0]);
-			
-		}, false);
-	}
-}*/

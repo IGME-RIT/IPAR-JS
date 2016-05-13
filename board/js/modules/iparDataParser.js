@@ -52,25 +52,29 @@ m.assignQuestionStates = function(categories, questionElems) {
 	
 	// all questions
 	for (var i=0; i<categories.length; i++) {
+		console.log("CATEGORY " + i);
 		for (var j=0; j<categories[i].questions.length; j++, tally++) {
-		
 			// store question  for easy reference
 			var q = categories[i].questions[j];
 			
 			// store tag for easy reference
 			var qElem = questionElems[tally];
-			
+			/* FUUUUUUUUUUUUUUUUUUU
 			// If position is less than zero don't load the question
 			if(parseInt(qElem.getAttribute("positionPercentX"))<0 || 
 					parseInt(qElem.getAttribute("positionPercentY"))<0)
 				continue;
-			
+			*/
 			// state
 			q.currentState = stateConverter[qElem.getAttribute("questionState")];
 			
 			// justification
 			if(q.justification)
 				q.justification.value = qElem.getAttribute("justification");
+			
+			// debug
+			//console.log(q.message);
+			console.log("question " + j + " solved? " + reverseStateConverter[q.currentState]);
 			
 			// Call correct answer if state is correct
 			if(q.currentState==Question.SOLVE_STATE.SOLVED)
@@ -86,17 +90,17 @@ m.assignQuestionStates = function(categories, questionElems) {
 }
 
 // takes the xml structure and fills in the data for the question object
-m.getCategoriesAndQuestions = function(rawData, url, windowDiv, windows) {
+m.getCategoriesAndQuestions = function(xmlData, url, windowDiv, windows) {
 	// if there is a case file
-	if (rawData != null) {
+	if (xmlData != null) {
 		
 		// Get player data 
-		firstName = rawData.getElementsByTagName("case")[0].getAttribute("profileFirst");
-		lastName = rawData.getElementsByTagName("case")[0].getAttribute("profileLast");
-		rawData.getElementsByTagName("case")[0].getAttribute("profileMail");
+		firstName = xmlData.getElementsByTagName("case")[0].getAttribute("profileFirst");
+		lastName = xmlData.getElementsByTagName("case")[0].getAttribute("profileLast");
+		xmlData.getElementsByTagName("case")[0].getAttribute("profileMail");
 		
 		// First load the resources
-		var resourceElements = rawData.getElementsByTagName("resourceList")[0].getElementsByTagName("resource");
+		var resourceElements = xmlData.getElementsByTagName("resourceList")[0].getElementsByTagName("resource");
 		var resources = [];
 		for (var i=0; i<resourceElements.length; i++) {
 			// Load each resource
@@ -104,8 +108,8 @@ m.getCategoriesAndQuestions = function(rawData, url, windowDiv, windows) {
 		}
 		
 		// Then load the categories
-		var categoryElements = rawData.getElementsByTagName("category");
-		var categoryNames = rawData.getElementsByTagName("categoryList")[0].getElementsByTagName("element");
+		var categoryElements = xmlData.getElementsByTagName("category");
+		var categoryNames = xmlData.getElementsByTagName("categoryList")[0].getElementsByTagName("element");
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
@@ -156,13 +160,15 @@ m.createXMLSaveFile = function(boards, includeNewline) {
 			var newJustification = q.justification.value;
 			var justification;
 			newJustification ? justification = newJustification : justification = q.justificationString;
+			// handle undefined
+			if (!justification) justification = "";
 			output += 'justification="' + justification + '" ';
 			// animated
 			output += 'animated="' + (q.currentState == 2) + '" '; // might have to fix this later
 			// linesTranced
 			output += 'linesTraced="0" '; // might have to fix this too
-			// revealBuffer
-			output += 'revealBuffer="0" '; // and this
+			// revealThreshold
+			output += 'revealThreshold  ="'+q.revealThreshold  +'" '; // and this
 			// positionPercentX
 			output += 'positionPercentX="' + Utilities.map(q.positionPercentX - boards[i].lessonNodeArray[j].width/2, 0, Constants.boardSize.x, 0, 100) + '" ';
 			// positionPercentY

@@ -33,6 +33,7 @@ function Question(xml, resources, url, windowDiv, windows){
     this.positionPercentX = Utilities.map(parseInt(xml.getAttribute("xPositionPercent")), 0, 100, 0, Constants.boardSize.x);
     this.positionPercentY = Utilities.map(parseInt(xml.getAttribute("yPositionPercent")), 0, 100, 0, Constants.boardSize.y);
     this.revealThreshold = parseInt(xml.getAttribute("revealThreshold"));
+    //console.log(xml);
     this.imageLink = url+xml.getAttribute("imageLink");
     this.feedbacks = xml.getElementsByTagName("feedback");
     this.blob = null; // no upload by default
