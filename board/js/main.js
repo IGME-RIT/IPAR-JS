@@ -8,55 +8,62 @@ var Point = require('./modules/point.js');
 var Constants = require('./modules/constants.js');
 var Utilities = require('./modules/utilities.js');
 
-//game objects
+// The current game
 var game;
 
-//persistent utilities
-var prevTime; // date in milliseconds
-var dt; // delta time in milliseconds
+// The current page the website is on
+var curPage;
+var PAGE = Object.freeze({TITLE: 0, CASE: 1, PROFILE: 2, BOARD: 3});
 
 //fires when the window loads
 window.onload = function(e){
 	
-    initializeVariables();
-    loop();
+    createGame();
 	
 }
 
-//initialization, mouse events, and game instantiation
-function initializeVariables(){
-	
-	// Setup dt
-    prevTime = Date.now();
-    dt = 0;
+// create the game object and start the loop with a dt
+function createGame(){
     
+	// Set the page to the game page
+	curPage = PAGE.BOARD;
+	
     // Create the game
     game = new Game(localStorage['caseFiles'], Utilities.getScale(Constants.boardSize, new Point(window.innerWidth, window.innerHeight)));
+    
+    // Start the game loop
+    gameLoop(Date.now());
+    
 }
 
-//fires once per frame
-function loop(){
-	// loop
-    window.requestAnimationFrame(loop.bind(this));
+//fires once per frame for the game
+function gameLoop(prevTime){
+	
     
-	// update delta time
-    dt = Date.now() - prevTime;
-    prevTime = Date.now();
+	// get delta time
+    var dt = Date.now() - prevTime;
     
     // update game
     game.update(dt);
+    
+	// loop
+    window.requestAnimationFrame(gameLoop.bind(this, Date.now()));
+    
 }
 
-//listens for changes in size of window and adjusts variables accordingly
+//listens for changes in size of window and scales the game accordingly
 window.addEventListener("resize", function(e){
-    // Get the new scale
-    game.setScale(Utilities.getScale(Constants.boardSize, new Point(window.innerWidth, window.innerHeight)));    
+	
+	// Scale the game to the new size
+	if(curPage==PAGE.BOARD)
+		game.setScale(Utilities.getScale(Constants.boardSize, new Point(window.innerWidth, window.innerHeight)));
+	
 });
 
-// Listen for touch for fullscreen
+// Listen for touch for fullscreen while in game on mobile
 window.addEventListener('touchstart', function(event){
 	
-	if(window.matchMedia("only screen and (max-width: 760px)"))
+	if(curPage==PAGE.BOARD && window.matchMedia("only screen and (max-width: 760px)"))
 		document.documentElement.requestFullScreen();
 	
 }, false);

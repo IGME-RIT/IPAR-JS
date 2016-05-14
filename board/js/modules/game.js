@@ -142,7 +142,7 @@ p.act = function(dt){
 	}*/
 	
     // Update the current board (give it the mouse only if not zooming)
-    this.boardArray[this.activeBoardIndex].act((this.zoomin || this.zoomout ? null : this.mouseState), dt);
+    this.boardArray[this.activeBoardIndex].act(this.scale, (this.zoomin || this.zoomout ? null : this.mouseState), dt);
     
     // Check if new board available
     if(this.activeBoardIndex < this.boardArray.length-1 &&
@@ -152,7 +152,7 @@ p.act = function(dt){
     }
 	
 
-	// If the board is done zoom out to center
+	// If the needs to zoom out to center
 	if(this.zoomout){
 		
 		// Get the current board

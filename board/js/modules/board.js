@@ -47,7 +47,7 @@ function board(section, startPosition, lessonNodes){
 //prototype
 var p = board.prototype;
 
-p.act = function(pMouseState, dt) {
+p.act = function(gameScale, pMouseState, dt) {
 	
 	// for each  node
     for(var i=0; i<this.lessonNodeArray.length; i++){
