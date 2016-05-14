@@ -6,8 +6,22 @@ var Constants = require("./constants.js");
 var DrawLib = require("./drawlib.js");
 
 //parameter is a point that denotes starting position
-function board(startPosition, lessonNodes){
-    this.position = startPosition;
+function board(section, startPosition, lessonNodes){
+	
+	// Create the canvas for this board and add it to the section
+	this.canvas = document.createElement("canvas");
+	this.ctx = this.canvas.getContext('2d');
+	this.canvas.style.display = 'none';
+	this.canvas.width = window.innerWidth;
+	this.canvas.height = window.innerHeight;
+	section.appendChild(this.canvas);
+	
+	var board = this;
+	this.canvas.addEventListener('animationend', function(){
+		if(board.loaded)
+			board.loaded();
+	}, false);
+	
     this.lessonNodeArray = lessonNodes;
     this.boardOffset = startPosition;
     this.prevBoardOffset = {x:0,y:0};
@@ -22,7 +36,7 @@ function board(startPosition, lessonNodes){
 	// Check if all nodes are solved
 	var done = true;
 	for(var i=0;i<this.lessonNodeArray.length && done;i++)
-		if(this.lessonNodeArray[i].currentState!=Question.SOLVE_STATE.SOLVED)
+		if(this.lessonNodeArray[i].question.currentState!=Question.SOLVE_STATE.SOLVED)
 			done = false;
 	if(done)
 		this.finished = true;
@@ -32,13 +46,6 @@ function board(startPosition, lessonNodes){
 
 //prototype
 var p = board.prototype;
-
-p.move = function(pX, pY){
-    this.position.x += pX;
-    this.position.y += pY;
-    this.boardOffset = {x:0,y:0};
-    this.prevBoardOffset = {x:0,y:0};
-};
 
 p.act = function(pMouseState, dt) {
 	
@@ -137,9 +144,9 @@ p.act = function(pMouseState, dt) {
 		// drag the board around
 		if (this.target==null) {
 			if (pMouseState.mouseDown) {
-				canvas.style.cursor = '-webkit-grabbing';
-				canvas.style.cursor = '-moz-grabbing';
-				canvas.style.cursor = 'grabbing';
+				this.canvas.style.cursor = '-webkit-grabbing';
+				this.canvas.style.cursor = '-moz-grabbing';
+				this.canvas.style.cursor = 'grabbing';
 				if (!this.mouseStartDragBoard) {
 					this.mouseStartDragBoard = pMouseState.virtualPosition;
 					this.prevBoardOffset.x = this.boardOffset.x;
@@ -155,31 +162,39 @@ p.act = function(pMouseState, dt) {
 				}
 			} else {
 				this.mouseStartDragBoard = undefined;
-				canvas.style.cursor = '';
+				this.canvas.style.cursor = '';
 			}
 	    }
     }
 }
 
-p.draw = function(ctx, canvas){
+p.draw = function(gameScale){
     
     // save canvas state because we are about to alter properties
-    ctx.save();   
+    this.ctx.save();   
+    
+    // Clear before drawing new stuff
+	DrawLib.rect(this.ctx, 0, 0, this.canvas.width, this.canvas.height, "#15718F");
+
+	// Scale the game
+    this.ctx.save();
+    this.ctx.translate(this.canvas.width/2, this.canvas.height/2);
+	this.ctx.scale(gameScale, gameScale);
+	this.ctx.translate(-this.canvas.width/2, -this.canvas.height/2);
 
     // Translate to center of screen and scale for zoom then translate back
-    ctx.translate(canvas.width/2, canvas.height/2);
-    ctx.scale(this.zoom, this.zoom);
-    ctx.translate(-canvas.width/2, -canvas.height/2);
+    this.ctx.translate(this.canvas.width/2, this.canvas.height/2);
+    this.ctx.scale(this.zoom, this.zoom);
+    this.ctx.translate(-this.canvas.width/2, -this.canvas.height/2);
     // move the board to where the user dragged it
-    this.position = this.boardOffset;
     //translate to the center of the board
     //console.log(this);
-    ctx.translate(canvas.width/2 - this.position.x, canvas.height/2 - this.position.y);
+    this.ctx.translate(this.canvas.width/2 - this.boardOffset.x, this.canvas.height/2 - this.boardOffset.y);
     
 	
     // Draw the background of the board
-    DrawLib.rect(ctx, 0, 0, Constants.boardSize.x, Constants.boardSize.y, "#D3B185");
-    DrawLib.strokeRect(ctx, -Constants.boardOutline/2, -Constants.boardOutline/2, Constants.boardSize.x+Constants.boardOutline/2, Constants.boardSize.y+Constants.boardOutline/2, Constants.boardOutline, "#CB9966");
+    DrawLib.rect(this.ctx, 0, 0, Constants.boardSize.x, Constants.boardSize.y, "#D3B185");
+    DrawLib.strokeRect(this.ctx, -Constants.boardOutline/2, -Constants.boardOutline/2, Constants.boardSize.x+Constants.boardOutline/2, Constants.boardSize.y+Constants.boardOutline/2, Constants.boardOutline, "#CB9966");
     
 	// draw the nodes
     for(var i = 0; i < this.lessonNodeArray.length; i++){
@@ -188,7 +203,7 @@ p.draw = function(ctx, canvas){
 		//if (this.lessonNodeArray[i].question.revealThreshold > this.lessonNodeArray[i].linksAwayFromOrigin) continue;
     	
     	// draw the node itself
-        this.lessonNodeArray[i].draw(ctx, canvas);
+        this.lessonNodeArray[i].draw(this.ctx, this.canvas);
     }
 
 	// draw the lines
@@ -201,8 +216,8 @@ p.draw = function(ctx, canvas){
         var oPos = this.lessonNodeArray[i].getNodePoint();
         
 		// set line style
-		ctx.strokeStyle = "rgba(0,0,105,0.2)";
-		ctx.lineWidth = 1;
+        this.ctx.strokeStyle = "rgba(0,0,105,0.2)";
+        this.ctx.lineWidth = 1;
         
         // draw lines
         for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
@@ -216,16 +231,16 @@ p.draw = function(ctx, canvas){
         	var cPos = connection.getNodePoint();
         	
         	// draw the line
-        	ctx.beginPath();
+        	this.ctx.beginPath();
         	// translate to start (pin)
-        	ctx.moveTo(oPos.x, oPos.y);
-        	ctx.lineTo(oPos.x + (cPos.x - oPos.x)*this.lessonNodeArray[i].linePercent, oPos.y + (cPos.y - oPos.y)*this.lessonNodeArray[i].linePercent);
-        	ctx.closePath();
-        	ctx.stroke();
+        	this.ctx.moveTo(oPos.x, oPos.y);
+        	this.ctx.lineTo(oPos.x + (cPos.x - oPos.x)*this.lessonNodeArray[i].linePercent, oPos.y + (cPos.y - oPos.y)*this.lessonNodeArray[i].linePercent);
+        	this.ctx.closePath();
+        	this.ctx.stroke();
         }
     }
     
-    ctx.restore();
+	this.ctx.restore();
 };
 
 // Gets a free node in this board (i.e. not unsolved) returns null if none
@@ -281,5 +296,28 @@ p.windowClosed = function(){
 	}
 }
 
+p.show = function(dir){
+	if(dir!=null)
+		this.canvas.style.animation = 'canvasEnter' + (dir ? 'L' : 'R') + ' 1s';
+	this.canvas.style.display = 'inline-block';
+}
+
+p.hide = function(dir){
+	if(dir!=null){
+		this.canvas.style.animation = 'canvasLeave' + (dir ? 'R' : 'L') + ' 1s';
+		var board = this;
+		this.loaded = function(){
+			board.canvas.style.display = 'none';
+		}
+	}
+	else{
+		board.canvas.style.display = 'none';
+	}
+}
+
+p.updateSize = function(){
+	this.canvas.width = window.innerWidth;
+	this.canvas.height = window.innerHeight;
+}
 
 module.exports = board;    

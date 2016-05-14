@@ -176,9 +176,7 @@
 
 /* Window open animation */
 #window {
-  animation-name: openWindow;
-  animation-duration: 1s;
-  animation-iteration-count: 1;
+  animation: openWindow 0.25s;
 }
 @keyframes openWindow {
     from{transform:scale(0)}
