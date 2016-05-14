@@ -4,7 +4,6 @@ var Resource = require("./resources.js");
 var Utilities = require('./utilities.js');
 var Constants = require('./constants.js');
 var Question = require('./question.js');
-var QuestionWindows = require('./questionWindows.js');
 window.resolveLocalFileSystemURL  = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
 
 // Parses the xml case files
@@ -90,7 +89,7 @@ m.assignQuestionStates = function(categories, questionElems) {
 }
 
 // takes the xml structure and fills in the data for the question object
-m.getCategoriesAndQuestions = function(xmlData, url, windowDiv, windows) {
+m.getCategoriesAndQuestions = function(xmlData, url, windowDiv) {
 	// if there is a case file
 	if (xmlData != null) {
 		
@@ -113,7 +112,7 @@ m.getCategoriesAndQuestions = function(xmlData, url, windowDiv, windows) {
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
-			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv, windows);
+			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv);
 		}
 		return categories;
 	}

@@ -2,7 +2,7 @@
 var Question = require("./question.js");
 
 // Creates a category with the given name and from the given xml
-function Category(name, xml, resources, url, windowDiv, windows){
+function Category(name, xml, resources, url, windowDiv){
 	
 	// Save the name
 	this.name = name;
@@ -14,7 +14,7 @@ function Category(name, xml, resources, url, windowDiv, windows){
 	for (var i=0; i<questionElements.length; i++) 
 	{
 		// create a question object
-		this.questions[i] = new Question(questionElements[i], resources, url, windowDiv, windows);
+		this.questions[i] = new Question(questionElements[i], resources, url, windowDiv);
 	}
     
 }

@@ -1,6 +1,7 @@
 "use strict";
 var Utilities = require('./utilities.js');
 var Constants = require('./constants.js');
+var Windows = require('./questionWindows.js');
 
 var SOLVE_STATE = Object.freeze({HIDDEN: 0, UNSOLVED: 1, SOLVED: 2});
 var QUESTION_TYPE = Object.freeze({JUSTIFICATION: 1, MULTIPLE_CHOICE: 2, SHORT_RESPONSE: 3, FILE: 4, MESSAGE: 5});
@@ -22,7 +23,7 @@ wrongAnswer: string
 correctAnswer: string
 */
 //parameter is a point that denotes starting position
-function Question(xml, resources, url, windowDiv, windows){
+function Question(xml, resources, url, windowDiv){
 	
 	// Set the current state to default at hidden and store the window div
     this.currentState = SOLVE_STATE.HIDDEN;
@@ -47,20 +48,20 @@ function Question(xml, resources, url, windowDiv, windows){
     this.questionType = parseInt(xml.getAttribute("questionType"));
     this.justification = this.questionType==1 || this.questionType==3;
 	if(this.questionType!=5){
-		this.createTaskWindow(xml, windows.taskWindow);
-		this.createResourceWindow(xml, resources, windows.resourceWindow, windows.resource);
+		this.createTaskWindow(xml);
+		this.createResourceWindow(xml, resources);
 	}
 	switch(this.questionType){
 		case 5:
-			this.createMessageWindow(xml, windows.messageWindow);
+			this.createMessageWindow(xml);
 			break;
 		case 4:
-			this.createFileWindow(windows.fileWindow);
+			this.createFileWindow();
 			break;
 		case 3:
 		case 2:
 		case 1:
-			this.createAnswerWindow(xml, windows.answerWindow);
+			this.createAnswerWindow(xml);
 			break;
 	}
     
@@ -161,29 +162,25 @@ p.displayWindows = function(){
 	
 }
 
-p.createTaskWindow = function(xml, window){
+p.createTaskWindow = function(xml){
 	this.proceedElement = document.getElementById("proceedContainer");
 	
 	// Create the task window 
-	this.task = document.createElement("DIV");
-    this.task.className = "window";
-    this.task.style.top = "10vh";
-    this.task.style.left = "5vw";
-    this.task.innerHTML = window;
+	var tempDiv = document.createElement("DIV");
+	tempDiv.innerHTML = Windows.taskWindow;
+    this.task = tempDiv.firstChild;
     this.task.innerHTML = this.task.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerHTML.replace(/\n/g, '<br/>'));
     this.task.innerHTML = this.task.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
     this.task.innerHTML = this.task.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
     this.feedback = this.task.getElementsByClassName("feedback")[0];
 }
 
-p.createResourceWindow = function(xml, resourceFiles, window, resourceElement){
+p.createResourceWindow = function(xml, resourceFiles){
 	
 	// Create the resource window 
-	this.resource = document.createElement("DIV");
-	this.resource.className = "window";
-	this.resource.style.top = "55vh";
-	this.resource.style.left = "5vw";
-	this.resource.innerHTML = window;
+	var tempDiv = document.createElement("DIV");
+	tempDiv.innerHTML = Windows.resourceWindow;
+    this.resource = tempDiv.firstChild;
 	
 	// Get the template for individual resouces if any
 	var resources = xml.getElementsByTagName("resourceIndex");
@@ -192,7 +189,7 @@ p.createResourceWindow = function(xml, resourceFiles, window, resourceElement){
     	// Get the html for each resource and then add the result to the window
     	var resourceHTML = '';
 	    for(var i=0;i<resources.length;i++){
-    		var curResource = resourceElement.replace("%icon%", resourceFiles[parseInt(resources[i].innerHTML)].icon);
+    		var curResource = Windows.resource.replace("%icon%", resourceFiles[parseInt(resources[i].innerHTML)].icon);
 	    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerHTML)].title);
 	    	curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerHTML)].link);
 	    	resourceHTML += curResource;
@@ -209,14 +206,12 @@ p.createResourceWindow = function(xml, resourceFiles, window, resourceElement){
 	}
 }
 
-p.createAnswerWindow = function(xml, window){
+p.createAnswerWindow = function(xml){
 	
 	// Create the answer window 
-	this.answer = document.createElement("DIV");
-    this.answer.className = "window";
-    this.answer.style.top = "10vh";
-    this.answer.style.left = "50vw";
-    this.answer.innerHTML = window;
+	var tempDiv = document.createElement("DIV");
+	tempDiv.innerHTML = Windows.answerWindow;
+    this.answer = tempDiv.firstChild;
     
     // Create the text element if any
     var question = this;
@@ -280,14 +275,12 @@ p.createAnswerWindow = function(xml, window){
     }
 }
 
-p.createFileWindow = function(window){
+p.createFileWindow = function(){
 	
 	// Create the file window 
-	this.answer = document.createElement("DIV");
-    this.answer.className = "window";
-    this.answer.style.top = "10vh";
-    this.answer.style.left = "50vw";
-    this.answer.innerHTML = window;
+	var tempDiv = document.createElement("DIV");
+	tempDiv.innerHTML = Windows.fileWindow;
+    this.answer = tempDiv.firstChild;
     this.fileInput = this.answer.getElementsByTagName("input")[0];
     var question = this;
     this.fileInput.addEventListener("change", function(event){
@@ -314,14 +307,12 @@ p.createFileWindow = function(window){
     
 }
 
-p.createMessageWindow = function(xml, window){
+p.createMessageWindow = function(xml){
 	
-	// Create the file window 
-	this.message = document.createElement("DIV");
-    this.message.className = "window";
-    this.message.style.top = "10vh";
-    this.message.style.left = "40vw";
-    this.message.innerHTML = window;
+	// Create the message window 
+	var tempDiv = document.createElement("DIV");
+	tempDiv.innerHTML = Windows.messageWindow;
+    this.message = tempDiv.firstChild;
     this.message.innerHTML = this.message.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerHTML.replace(/\n/g, '<br/>'));
     this.message.innerHTML = this.message.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
     this.message.innerHTML = this.message.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));

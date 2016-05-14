@@ -1,133 +1,81 @@
 
+var m = module.exports;
 
-function QuestionWindows(callback){
-  this.loadWindows(callback);
-}
-
-var p = QuestionWindows.prototype;
-
-p.loadWindows = function(callback){
-
-  var counter = 0;
-  var cb = function(){
-	  if(++counter>=6 && callback)
-		  callback();
-  };
-  this.loadTaskWindow(cb);
-  this.loadResourceWindow(cb);
-  this.loadAnswerWindow(cb);
-  this.loadFileWindow(cb);
-  this.loadMessageWindow(cb);
-  this.loadResource(cb);
-  
-}
-
-p.loadTaskWindow = function(callback){
-	// Get the template for task windows
-	var windows = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the task window 
-	    	windows.taskWindow = request.responseText;
-	    	if(callback)
-	    	  callback();
-	    }
-	}
-	request.open("GET", "taskWindow.html", true);
-	request.send();
-}
+m.taskWindow = '\
+<div class="window task">\
+	<div class="title">\
+		Task\
+	</div>\
+	<div class="windowContent" style="overflow-y: scroll;height:35vh;">\
+		<h3><b>%title%</b></h3>\
+		<p>%instructions%</p>\
+		<hr>\
+		<p><b>%question%</b></p>\
+		<hr>\
+		<p class="feedback"></p>\
+	</div>\
+</div>\
+';
 
 
-p.loadResourceWindow = function(callback){
-	
-	// Get the template for resource windows
-	var windows = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the resource window 
-	    	windows.resourceWindow = request.responseText;
-	        if(callback)
-	        	callback();
-	    }
-	};
-	request.open("GET", "resourceWindow.html", true);
-	request.send();
-}
+m.resourceWindow = '\
+<div class="window resource">\
+	<div class="title">\
+		Resource\
+	</div>\
+	<div class="windowContent" style="overflow-y: scroll; height:20vh;">\
+		%resources%\
+	</div>\
+</div>\
+';
 
-p.loadResource = function(callback){
-	var windows = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Get the html for each resource and then add the result to the window
-	    	windows.resource = request.responseText;
-	        if(callback)
-	        	callback();
-	    }
-	}
-	request.open("GET", "resource.html", true);
-	request.send();
-}
+m.resource = '\
+<div class="resourceItem">\
+  <img src="%icon%"/>\
+  %title%\
+  <a href="%link%" target="_blank">\
+    <div class="center">\
+      Open\
+      <img src="../img/iconLaunch.png"/>\
+    </div>\
+  </a>\
+</div>\
+';
 
-p.loadAnswerWindow = function(callback){
-	
-	// Get the template for answer windows
-	var windows = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the answer window 
-	    	windows.answerWindow = request.responseText;
-	        if(callback)
-	        	callback();
-	    }
-	}
-	request.open("GET", "answerWindow.html", true);
-	request.send();
-}
+m.answerWindow = '\
+<div class="window answer">\
+	<div class="title">\
+		Answers\
+	</div>\
+	<div class="windowContent" style="min-height:20vh;">\
+	\
+	</div>\
+</div>\
+';
 
-p.loadFileWindow = function(callback){
-	
-	// Get the template for file windows
-	var windows = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the file window 
-	    	windows.fileWindow = request.responseText;
-	    	if(callback)
-	    		callback();
-	        
-	    }
-	}
-	request.open("GET", "fileWindow.html", true);
-	request.send();
-}
+m.fileWindow = '\
+<div class="window file">\
+  <div class="title">\
+    Files\
+  </div>\
+  <div class="windowContent, center" style="height:20vh;background-color:#FFFFFF">\
+    <input type="file" multiple/>\
+  </div>\
+</div>\
+';
 
-p.loadMessageWindow = function(callback){
-	
-	// Get the template for message windows
-	var windows = this;
-	var request = new XMLHttpRequest();
-	request.onreadystatechange = function() {
-	    if (request.readyState == 4 && request.status == 200) {
-	    	
-	    	// Save the message window 
-	    	windows.messageWindow = request.responseText;
-		    if(callback)
-		    	callback();
-
-	    }
-	}
-	request.open("GET", "messageWindow.html", true);
-	request.send();
-}
-
-module.exports = QuestionWindows;
+m.messageWindow = '\
+<div class="window message">\
+	<div class="title">\
+		Message\
+	</div>\
+	<div class="windowContent" style="height:80vh;overflow-y:scroll;">\
+		<p><b>From </b>%title%</p>\
+		<hr>\
+		<p><b>Subject </b>%instructions%</p>\
+		<hr>\
+		<p>%question%</p>\
+	  <button>Mark as Read</button>\
+	</div>\
+</div>\
+';

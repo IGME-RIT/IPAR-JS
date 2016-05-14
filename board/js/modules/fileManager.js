@@ -4,7 +4,6 @@ var Resource = require("./resources.js");
 var Utilities = require('./utilities.js');
 var Constants = require('./constants.js');
 var Parser = require('./iparDataParser.js');
-var QuestionWindows = require('./questionWindows.js');
 window.resolveLocalFileSystemURL  = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
 
 // Module export
@@ -31,30 +30,27 @@ m.loadCase = function(url, windowDiv, callback) {
     this.categories = [];
     this.questions = [];
     
-    // Load the question windows first
-    var windows = new QuestionWindows(function(){
-    	// get XML CASE file
-        window.resolveLocalFileSystemURL(url+'active/caseFile.ipardata', function(fileEntry) {
-    		fileEntry.file(function(file) {
-    			var reader = new FileReader();
-    			
-    			// hook up callback
-    			reader.onloadend = function() {
+	// get XML CASE file
+    window.resolveLocalFileSystemURL(url+'active/caseFile.ipardata', function(fileEntry) {
+		fileEntry.file(function(file) {
+			var reader = new FileReader();
+			
+			// hook up callback
+			reader.onloadend = function() {
 
-    				// Get the xml data
-    				var xmlData = Utilities.getXml(this.result);
-    				var categories = Parser.getCategoriesAndQuestions(xmlData, url, windowDiv, windows);
-    				
-    				// load the most recent progress from saveFile.ipardata
-   					loadSaveProgress(categories, url, windowDiv, callback);
-    			};
-    			reader.readAsText(file);
-    		   
-    		}, function(e){
-    			//console.log("Error: "+e.message);
-    		});
-    	});
-    });
+				// Get the xml data
+				var xmlData = Utilities.getXml(this.result);
+				var categories = Parser.getCategoriesAndQuestions(xmlData, url, windowDiv);
+				
+				// load the most recent progress from saveFile.ipardata
+				loadSaveProgress(categories, url, windowDiv, callback);
+			};
+			reader.readAsText(file);
+		   
+		}, function(e){
+			//console.log("Error: "+e.message);
+		});
+	});
 }
 
 // load the save from the filesytem sandbox
