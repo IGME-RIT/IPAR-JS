@@ -173,3 +173,13 @@
   color: grey;
   margin-left: 10px;
 }
+
+/* Window open animation */
+#window {
+  animation-name: openWindow;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+}
+@keyframes openWindow {
+    from{transform:scale(0)}
+}

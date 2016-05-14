@@ -100,6 +100,7 @@ function loop(){
     // Check if should pause
     if(game.active && windowDiv.innerHTML!='' && pausedTime++>3){
     	game.active = false;
+    	windowDiv.style.display = 'block';
     	windowFilm.style.display = 'block';
     }
     else if(pausedTime!=0 && windowDiv.innerHTML==''){
@@ -142,8 +143,9 @@ function windowClosed(){
 	// Unpause the game and fully close the window
 	pausedTime = 0;
 	game.active = true;
+	windowDiv.style.display = 'none';
 	windowFilm.style.display = 'none';
-	proceedContainer.style.display = "none";
+	proceedContainer.style.display = 'none';
 	
 	game.windowClosed();
 	

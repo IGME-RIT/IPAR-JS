@@ -6,32 +6,36 @@
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="../css/styles.css">
 	<link rel="stylesheet" type="text/css" href="../css/windowsStyle.css">
-</head>
-<body>
-	<canvas id="canvas">The browser you are using does not support modern functionality</canvas>
-	<div id="controlBar" class="buttonBar">
-		<button id="zoom-in">+</button>
-		<input id="zoom-slider" type="range" step="0.1" min="-2.0" max="-0.5" />
-		<button id="zoom-out">-</button>
-	</div>
-    <div id="bottomBar" class="buttonBar"></div>
-    <!-- save button -->
-    <button id="blob" class="saveBtn"><img src="../img/iconSave.png" /></button>
-    <!-- hidden save as link -->
-    <input type="file" id="load-input" style="display: none;" />
-    <div id="windowFlim">
-    	<div id="proceedContainer" style="display: none">
-			<button id="proceedBtnLong" class="proceedWidthStart">Proceed</button>
-			<div id="proceedBtnRound" class="proceedLeftStart">
-				<div id="rightArrow"> > </div>
-			</div>
-    	</div>
-    </div>
-    <div id="window"></div>
-    <!--<div id="console" style="position:fixed;background-color:black;color:white;top:0;left:0;z-index:999;width:100vw;">This is the console</div>  -->
     <script src="../lib/preloadjs-0.6.1.min.js"></script>
     <script src="../lib/jszip.js"></script>
     <script src="temp/bundle.js"></script>
     <!--<script src="bundle.min.js"></script>-->
+</head>
+<body>
+	<!-- div for console for mobile testing -->
+	<!--<div id="console" style="position:fixed;background-color:black;color:white;top:0;left:0;z-index:999;width:100vw;">This is the console</div>  -->
+	<!-- Section for the board -->
+	<section id="board">
+		<canvas id="canvas">The browser you are using does not support modern functionality</canvas>
+		<div id="controlBar" class="buttonBar">
+			<button id="zoom-in">+</button>
+			<input id="zoom-slider" type="range" step="0.1" min="-2.0" max="-0.5" />
+			<button id="zoom-out">-</button>
+		</div>
+	    <div id="bottomBar" class="buttonBar"></div>
+	    <!-- save button -->
+	    <button id="blob" class="saveBtn"><img src="../img/iconSave.png" /></button>
+	    <!-- hidden save as link -->
+	    <input type="file" id="load-input" style="display: none;" />
+	    <div id="windowFlim" style="display: none">
+	    	<div id="proceedContainer" style="display: none">
+				<button id="proceedBtnLong" class="proceedWidthStart">Proceed</button>
+				<div id="proceedBtnRound" class="proceedLeftStart">
+					<div id="rightArrow"> > </div>
+				</div>
+	    	</div>
+	    </div>
+	    <div id="window" style="display: none"></div>
+    </section>
 </body>
 </html>
