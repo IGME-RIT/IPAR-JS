@@ -1,9 +1,9 @@
 "use strict";
-var Utilities = require('./utilities.js');
-var Point = require('./point.js');
-var Question = require("./question.js");
+var Utilities = require('../helper/utilities.js');
+var Point = require('../helper/point.js');
+var Question = require("../case/question.js");
 var Constants = require("./constants.js");
-var DrawLib = require("./drawlib.js");
+var DrawLib = require("../helper/drawlib.js");
 
 //parameter is a point that denotes starting position
 function board(section, startPosition, lessonNodes){
@@ -127,7 +127,6 @@ p.act = function(gameScale, pMouseState, dt) {
 					// handle click code
 					this.target.click(pMouseState);
 					this.lastQuestion = this.target.question;
-					this.lastQuestionNum = i;
 				}
 			}
 			else{
@@ -281,17 +280,14 @@ p.moveTowards = function(point, dt, speed){
 }
 
 p.windowClosed = function(){
-	console.log("window closed");
+	console.log("window closed:"+this.lastQuestion.newFiles);
 	// if it is file type
-	if (this.lastQuestion.questionType == 4) {
+	if (this.lastQuestion.newFiles) {
 		// add a file to the file system
-		var name = this.lastQuestion.fileName;
-		var blob = this.lastQuestion.blob;
-		var lastQuestionNum = this.lastQuestionNum;
+		this.lastQuestion.newFiles = false;
 		return { 
-			blob: blob, 
-			num: lastQuestionNum, 
-			ext: name.substring( name.lastIndexOf("."), name.length)
+			files: this.lastQuestion.fileInput.files, 
+			question: this.lastQuestion.num
 		}
 	}
 }

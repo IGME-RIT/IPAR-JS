@@ -1,5 +1,5 @@
 "use strict";
-var Point = require('./point.js');
+var Point = require('../helper/point.js');
 
 //Module export
 var m = module.exports;

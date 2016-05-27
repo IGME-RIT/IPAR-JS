@@ -5,7 +5,7 @@ body {
 	overflow: hidden;
 }
 
-#center {
+.menu {
 	width: 100vw;
 	height: 100vh;
 	display:flex;
@@ -15,7 +15,7 @@ body {
 	color: white;
 }
 
-button {
+.menuButton {
 	display: block;
 	background-color: #15718F;
 	color: white;
@@ -24,9 +24,13 @@ button {
 	margin: 1vh 0;
 }
 
-button:disabled {
+.menuButton:disabled {
 	background-color: #F8F8FF;
 	color: #B89880;
+}
+
+.inline {
+	display: inline;
 }
 
 .bottom {
@@ -42,7 +46,7 @@ form input{
 	width: 100%;
 }
 
-#logo {
+.logo {
 	position: fixed;
 	top: 75vh;
 	left: 85vw;

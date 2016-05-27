@@ -1,10 +1,9 @@
 "use strict";
-var Category = require("./category.js");
-var Resource = require("./resources.js");
+var Category = require("../case/category.js");
+var Resource = require("../case/resources.js");
 var Utilities = require('./utilities.js');
-var Constants = require('./constants.js');
-var Question = require('./question.js');
-window.resolveLocalFileSystemURL  = window.resolveLocalFileSystemURL || window.webkitResolveLocalFileSystemURL;
+var Constants = require('../game/constants.js');
+var Question = require('../case/question.js');
 
 // Parses the xml case files
 // ----------------------------
@@ -58,22 +57,13 @@ m.assignQuestionStates = function(categories, questionElems) {
 			
 			// store tag for easy reference
 			var qElem = questionElems[tally];
-			/* FUUUUUUUUUUUUUUUUUUU
-			// If position is less than zero don't load the question
-			if(parseInt(qElem.getAttribute("positionPercentX"))<0 || 
-					parseInt(qElem.getAttribute("positionPercentY"))<0)
-				continue;
-			*/
+			
 			// state
 			q.currentState = stateConverter[qElem.getAttribute("questionState")];
 			
 			// justification
 			if(q.justification)
 				q.justification.value = qElem.getAttribute("justification");
-			
-			// debug
-			//console.log(q.message);
-			console.log("question " + j + " solved? " + reverseStateConverter[q.currentState]);
 			
 			// Call correct answer if state is correct
 			if(q.currentState==Question.SOLVE_STATE.SOLVED)
@@ -89,7 +79,7 @@ m.assignQuestionStates = function(categories, questionElems) {
 }
 
 // takes the xml structure and fills in the data for the question object
-m.getCategoriesAndQuestions = function(xmlData, url, windowDiv) {
+m.getCategoriesAndQuestions = function(xmlData, windowDiv) {
 	// if there is a case file
 	if (xmlData != null) {
 		
@@ -103,7 +93,7 @@ m.getCategoriesAndQuestions = function(xmlData, url, windowDiv) {
 		var resources = [];
 		for (var i=0; i<resourceElements.length; i++) {
 			// Load each resource
-			resources[i] = new Resource(resourceElements[i], url);
+			resources[i] = new Resource(resourceElements[i]);
 		}
 		
 		// Then load the categories
@@ -112,7 +102,7 @@ m.getCategoriesAndQuestions = function(xmlData, url, windowDiv) {
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
-			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, url, windowDiv);
+			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, windowDiv);
 		}
 		return categories;
 	}
@@ -133,14 +123,14 @@ m.recreateCaseFile = function(boards) {
 }
 
 // creates the xml
-m.createXMLSaveFile = function(boards, includeNewline) {
+m.createXMLSaveFile = function(activeIndex, boards, includeNewline) {
 	// newline
 	var nl;
 	includeNewline ? nl = "\n" : nl = "";
 	// header
 	var output = '<?xml version="1.0" encoding="utf-8"?>' + nl;
 	// case data
-	output += '<case categoryIndex="3" caseStatus="1" profileFirst="'+ firstName +'" profileLast="' + lastName + '" profileMail="'+ email +'">' + nl;
+	output += '<case categoryIndex="3" caseStatus="'+(activeIndex+1)+'" profileFirst="'+ firstName +'" profileLast="' + lastName + '" profileMail="'+ email +'">' + nl;
 	// questions header
 	output += '<questions>' + nl;
 	
@@ -152,7 +142,7 @@ m.createXMLSaveFile = function(boards, includeNewline) {
 			
 			// tag start
 			output += '<question ';
-			
+
 			// questionState
 			output += 'questionState="' + reverseStateConverter[q.currentState] + '" ';
 			// justification

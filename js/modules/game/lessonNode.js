@@ -1,11 +1,10 @@
 "use strict";
-var DrawLib = require('./drawLib.js');
-var Question = require("./question.js");
+var DrawLib = require('../helper/drawLib.js');
+var Question = require("../case/question.js");
 var Constants = require("./constants.js");
-var Point = require('./point.js');
-var Question = require('./question.js');
+var Point = require('../helper/point.js');
 
-var CHECK_IMAGE = "../img/iconPostItCheck.png";
+var CHECK_IMAGE = "img/iconPostItCheck.png";
 
 //parameter is a point that denotes starting position
 function lessonNode(startPosition, imagePath, pQuestion){
@@ -21,7 +20,7 @@ function lessonNode(startPosition, imagePath, pQuestion){
     this.height;
     this.question = pQuestion;
     this.connections = 0;
-    this.currentState = this.question.currentState;
+    this.currentState = 0;
     this.linePercent = 0;
     
     // skip animations for solved

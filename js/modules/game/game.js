@@ -1,12 +1,12 @@
 "use strict";
 var Board = require('./board.js');
-var Point = require('./point.js');
+var Point = require('../helper/point.js');
 var LessonNode = require('./lessonNode.js');
 var Constants = require('./constants.js');
-var DrawLib = require('./drawlib.js');
-var DataParser = require('./iparDataParser.js');
-var MouseState = require('./mouseState.js');
-var FileManager = require('./fileManager.js');
+var DrawLib = require('../helper/drawlib.js');
+var DataParser = require('../helper/iparDataParser.js');
+var MouseState = require('../helper/mouseState.js');
+var FileManager = require('../helper/fileManager.js');
 
 //mouse management
 var mouseState;
@@ -32,9 +32,10 @@ var pausedTime = 0;
 //phase handling
 var phaseObject;
 
-function game(url, baseScale){
+function game(section, baseScale){
 	var game = this;
 	this.active = false;
+	this.saveFiles = [];
 	
 	// Get and setup the window elements
 	windowDiv = document.getElementById('window');
@@ -45,34 +46,45 @@ function game(url, baseScale){
 	windowFilm.onclick = function() { windowDiv.innerHTML = ''; };
 	
 	// Get and setup the zoom slider
-	zoomSlider = document.querySelector('#board #zoom-slider');
+	zoomSlider = document.querySelector('#'+section.id+' #zoom-slider');
 	zoomSlider.oninput = function(){
 		game.setZoom(-parseFloat(zoomSlider.value));
 	};
-	document.querySelector('#board #zoom-in').onclick = function() {
+	document.querySelector('#'+section.id+' #zoom-in').onclick = function() {
     	zoomSlider.stepDown();
 		game.setZoom(-parseFloat(zoomSlider.value));
     };
-    document.querySelector('#board #zoom-out').onclick = function() { 
+    document.querySelector('#'+section.id+' #zoom-out').onclick = function() { 
 		zoomSlider.stepUp(); 
 		game.setZoom(-parseFloat(zoomSlider.value));
 	};
 	
-	// Load the case file
-	FileManager.loadCase(url, document.querySelector("#board #window"), function(categories, stage){
-		game.categories = categories;
-		game.createLessonNodes();
-	});
-	
 	// Save the given scale
 	this.scale = baseScale;
+	
+	// Load the case file
+	var loadData = FileManager.loadCase(JSON.parse(localStorage['caseData']), document.querySelector('#'+section.id+' #window'));
+	
+	// Create the boards
+	this.categories = loadData.categories;
+	this.createLessonNodes(section);
+	
+	// Display the current board
+	this.activeBoardIndex = loadData.category;
+	this.active = true;
+	this.boardArray[this.activeBoardIndex].show();
+	this.updateNode();
+	zoomSlider.value = -this.getZoom();
+	
+	// Setup the save button
+	FileManager.prepareZip(document.querySelector('#'+section.id+' #blob'));
 }
 
 var p = game.prototype;
 
-p.createLessonNodes = function(){
+p.createLessonNodes = function(section){
 	this.boardArray = [];
-	var bottomBar = document.getElementById("bottomBar");
+	var bottomBar = document.querySelector('#'+section.id+' #bottomBar');
 	for(var i=0;i<this.categories.length;i++){
 		// initialize empty
 		
@@ -87,7 +99,7 @@ p.createLessonNodes = function(){
 		}
 
 		// create a board
-		this.boardArray[i] = new Board(document.querySelector('#board'), new Point(Constants.boardSize.x/2, Constants.boardSize.y/2), this.lessonNodes);
+		this.boardArray[i] = new Board(section, new Point(Constants.boardSize.x/2, Constants.boardSize.y/2), this.lessonNodes);
 		var button = document.createElement("BUTTON");
 		button.innerHTML = this.categories[i].name;
 		var game = this;
@@ -106,14 +118,7 @@ p.createLessonNodes = function(){
 	}
 	
 	this.mouseState = new MouseState(this.boardArray);
-	this.activeBoardIndex = 0;
-	this.active = true;
-	this.boardArray[this.activeBoardIndex].show();
-	this.updateNode();
-	zoomSlider.value = -this.getZoom();
 	
-	// ready to save
-	FileManager.prepareZip(this.boardArray);
 }
 
 p.update = function(dt){
@@ -129,6 +134,7 @@ p.update = function(dt){
     }
     else if(pausedTime!=0 && windowDiv.innerHTML=='')
     	this.windowClosed();
+    
 }
 
 p.act = function(dt){
@@ -290,14 +296,38 @@ p.windowClosed = function() {
 	windowFilm.style.display = 'none';
 	proceedContainer.style.display = 'none';
 	
+	this.save();
+	
+}
+
+p.save = function(){
+	
+	// Get the current case data
+	var caseData = JSON.parse(localStorage['caseData']);
+	caseData.saveFile = DataParser.createXMLSaveFile(this.activeBoardIndex, this.boardArray, true);
+	
 	// Autosave on window close
-	var fileToStore = this.boardArray[this.activeBoardIndex].windowClosed();
-	if (fileToStore) {
-		FileManager.addNewFileToSystem(		  // need to encode number of files
-			""+this.activeBoardIndex+"-"+fileToStore.num+"-"+"0."+fileToStore.ext,
-			fileToStore.blob);
+	var filesToStore = this.boardArray[this.activeBoardIndex].windowClosed();
+	if (filesToStore){
+		filesToStore.board = this.activeBoardIndex;
+		this.saveFiles.push(filesToStore);
+		this.nextFileInSaveStack(caseData);
 	}
-	FileManager.addNewFileToSystem("case\\active\\saveFile.ipardata", DataParser.createXMLSaveFile(this.boardArray, true));
+	localStorage['caseData'] = JSON.stringify(caseData);
+	
+}
+
+p.nextFileInSaveStack = function(caseData){
+	
+	var curData = JSON.parse(localStorage['caseData']);
+	curData.submitted = caseData.submitted;
+	localStorage['caseData'] = JSON.stringify(curData);
+	
+	if(this.saveFiles.length>0){
+		FileManager.removeFilesFor(caseData, this.saveFiles[0]);
+		FileManager.addNewFilesToSystem(caseData, this.saveFiles[0], this.nextFileInSaveStack.bind(this));
+	}
+	this.saveFiles.shift();
 }
 
 module.exports = game;

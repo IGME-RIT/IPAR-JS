@@ -1,20 +1,82 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>IPAR</title>
-		<link rel="stylesheet" type="text/css" href="css/menuStyle.css">
-		<meta charset="utf-8">
-		<script type="text/javascript" src="title.js"></script> 
-	</head>
-	<body>
-		<div id="center">
-			<div>
-				<h1>IPAR</h1>
-				<button id="load-button">Load Case</button>
-				<button id="demo-button">Demo</button>
-				<input type="file" id="load-input" />
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>IPAR</title>
+	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="../css/styles.css">
+	<link rel="stylesheet" type="text/css" href="../css/windowsStyle.css">
+	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
+    <script src="lib/preloadjs-0.6.1.min.js"></script>
+    <script src="lib/jszip.min.js"></script>
+    <script src="temp/bundle.js"></script>
+    <!--<script src="bundle.min.js"></script>-->
+</head>
+<body>
+	<!-- div for console for mobile testing -->
+	<!--<div id="console" style="position:fixed;background-color:black;color:white;top:0;left:0;z-index:999;width:100vw;">This is the console</div>  -->
+	<!-- Section for the board -->
+	<section id="board" style="display:none;">
+		<div id="controlBar" class="buttonBar">
+			<button id="zoom-in">+</button>
+			<input id="zoom-slider" type="range" step="0.1" min="-2.0" max="-0.5" />
+			<button id="zoom-out">-</button>
+		</div>
+	    <div id="bottomBar" class="buttonBar"></div>
+	    <!-- save button -->
+	    <button id="blob" class="saveBtn"><img src="../img/iconSave.png" /></button>
+	    <!-- hidden save as link -->
+	    <input type="file" id="load-input" style="display: none;" />
+	    <div id="windowFlim" style="display: none">
+	    	<div id="proceedContainer" style="display: none">
+				<button id="proceedBtnLong" class="proceedWidthStart">Proceed</button>
+				<div id="proceedBtnRound" class="proceedLeftStart">
+					<div id="rightArrow"> > </div>
+				</div>
+	    	</div>
+	    </div>
+	    <div id="window" style="display: none"></div>
+    </section>
+    <!-- Section For Menus -->
+    <section id="titleMenu" class="menu" style="display:none;">
+    	<div>
+			<h1>IPAR</h1>
+			<button id="load-button" class="menuButton">Load Case</button>
+			<button id="demo-button" class="menuButton">Demo</button>
+			<button id="continue-button" class="menuButton">Continue</button>
+			<input type="file" id="load-input" />
+		</div>
+		<img class="logo" src="img/nsflogo.png" />
+    </section>
+    <section id="caseMenu" class="menu" style="display:none;">
+    	<div>
+			<h1 id="title"></h1>
+			<div id="right-content">
+				<div>
+					<button id="resume-button" class="menuButton">Resume Session</button><br/>
+					<button id="start-button" class="menuButton">Start from Beginning</button><br/>
+					<button id="back-button" class="menuButton bottom">&lt; &lt; Back</button>
+				</div>
+			</div>
+			<div id="left-content">
+				<div id="description-box"><p id="description"></p></div>
 			</div>
 		</div>
-		<img id="logo" src="img/nsflogo.png" />
-	</body>
+		<img class="logo" src="img/nsflogo.png" />
+    </section>
+    <section id="profileMenu" class="menu" style="display:none;">
+    	<div>
+			<h1 id="title"></h1>
+			<form>
+				First Name: <span id="first-name"></span><input name="first" id="input-first-name" />
+				<hr>
+				Last Name: <span id="last-name"></span><input name="last" id="input-last-name" />
+				<span id="email"><hr> Email: <input name="email" id="input-email" /></span>
+			</form>
+			<button id="back-button" class="menuButton inline">Back</button>
+			<button id="proceed-button" class="menuButton inline">Proceed</button>
+		</div>
+		<img class="logo" src="img/nsflogo.png" />
+    </section>
+</body>
 </html>

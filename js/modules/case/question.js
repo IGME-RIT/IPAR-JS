@@ -1,7 +1,7 @@
 "use strict";
-var Utilities = require('./utilities.js');
-var Constants = require('./constants.js');
-var Windows = require('./questionWindows.js');
+var Utilities = require('../helper/utilities.js');
+var Constants = require('../game/constants.js');
+var Windows = require('../html/questionWindows.js');
 
 var SOLVE_STATE = Object.freeze({HIDDEN: 0, UNSOLVED: 1, SOLVED: 2});
 var QUESTION_TYPE = Object.freeze({JUSTIFICATION: 1, MULTIPLE_CHOICE: 2, SHORT_RESPONSE: 3, FILE: 4, MESSAGE: 5});
@@ -23,11 +23,12 @@ wrongAnswer: string
 correctAnswer: string
 */
 //parameter is a point that denotes starting position
-function Question(xml, resources, url, windowDiv){
+function Question(xml, resources, windowDiv, num){
 	
 	// Set the current state to default at hidden and store the window div
     this.currentState = SOLVE_STATE.HIDDEN;
     this.windowDiv = windowDiv;
+    this.num = num;
     
     // Get and save the given index, correct answer, position, reveal threshold, image link, feedback, and connections
     this.correct = parseInt(xml.getAttribute("correctAnswer"));
@@ -35,10 +36,10 @@ function Question(xml, resources, url, windowDiv){
     this.positionPercentY = Utilities.map(parseInt(xml.getAttribute("yPositionPercent")), 0, 100, 0, Constants.boardSize.y);
     this.revealThreshold = parseInt(xml.getAttribute("revealThreshold"));
     //console.log(xml);
-    this.imageLink = url+xml.getAttribute("imageLink");
+    this.imageLink = xml.getAttribute("imageLink");
     this.feedbacks = xml.getElementsByTagName("feedback");
-    this.blob = null; // no upload by default
-    this.fileName = "";
+    this.newFiles = false;
+    this.files = [];
     var connectionElements = xml.getElementsByTagName("connections");
     this.connections = [];
     for(var i=0;i<connectionElements.length;i++)
@@ -114,8 +115,8 @@ p.correctAnswer = function(){
 			this.feedback.innerHTML = 'Submitted Files:<br/>';
 		else
 			this.feedback.innerHTML = '';
-		for(var i=0;i<this.fileInput.files.length;i++)
-			this.feedback.innerHTML += '<span class="feedbackI">'+this.fileInput.files[i].name+'</span><br/>';
+		for(var i=0;i<this.files.length;i++)
+			this.feedback.innerHTML += '<span class="feedbackI">'+this.files[i]+'</span><br/>';
 	}
   
   if(this.currentState!=SOLVE_STATE.SOLVED && 
@@ -137,7 +138,7 @@ p.displayWindows = function(){
 	// Add the windows to the window div
 	var windowNode = this.windowDiv;
 	var exitButton = new Image();
-	exitButton.src = "../img/iconClose.png";
+	exitButton.src = "img/iconClose.png";
 	exitButton.className = "exit-button";
 	var question = this;
 	exitButton.onclick = function() { question.windowDiv.innerHTML = ''; };
@@ -284,24 +285,10 @@ p.createFileWindow = function(){
     this.fileInput = this.answer.getElementsByTagName("input")[0];
     var question = this;
     this.fileInput.addEventListener("change", function(event){
-    		// Make sure a valid file was chosen (currently not implemented)
-			if(false){
-				alert("You didn't choose an ipar file! you can only load ipar files!");
-				return;
-			}
-			
-			/*// Create a reader and read the zip
-			var reader = new FileReader();
-			reader.onload = function(event){
-				console.log(event);
-			};
-			// read the first file
-			reader.readAsArrayBuffer(event.target.files[0]);*/
-			
-			question.fileName = event.target.files[0].name;
-			question.blob = event.target.files[0].slice();
-
-			
+    	question.newFiles = true;
+    	question.files = [];
+    	for(var i=0;i<event.target.files.length;i++)
+    		question.files[i] = event.target.files[i].name;
 	    question.correctAnswer();
     });
     

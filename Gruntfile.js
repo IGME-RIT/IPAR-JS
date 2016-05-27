@@ -8,7 +8,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['*.html', '*.ipar', '*.js', '*.md', 'data/**/*', 'css/**/*', 'images/**/*', 'lib/**/*', 'img/*', 'board/*', 'case/*', 'profile/*'],
+          src: ['*.html', '*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           dest: 'build/',
           filter: 'isFile'
         }]
@@ -17,14 +17,14 @@ module.exports = function(grunt) {
     watch: {
       js: {
         files: [
-          'board/js/**/*.js',
+          'js/**/*.js',
           'Gruntfile.js'
         ],
         tasks: ['browserify']
       },
       other: {
-    	files: ['*.html', '*.ipar', '*.js', '*.md', 'data/**/*', 'css/**/*', 'images/**/*', 'lib/**/*', 'img/*', 'board/*.*', 'case/*.*', 'profile/*.*'],
-        tasks: ['copy']
+          files: ['*.html', '*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          tasks: ['copy']
       },
       livereload: {
         files: ['build/**/*'],
@@ -35,8 +35,8 @@ module.exports = function(grunt) {
     },
     browserify: {
       dist: {
-        src: ['board/js/**/*.js'],
-        dest: 'build/board/temp/bundle.js',
+        src: ['js/**/*.js'],
+        dest: 'build/temp/bundle.js',
         options: {
             browserifyOptions: {
                 debug: true
@@ -46,8 +46,8 @@ module.exports = function(grunt) {
     },
     uglify: {
       dist: {
-          src: 'build/board/temp/bundle.js',
-          dest: 'build/board/bundle.min.js'
+          src: 'build/temp/bundle.js',
+          dest: 'build/bundle.min.js'
       }
     },
     connect: {
