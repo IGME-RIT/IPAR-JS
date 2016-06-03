@@ -244,9 +244,9 @@ p.draw = function(gameScale){
 
 // Gets a free node in this board (i.e. not unsolved) returns null if none
 p.getFreeNode = function() {
-	for(var i=0; i<this.lessonNodeArray.length; i++)
-		if(this.lessonNodeArray[i].currentState == Question.SOLVE_STATE.UNSOLVED)
-			return this.lessonNodeArray[i];
+	for(var i=0; i<this.lessonNodeArray.length; i++){
+		if(this.lessonNodeArray[i].question.currentState == Question.SOLVE_STATE.UNSOLVED)
+			return this.lessonNodeArray[i];}
 	return null;
 }
 

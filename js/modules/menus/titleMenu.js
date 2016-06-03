@@ -49,7 +49,10 @@ p.open = function(){
 }
 
 p.demo = function(){
-	
+
+	if(localStorage['caseData'] && !confirm("Are you sure you want to start a new case? Your autosave data will be lost!"))
+		return;
+		
 	// Set the button to disabled so that it can't be pressed while loading
 	loadButton.disabled = true;
 	loadInput.disabled = true;
@@ -88,7 +91,10 @@ p.demo = function(){
 }
 
 p.loadFile = function(event){
-console.log("LOADING FILE");
+	
+	if(localStorage['caseData'] && !confirm("Are you sure you want to start a new case? Your autosave data will be lost!"))
+		return;
+	
 	// Make sure a ipar file was choosen
 	if(!loadInput.value.endsWith("ipar")){
 		alert("You didn't choose an ipar file! you can only load ipar files!");

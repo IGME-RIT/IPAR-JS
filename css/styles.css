@@ -111,7 +111,7 @@ header {
 }
 
 .buttonBar button:hover {
-	background-color: #eee;
+	background-color: #aaa;
 }
 
 .buttonBar button:disabled {
@@ -120,6 +120,10 @@ header {
 
 .buttonBar button:focus {
 	outline: 0;
+}
+
+.buttonBar .active {
+	background-color: #ccc;
 }
 
 /* Style for the zoom slider */
@@ -162,8 +166,8 @@ header {
 
 #proceedContainer {
 	position: fixed;
-	left: 49vw;
-	top: 64vh;
+	left: 30vw;
+	bottom: 15vh;
 	
 }
 

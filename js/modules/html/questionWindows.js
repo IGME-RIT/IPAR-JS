@@ -58,8 +58,12 @@ m.fileWindow = '\
   <div class="title">\
     Files\
   </div>\
-  <div class="windowContent, center" style="height:20vh;background-color:#FFFFFF">\
-    <input type="file" multiple/>\
+  <div class="windowContent" style="height:25vh;min-height: 100px;">\
+	<div class="fileButton full">\
+		<img src="img/iconFileSubmit.png"/><br>\
+		Browse And Submit\
+	</div>\
+    <input type="file" style="display:none;" multiple/>\
   </div>\
 </div>\
 ';

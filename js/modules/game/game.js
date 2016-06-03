@@ -73,6 +73,7 @@ function game(section, baseScale){
 	this.activeBoardIndex = loadData.category;
 	this.active = true;
 	this.boardArray[this.activeBoardIndex].show();
+	this.boardArray[this.activeBoardIndex].button.className = "active";
 	this.updateNode();
 	zoomSlider.value = -this.getZoom();
 	
@@ -122,7 +123,7 @@ p.createLessonNodes = function(section){
 }
 
 p.update = function(dt){
-
+	
     if(this.active){
     
     	// perform game actions
@@ -155,9 +156,10 @@ p.act = function(dt){
     		this.boardArray[this.activeBoardIndex+1].button.disabled && 
     		this.boardArray[this.activeBoardIndex].finished){
     	this.boardArray[this.activeBoardIndex+1].button.disabled = false;
+    	this.prompt = true;
     }
-	
 
+    
 	// If the needs to zoom out to center
 	if(this.zoomout){
 		
@@ -177,6 +179,24 @@ p.act = function(dt){
 		// If fully zoomed out and in center stop
 		if(this.getZoom()==Constants.startZoom && board.boardOffset.x==Constants.boardSize.x/2 && board.boardOffset.y==Constants.boardSize.y/2){				
 			this.zoomout = false;
+			
+			if(this.prompt){
+		    	windowDiv.innerHTML = '<div class="windowPrompt"><div><h1>The "'+this.categories[this.activeBoardIndex+1].name+'" category is now available!</h1></div></div>';
+		    	var zoomin = function(){
+					windowDiv.removeEventListener('animationend', zoomin);
+					setTimeout(function(){
+						windowDiv.style.animation = 'promptFade 1s';
+						var fadeout = function(){
+							windowDiv.removeEventListener('animationend', fadeout);
+							windowDiv.innerHTML = '';
+							windowDiv.style.animation = '';
+						}
+						windowDiv.addEventListener('animationend', fadeout, false);
+					}, 500);
+				};
+				windowDiv.style.animation = 'openWindow 0.5s';
+		    	windowDiv.addEventListener('animationend', zoomin, false);
+			}
 			
 			// If changing board start that process
 			if(this.newBoard!=null){
@@ -282,6 +302,8 @@ p.setScale = function(scale){
 
 p.changeBoard = function(num){
 	if(num!=this.activeBoardIndex){
+		this.boardArray[num].button.className = "active";
+		this.boardArray[this.activeBoardIndex].button.className = "";
 		this.newBoard = num;
 		this.zoomout = true;
 	}

@@ -111,7 +111,7 @@ p.correctAnswer = function(){
 		this.feedback.innerHTML += 'Submitted Text:<br/><span class="feedbackI">'+this.justification.value+'</span><br/>';
 	
 	if(this.questionType===4){
-		if(this.fileInput.files.length>0)
+		if(this.files.length>0)
 			this.feedback.innerHTML = 'Submitted Files:<br/>';
 		else
 			this.feedback.innerHTML = '';
@@ -284,6 +284,10 @@ p.createFileWindow = function(){
     this.answer = tempDiv.firstChild;
     this.fileInput = this.answer.getElementsByTagName("input")[0];
     var question = this;
+    this.answer.getElementsByClassName("fileButton")[0].onclick = function(){
+    	console.log("FILE BUTTON CLICKED!");
+    	question.fileInput.click();
+    }
     this.fileInput.addEventListener("change", function(event){
     	question.newFiles = true;
     	question.files = [];

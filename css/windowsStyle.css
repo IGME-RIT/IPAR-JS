@@ -55,6 +55,29 @@
 	margin-bottom: 0.5em;
 }
 
+.windowPrompt{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	z-index: 999;
+}
+
+.windowPrompt div{
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 40vw;
+	padding: 10px;
+}
+
 .windowContent {
   background-color: #FFFFFF;
   color: 'black';
@@ -140,6 +163,21 @@
   border-color: #00FF00;
 }
 
+.windowContent .fileButton {
+  background-color: #A9A9A9;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.windowContent .fileButton img {
+	height: 80%;
+}
+
+.windowContent .fileButton:hover {
+  background-color: grey;
+}
+
 .windowContent textarea {
   height: 80%;
   width: 80%;
@@ -180,4 +218,8 @@
 }
 @keyframes openWindow {
     from{transform:scale(0)}
+}
+
+@keyframes promptFade {
+    to{opacity:0}
 }
