@@ -196,6 +196,7 @@ p.act = function(dt){
 				};
 				windowDiv.style.animation = 'openWindow 0.5s';
 		    	windowDiv.addEventListener('animationend', zoomin, false);
+		    	this.prompt = false;
 			}
 			
 			// If changing board start that process
