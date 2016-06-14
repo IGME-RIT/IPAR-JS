@@ -156,12 +156,19 @@ header {
 	padding-top: 2vw;
 }
 
-.saveBtn {
-	background-color: rgba(0,0,0,0);
-	border: none;
+.topBtns {
 	position: fixed; 
 	left: 1vw;
 	top: 2vh;
+}
+
+.topBtns button{
+	background-color: rgba(0,0,0,0);
+	border: none;
+}
+
+.topBtns button:hover{
+	background-color: rgba(0,0,0,0.25);
 }
 
 #proceedContainer {
@@ -170,8 +177,6 @@ header {
 	bottom: 15vh;
 	
 }
-
-
 
 .proceedEndWidth {
 	display: block;
@@ -264,4 +269,27 @@ section{
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.context {
+	display:none;
+	position:absolute;
+	background-color:lightGrey;
+	box-shadow:2px 2px 1px grey;
+	width:200px;
+}
+
+.context ul {
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+
+.context li {
+	padding:5px;
+}
+
+.context li:hover {
+	background-color:#90C8F6;
+	cursor:default;
 }

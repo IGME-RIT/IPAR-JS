@@ -16,12 +16,22 @@ body {
 }
 
 .menuButton {
-	display: block;
+	display:flex;
 	background-color: #15718F;
 	color: white;
 	width: 20vw;
 	height: 5vh;
 	margin: 1vh 0;
+	border: 3px outset lightGrey;
+    text-decoration: none;
+	text-align:center;
+	justify-content:center;
+	align-items:center;
+}
+
+.menuButton:hover{
+	cursor: default;
+	background-color: #3591AF;
 }
 
 .menuButton:disabled {

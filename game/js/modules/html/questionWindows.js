@@ -60,7 +60,7 @@ m.fileWindow = '\
   </div>\
   <div class="windowContent" style="height:25vh;min-height: 100px;">\
 	<div class="fileButton full">\
-		<img src="img/iconFileSubmit.png"/><br>\
+		<img src="../img/iconFileSubmit.png"/><br>\
 		Browse And Submit\
 	</div>\
     <input type="file" style="display:none;" multiple/>\
@@ -79,7 +79,7 @@ m.messageWindow = '\
 		<p><b>Subject </b>%instructions%</p>\
 		<hr>\
 		<p>%question%</p>\
-	  <button>Mark as Read</button>\
+	  <button class="answer">Mark as Read</button>\
 	</div>\
 </div>\
 ';

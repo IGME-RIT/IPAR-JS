@@ -3,7 +3,7 @@
 var section;
 
 // Parts of the html
-var loadInput, loadButton, demoButton, continueButton;
+var loadInput, loadButton, demoButton, continueButton, menuButton;
 
 // The next page to open when this one closes
 var next;
@@ -19,12 +19,14 @@ function TitleMenu(pSection){
 	loadButton = document.querySelector('#'+section.id+' #load-button');
 	demoButton = document.querySelector('#'+section.id+' #demo-button');
 	continueButton = document.querySelector('#'+section.id+' #continue-button');
+	menuButton = document.querySelector('#'+section.id+' #menu-button');
 	
 	// Setup the buttons
 	demoButton.onclick = this.demo.bind(this);
 	loadButton.onclick = loadInput.click.bind(loadInput);
 	loadInput.addEventListener('change', this.loadFile.bind(this), false);
 	continueButton.onclick = this.close.bind(this);
+	menuButton.onclick = function(){window.location.href = "../index.html";};
 }
 
 var p = TitleMenu.prototype;
@@ -57,6 +59,8 @@ p.demo = function(){
 	loadButton.disabled = true;
 	loadInput.disabled = true;
 	demoButton.disabled = true;
+	continueButton.disabled = true;
+	menuButton.disabled = true;
 	
 	var page = this;
 	var request = new XMLHttpRequest();
@@ -69,7 +73,7 @@ p.demo = function(){
 			localStorage['caseName'] = "demo.ipar";
 			
 			// Create a worker for unzipping the file
-			var zipWorker = new Worker("lib/unzip.js");
+			var zipWorker = new Worker("../lib/unzip.js");
 			zipWorker.onmessage = function(message) {
 				
 				// Save the base url to local storage
@@ -116,7 +120,7 @@ p.loadFile = function(event){
 		localStorage.setItem("autosave","");
 		
 		// Create a worker for unzipping the file
-		var zipWorker = new Worker("lib/unzip.js");
+		var zipWorker = new Worker("../lib/unzip.js");
 		zipWorker.onmessage = function(message) {
 			
 			// Save the base url to local storage

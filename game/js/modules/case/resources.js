@@ -8,13 +8,13 @@ function Resource(xml){
 	  var type = parseInt(xml.getAttribute("type"));
 	  switch(type){
 	    case 0:
-	      this.icon = 'img/iconResourceFile.png';
+	      this.icon = '../img/iconResourceFile.png';
 	      break;
 	    case 1:
-	      this.icon = 'img/iconResourceLink.png';
+	      this.icon = '../img/iconResourceLink.png';
 	      break;
 	    case 2:
-    	  this.icon = 'img/iconResourceVideo.png';
+    	  this.icon = '../img/iconResourceVideo.png';
 	      break;
 	    default:
 	      this.icon = '';

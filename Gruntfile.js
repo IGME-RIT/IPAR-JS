@@ -8,7 +8,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['*.html', '*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          src: ['**/*.html', '**/*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           dest: 'build/',
           filter: 'isFile'
         }]
@@ -17,13 +17,13 @@ module.exports = function(grunt) {
     watch: {
       js: {
         files: [
-          'js/**/*.js',
+          ['game/js/**/*.js', 'editor/js/**/*.js'],
           'Gruntfile.js'
         ],
-        tasks: ['browserify']
+        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor']
       },
       other: {
-          files: ['*.html', '*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          files: ['**/*.html', '*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           tasks: ['copy']
       },
       livereload: {
@@ -34,20 +34,33 @@ module.exports = function(grunt) {
       }
     },
     browserify: {
-      dist: {
-        src: ['js/**/*.js'],
-        dest: 'build/temp/bundle.js',
-        options: {
-            browserifyOptions: {
-                debug: true
-            }
-        }
+      game: {
+    	  src: ['game/js/**/*.js'],
+          dest: 'build/game/temp/bundle.js',
+          options: {
+              browserifyOptions: {
+                  debug: true
+              }
+          }
       },
+      editor: {
+    	  src: ['editor/js/**/*.js'],
+  	    dest: 'build/editor/temp/bundle.js',
+  	    options: {
+  	        browserifyOptions: {
+  	            debug: true
+  	        }
+  	    }
+      }
     },
     uglify: {
-      dist: {
-          src: 'build/temp/bundle.js',
-          dest: 'build/bundle.min.js'
+      game: {
+          src: 'build/game/temp/bundle.js',
+          dest: 'build/game/bundle.min.js'
+      },
+      editor: {
+          src: 'build/editor/temp/bundle.js',
+          dest: 'build/editor/bundle.min.js'
       }
     },
     connect: {
@@ -67,5 +80,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
 
-  grunt.registerTask('default', ["clean", "copy", "browserify",  "uglify", "connect", "watch"]);
+  grunt.registerTask('default', ["clean", "copy", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor",  "connect", "watch"]);
 };

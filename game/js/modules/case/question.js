@@ -38,6 +38,11 @@ function Question(xml, resources, windowDiv, num){
     //console.log(xml);
     this.imageLink = xml.getAttribute("imageLink");
     this.feedbacks = xml.getElementsByTagName("feedback");
+    var scale = xml.getAttribute("scale");
+    if(scale==="" || !scale)
+    	this.scale = 1;
+    else
+    	this.scale = Number(scale);
     this.newFiles = false;
     this.files = [];
     var connectionElements = xml.getElementsByTagName("connections");
@@ -62,7 +67,7 @@ function Question(xml, resources, windowDiv, num){
 		case 3:
 		case 2:
 		case 1:
-			this.createAnswerWindow(xml);
+			this.createAnswerWindow(xml, this.questionType!=3);
 			break;
 	}
     
@@ -138,7 +143,7 @@ p.displayWindows = function(){
 	// Add the windows to the window div
 	var windowNode = this.windowDiv;
 	var exitButton = new Image();
-	exitButton.src = "img/iconClose.png";
+	exitButton.src = "../img/iconClose.png";
 	exitButton.className = "exit-button";
 	var question = this;
 	exitButton.onclick = function() { question.windowDiv.innerHTML = ''; };
@@ -207,7 +212,7 @@ p.createResourceWindow = function(xml, resourceFiles){
 	}
 }
 
-p.createAnswerWindow = function(xml){
+p.createAnswerWindow = function(xml, answers){
 	
 	// Create the answer window 
 	var tempDiv = document.createElement("DIV");
@@ -220,7 +225,7 @@ p.createAnswerWindow = function(xml){
     if(this.justification){
     	this.justification = document.createElement("textarea");
     	this.justification.submit = document.createElement("button");
-    	this.justification.submit.className = "submit";
+    	this.justification.submit.className = "answer submit";
     	this.justification.submit.innerHTML = "Submit";
         this.justification.submit.disabled = true;
         this.justification.submit.onclick = function() {
@@ -235,41 +240,44 @@ p.createAnswerWindow = function(xml){
     }
     
     // Create and get all the answer elements
-    this.answers = [];
-    var answersXml = xml.getElementsByTagName("answer");
-    var correct = parseInt(xml.getAttribute("correctAnswer"));
-    for(var i=0;i<answersXml.length;i++){
-    	if(this.justification)
-    		this.justification.disabled = true;
-    	this.answers[i] = document.createElement("button");
-    	if(correct===i)
-    		this.answers[i].className = "correct";
-    	else
-    		this.answers[i].className = "wrong";
-    	this.answers[i].innerHTML = String.fromCharCode(i + "A".charCodeAt())+". "+answersXml[i].innerHTML;
+    if(answers){
+	    this.answers = [];
+	    var answersXml = xml.getElementsByTagName("answer");
+	    var correct = parseInt(xml.getAttribute("correctAnswer"));
+	    for(var i=0;i<answersXml.length;i++){
+	    	if(this.justification)
+	    		this.justification.disabled = true;
+	    	this.answers[i] = document.createElement("button");
+	    	if(correct===i)
+	    		this.answers[i].className = "answer correct";
+	    	else
+	    		this.answers[i].className = "answer wrong";
+	    	this.answers[i].innerHTML = String.fromCharCode(i + "A".charCodeAt())+". "+answersXml[i].innerHTML;
+	    }
+	    
+	    // Create the events for the answers
+	    for(var i=0;i<this.answers.length;i++){
+		  if(this.answers[i].className == "wrong"){
+			this.answers[i].num = i;
+	        this.answers[i].onclick = function(){
+	          this.disabled = true;
+			  question.wrongAnswer(this.num);
+		    };
+	      }
+	      else{
+	    	this.answers[i].onclick = function(){
+		      if(question.justification)
+		        question.justification.disabled = false;
+		      question.correctAnswer();
+		    };
+	      }
+	    }
+	    
+	    // Add the answers to the window
+	    for(var i=0;i<this.answers.length;i++)
+	      this.answer.getElementsByClassName("windowContent")[0].appendChild(this.answers[i]);
     }
     
-    // Create the events for the answers
-    for(var i=0;i<this.answers.length;i++){
-	  if(this.answers[i].className == "wrong"){
-		this.answers[i].num = i;
-        this.answers[i].onclick = function(){
-          this.disabled = true;
-		  question.wrongAnswer(this.num);
-	    };
-      }
-      else{
-    	this.answers[i].onclick = function(){
-	      if(question.justification)
-	        question.justification.disabled = false;
-	      question.correctAnswer();
-	    };
-      }
-    }
-    
-    // Add the answers to the window
-    for(var i=0;i<this.answers.length;i++)
-      this.answer.getElementsByClassName("windowContent")[0].appendChild(this.answers[i]);
     if(this.justification){
     	this.answer.getElementsByClassName("windowContent")[0].appendChild(this.justification);
     	this.answer.getElementsByClassName("windowContent")[0].appendChild(this.justification.submit);

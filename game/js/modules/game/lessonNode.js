@@ -4,7 +4,7 @@ var Question = require("../case/question.js");
 var Constants = require("./constants.js");
 var Point = require('../helper/point.js');
 
-var CHECK_IMAGE = "img/iconPostItCheck.png";
+var CHECK_IMAGE = "../img/iconPostItCheck.png";
 
 //parameter is a point that denotes starting position
 function lessonNode(startPosition, imagePath, pQuestion){
@@ -41,8 +41,8 @@ function lessonNode(startPosition, imagePath, pQuestion){
             else{
                 x = maxDimension / that.height;
             }
-            that.width = that.width * x;
-            that.height = that.height * x;
+            that.width = that.width * x * that.question.scale;
+            that.height = that.height * x * that.question.scale;
         }
         if(that.width > maxDimension || that.height > maxDimension){
             var x;
@@ -57,8 +57,8 @@ function lessonNode(startPosition, imagePath, pQuestion){
         }
         
 
-        that.position.x += that.width/2;
-        that.position.y += that.height/2;
+        that.position.x += that.width/2 * that.question.scale;
+        that.position.y += that.height/2 * that.question.scale;
     };
     
     this.image.src = imagePath;
