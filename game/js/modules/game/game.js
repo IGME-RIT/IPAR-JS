@@ -18,6 +18,7 @@ var mouseSustainedDown;
 // HTML elements
 var zoomSlider;
 var windowDiv;
+var windowWrapper;
 var windowFilm;
 var proceedContainer;
 var proceedLong;
@@ -39,11 +40,28 @@ function game(section, baseScale){
 	
 	// Get and setup the window elements
 	windowDiv = document.getElementById('window');
+	windowWrapper = document.getElementById('windowWrapper');
     proceedContainer = document.getElementById('proceedContainer');
     proceedLong = document.getElementById('proceedBtnLong');
     proceedRound = document.getElementById('proceedBtnRound');
 	windowFilm = document.getElementById('windowFlim');
-	windowFilm.onclick = function() { windowDiv.innerHTML = ''; };
+	windowFilm.onclick = function(e) {
+		var window = false;
+		var windows = document.getElementsByClassName("windowContent");
+		for(var i=0;i<windows.length && !window;i++){
+			var bounds = windows[i].getBoundingClientRect();
+			if(bounds.left < e.clientX && bounds.right > e.clientX && bounds.top < e.clientY && bounds.bottom > e.clientY)
+				window = true;
+		}
+		windows = document.getElementsByClassName("title");
+		for(var i=0;i<windows.length && !window;i++){
+			var bounds = windows[i].getBoundingClientRect();
+			if(bounds.left < e.clientX && bounds.right > e.clientX && bounds.top < e.clientY && bounds.bottom > e.clientY)
+				window = true;
+		}
+		if(!window)
+			windowDiv.innerHTML = ''; 
+	};
 	
 	// Get and setup the zoom slider
 	zoomSlider = document.querySelector('#'+section.id+' #zoom-slider');
@@ -269,7 +287,6 @@ p.act = function(dt){
     // Check if should pause
     if(windowDiv.innerHTML!='' && pausedTime++>3){
     	this.active = false;
-    	windowDiv.style.display = 'block';
     	windowFilm.style.display = 'block';
     }
     
@@ -315,7 +332,6 @@ p.windowClosed = function() {
 	// Unpause the game and fully close the window
 	pausedTime = 0;
 	this.active = true;
-	windowDiv.style.display = 'none';
 	windowFilm.style.display = 'none';
 	proceedContainer.style.display = 'none';
 	

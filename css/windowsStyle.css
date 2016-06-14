@@ -4,42 +4,56 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 1;
   background-color: rgba(0, 0, 0, 0.25);
   display: none;
 }
 
-.window {
+#windowFilmClick{
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#windowWrapper {
+  display: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+#windowOuter {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.window {
+  display: block;
   width: 30vw;
   min-width: 50vh;
-  z-index: 2;
   font-family: Sans-serif;
+  margin-bottom: 25px;
+  text-align: left;
 }
 
-.window.task{
-	top: 10vh;
-	left: 5vw;
+.window.left {
+  float: left;
+  clear: left;
+  margin-right: 0;
+  margin-left: 10vw;
 }
 
-.window.resource{
-	top: 55vh;
-	left: 5vw;
-}
-
-.window.answer{
-	top: 10vh;
-	left: 50vw;
-}
-
-.window.file{
-	top: 10vh;
-	left: 50vw;
-}
-
-.window.message{
-	top: 10vh;
-	left: 40vw;
+.window.right {
+  float: right;
+  clear: right;
+  margin-left: 0;
+  margin-right: 10vw;
 }
 
 .window h3 {

@@ -2,7 +2,7 @@
 var m = module.exports;
 
 m.taskWindow = '\
-<div class="window task">\
+<div class="window left">\
 	<div class="title">\
 		Task\
 	</div>\
@@ -19,7 +19,7 @@ m.taskWindow = '\
 
 
 m.resourceWindow = '\
-<div class="window resource">\
+<div class="window left">\
 	<div class="title">\
 		Resource\
 	</div>\
@@ -43,7 +43,7 @@ m.resource = '\
 ';
 
 m.answerWindow = '\
-<div class="window answer">\
+<div class="window right">\
 	<div class="title">\
 		Answers\
 	</div>\
@@ -54,7 +54,7 @@ m.answerWindow = '\
 ';
 
 m.fileWindow = '\
-<div class="window file">\
+<div class="window right">\
   <div class="title">\
     Files\
   </div>\
@@ -69,7 +69,7 @@ m.fileWindow = '\
 ';
 
 m.messageWindow = '\
-<div class="window message">\
+<div class="window">\
 	<div class="title">\
 		Message\
 	</div>\
