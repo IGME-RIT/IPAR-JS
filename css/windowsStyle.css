@@ -45,15 +45,15 @@
 .window.left {
   float: left;
   clear: left;
-  margin-right: 0;
-  margin-left: 10vw;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 
 .window.right {
   float: right;
   clear: right;
-  margin-left: 0;
-  margin-right: 10vw;
+  margin-right: 5vw;
+  margin-left: 5vw;
 }
 
 .window h3 {
@@ -95,9 +95,10 @@
 .windowContent {
   background-color: #FFFFFF;
   color: 'black';
-  min-height: 10vw;
   padding: 1vw;
   font-size: 0.9em;
+  margin-bottom: 0;
+  overflow-x: none;
 }
 
 .title {
@@ -215,6 +216,7 @@
   top: 5vh;
   height: 5vh;
   z-index: 2;
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .exit-button:hover {
@@ -236,15 +238,6 @@
 
 @keyframes promptFade {
     to{opacity:0}
-}
-
-.window.type {
-	top:5vh;
-	left:5vw;
-}
-
-.window.type .windowContent {
-	min-height:5vw;
 }
 
 .window.popup {
@@ -402,4 +395,8 @@ select {
 
 select:hover {
 	background-color:#E3E3E3;
+}
+
+.addressInfo {
+	color: lightGray;
 }

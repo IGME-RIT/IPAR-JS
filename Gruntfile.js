@@ -2,13 +2,15 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     clean: {
-      build: ['build']
+      build: {
+    	    src: ['build', '!build/.git/**/*', '!build/resource/*', '!build/image/*']
+      }
     },
     copy: {
       main: {
         files: [{
           expand: true,
-          src: ['**/*.html', '**/*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          src: ['resource/*', 'image/*', '*.html', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           dest: 'build/',
           filter: 'isFile'
         }]
@@ -20,7 +22,7 @@ module.exports = function(grunt) {
           ['game/js/**/*.js', 'editor/js/**/*.js'],
           'Gruntfile.js'
         ],
-        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor']
+        tasks: ['browserify:game', 'browserify:editor']
       },
       other: {
           files: ['**/*.html', '*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],

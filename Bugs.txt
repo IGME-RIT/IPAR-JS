@@ -1,2 +1,4 @@
-CSS/HTML Fixes!
-Error with files on continue sometimes...
+CSS/HTML Fixes! (Resources on Editor, File Upload button in game).
+Add Upload images and manage uploaded images.
+Add keyboard shorcuts to Editor.
+Add load previous images/resources on server start.

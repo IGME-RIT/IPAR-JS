@@ -107,30 +107,32 @@ p.displayWindows = function(){
 	exitButton.className = "exit-button";
 	var question = this;
 	exitButton.onclick = function() { question.windowDiv.innerHTML = ''; };
-	if(this.questionType===5){
-		windowNode.appendChild(this.message);
-	    exitButton.style.left = "75vw";
-		this.typeWindow.style.left = "35vw";
-	}
-	else{
-		windowNode.appendChild(this.task);
-		windowNode.appendChild(this.resource);
-		if(this.questionType<=2){
-			windowNode.appendChild(this.answer);
-			this.typeWindow.style.left = "";
-			this.task.style.left = "";
-			this.resource.style.left = "";
-			exitButton.style.left = "85vw";
-		}
-		else{
-			this.typeWindow.style.left = "35vw";
-			this.task.style.left = "35vw";
-			this.resource.style.left = "35vw";
-			exitButton.style.left = "75vw";
-		}
+	
+	if(this.questionType<=2){
+		windowNode.appendChild(this.answer);
+		this.typeWindow.className = "window left";
+		this.task.className = "window left";
+		this.resource.className = "window left";
+		exitButton.style.right = "5vw";
 	}
 	
 	windowNode.appendChild(this.typeWindow);
+	if(this.questionType===5){
+		windowNode.appendChild(this.message);
+		exitButton.style.right = "25vw";
+		this.typeWindow.className = "window";
+	}
+	else{
+		if(this.questionType>2){
+			this.typeWindow.className = "window";
+			this.task.className = "window";
+			this.resource.className = "window";
+			exitButton.style.right = "25vw";
+		}
+		windowNode.appendChild(this.task);
+		windowNode.appendChild(this.resource);
+	}
+	
 	windowNode.appendChild(exitButton);
 	
 }

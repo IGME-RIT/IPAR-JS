@@ -230,8 +230,6 @@ p.addCategory = function(name){
 	list.appendChild(newElement);
 	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
 	localStorage['caseDataCreate'] = JSON.stringify(caseData);
-	console.log("ADDING CAT");
-	console.log(caseFile);
 	
 }
 
@@ -379,7 +377,6 @@ p.act = function(dt){
 	
 	/*if (this.mouseState.mouseClicked) {
 		//localStorage.setItem("autosave",DataParser.createXMLSaveFile(this.boardArray, false));
-		//console.log(localStorage.getItem("autosave"));
 	}*/
 	
     // Update the current board (give it the mouse only if not zooming)
@@ -448,7 +445,6 @@ p.act = function(dt){
     // Check if should pause
     if(windowDiv.innerHTML!='' && pausedTime++>3){
     	this.active = false;
-    	windowDiv.style.display = 'block';
     	windowFilm.style.display = 'block';
     }
     
@@ -490,7 +486,6 @@ p.windowClosed = function() {
 	// Unpause the game and fully close the window
 	pausedTime = 0;
 	this.active = true;
-	windowDiv.style.display = 'none';
 	windowFilm.style.display = 'none';
 	
 	var save = this.boardArray[this.activeBoardIndex].windowClosed();
@@ -532,8 +527,6 @@ p.save = function(){
 		caseNode.appendChild(this.categories[i].xml(caseFile, i));
 	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
 	localStorage['caseDataCreate'] = JSON.stringify(caseData);
-	console.log(caseFile);
-	console.log(caseNode.getElementsByTagName("category").length);
 	
 }
 

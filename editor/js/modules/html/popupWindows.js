@@ -59,8 +59,10 @@ m.resourceEditor = '\
 			</select>\
 			<b>Display Name</b><br>\
 			<input name="name" value="%name%"><br>\
-			<b>Link Address (www. needed)</b><br>\
-			<input name="link" value="%link%">\
+			<b class="addressTag">Link Address</b><br>\
+			<input class="address" name="link" value="%link%">\
+			<button class="halfButton">Choose File</button><button class="halfButton">View File</button>\
+			<span class="addressInfo"></span>\
 		</form>\
 		<br>\
 		<button class="halfButton">Cancel</button><button class="halfButton">%apply%</button>\

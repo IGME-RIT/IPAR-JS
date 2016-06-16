@@ -66,7 +66,6 @@ window.onload = function(e){
 
 // create the game object and start the loop with a dt
 function createCase(){
-	console.log("GAME");
 	// Show the section for the game
 	boardSection.style.display = 'block';
 	

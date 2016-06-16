@@ -149,32 +149,44 @@ p.edit = function(index, callback){
 	tempDiv.innerHTML = Windows.resourceEditor;
     var editInfo = tempDiv.firstChild;
     var form = editInfo.getElementsByTagName("form")[0];
-	
+
+	var resources = this;
+    var type = editInfo.getElementsByTagName("select")[0];
+	var buttons = editInfo.getElementsByTagName("button");
+    
+    
 	if(index==null){
 		editInfo.innerHTML = editInfo.innerHTML.replace(/%edit%/g, "Create").replace(/%apply%/g, "Create Resource").replace(/%name%/g, '').replace(/%link%/g, '');
 	}
 	else{
 		editInfo.innerHTML = editInfo.innerHTML.replace(/%edit%/g, "Edit").replace(/%apply%/g, "Apply Changes").replace(/%name%/g, this[index].title).replace(/%link%/g, this[index].link);
-		editInfo.getElementsByTagName("select")[0].value = this[index].type;
+		type.value = this[index].type;
+		this.newLink = this[index].link;
 	}
 	
+	// Setup combo box
+	var updateEditInfo = this.updateEditInfo.bind(this, type, buttons, editInfo.getElementsByClassName("addressTag")[0], editInfo.getElementsByClassName("addressInfo")[0], editInfo.getElementsByClassName("address")[0], index);
+	updateEditInfo();
+	type.onchange = updateEditInfo;
+	
 	// Setup cancel button
-	var resources = this;
-	var buttons = editInfo.getElementsByTagName("button");
-	buttons[0].onclick = function(){
+	buttons[2].onclick = function(){
 		resources.windowDiv.innerHTML = '';
     	callback();
 	}
 	
 	// Setup confirm button
-	buttons[1].onclick = function(){
+	buttons[3].onclick = function(){
 		if(index==null)
 			index = resources.length++;
 		var newResource = resources.doc.createElement("resource");
 		var form = editInfo.getElementsByTagName("form")[0];
 		newResource.setAttribute("type", form.elements["type"].value);
 		newResource.setAttribute("text", form.elements["name"].value);
-		newResource.setAttribute("link", form.elements["link"].value);
+		if(resources.newLink==null)
+			newResource.setAttribute("link", form.elements["link"].value);
+		else
+			newResource.setAttribute("link", resources.newLink);
 		resources[index] = new Resource(newResource);
 		resources.windowDiv.innerHTML = '';
     	callback();
@@ -184,6 +196,65 @@ p.edit = function(index, callback){
 	// Display the edit window
 	this.windowDiv.innerHTML = '';
 	this.windowDiv.appendChild(editInfo);
+}
+
+p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, index){
+	if(Number(type.value)==0){
+		addressTag.innerHTML = "Refrence File";
+		address.value = "";
+		address.type = "file";
+		address.style.display = "none";
+		addressInfo.style.display = "";
+		addressInfo.innerHTML = this.newLink;
+		buttons[0].style.display = "";
+		buttons[1].style.display = "";
+		buttons[0].onclick = address.click.bind(address);
+		var resources = this;
+		buttons[1].onclick = function(){
+			console.log(resources.newLink);
+			if(resources.newLink && resources.newLink!="")
+				window.open(resources.newLink,'_blank');
+		};
+		address.onchange = function(){
+			if(address.files.length>0){
+				
+				for(var i=0;i<buttons.length;i++)
+					buttons[i].disabled = true;
+				var imageData = new FormData();
+				imageData.append('resource', address.files[0], address.files[0].name);
+				var request = new XMLHttpRequest();
+				request.onreadystatechange = function() {
+					if (request.readyState == 4 && request.status == 200) {
+						for(var i=0;i<buttons.length;i++)
+							buttons[i].disabled = false;
+						resources.newLink = window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/resource/"+request.responseText;
+						addressInfo.innerHTML = resources.newLink;
+					}
+				};
+				request.open("POST", "../resource", true);
+				request.send(imageData);
+				addressInfo.innerHTML = "Uploading...";
+			}
+			else{
+				resources.newLink = "";
+				addressInfo.innerHTML = resources.newLink;
+			}
+		}
+	}
+	else{
+		addressTag.innerHTML = "Link Address";
+		address.value = "";
+		address.type = "text";
+		address.style.display = "";
+		address.value = this.newLink;
+		this.newLink = null;
+		address.onchange = function(){};
+		addressInfo.style.display = "none";
+		buttons[0].style.display = "none";
+		buttons[1].style.display = "none";
+		buttons[0].onclick = function(){};
+		buttons[1].onclick = function(){};
+	}
 }
 
 p.xml = function(xmlDoc){
