@@ -1,5 +1,5 @@
 "use strict";
-var DrawLib = require('../helper/drawLib.js');
+var DrawLib = require('../helper/drawlib.js');
 var Question = require("../case/question.js");
 var Constants = require("./constants.js");
 var Point = require('../helper/point.js');

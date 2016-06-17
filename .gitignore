@@ -3,3 +3,8 @@ build
 .tern-project
 .settings/
 node_modules
+*.log
+*.sh
+pid
+*.swo
+*.swp
