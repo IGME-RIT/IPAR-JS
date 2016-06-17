@@ -217,7 +217,6 @@ p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, ind
 		};
 		address.onchange = function(){
 			if(address.files.length>0){
-				
 				for(var i=0;i<buttons.length;i++)
 					buttons[i].disabled = true;
 				var imageData = new FormData();

@@ -85,3 +85,25 @@ m.textInput = '\
 	</div>\
 </div>\
 ';
+
+m.imagesEditor = '\
+<div class="window images">\
+	<div class="title">\
+		Images\
+	</div>\
+	<div class="windowContent">\
+		<div class="imageContent">\
+		</div>\
+		<br>\
+		<input type="file" style="display:none;"/>\
+		<button class="thirdButton">Cancel</button><button class="thirdButton">Upload Image</button><button class="thirdButton">Import Image</button>\
+	</div>\
+</div>\
+';
+
+m.image = '\
+<div class="image">\
+	<img src=%image% />\
+	<img src="../img/iconClose.png" class="delete"/>\
+</div>\
+';

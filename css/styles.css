@@ -276,7 +276,7 @@ section{
 	position:absolute;
 	background-color:lightGrey;
 	box-shadow:2px 2px 1px grey;
-	width:200px;
+	width:250px;
 }
 
 .context ul {
@@ -287,9 +287,14 @@ section{
 
 .context li {
 	padding:5px;
+	display: block;
 }
 
 .context li:hover {
 	background-color:#90C8F6;
 	cursor:default;
+}
+
+.context .hotkey {
+	float: right;
 }

@@ -330,16 +330,16 @@ p.windowClosed = function(){
 	return null;
 }
 
-p.addConnection = function(){
+p.addConnection = function(start){
 	this.addCon = true;
 	this.canvas.style.cursor = 'crosshair';
-	this.startCon = this.contextNode;
+	this.startCon = start;
 }
 
-p.removeConnection = function(){
+p.removeConnection = function(start){
 	this.removeCon = true;
 	this.canvas.style.cursor = 'crosshair';
-	this.startCon = this.contextNode;
+	this.startCon = start;
 }
 
 p.show = function(dir){

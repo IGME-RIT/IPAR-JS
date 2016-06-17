@@ -245,6 +245,43 @@
 	left:40vw;
 }
 
+.window.images {
+	width: 50vw;
+	height: 50vh;
+	top: 25vh;
+	left: 25vw;
+	overflow: none;
+}
+
+.window.images .windowContent {
+	height: 100%;
+	widht: 100%;
+	overflow-y: scroll;
+}
+
+.window.images .imageContent {
+	overflow-y: auto;
+	overflow-x: none;
+}
+
+.window.images .image {
+	display: block;
+	margin: 10px;
+}
+
+.window.images img {
+  height: 10vh;
+  cursor: pointer;
+}
+
+.window.images .delete:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.window.images .delete {
+	float: right;
+}
+
 .windowButtons {
 	position:fixed;
 	bottom:1vh;
@@ -319,6 +356,12 @@
 
 .windowContent .halfButton {
 	width:50%;
+	display:inline;
+	padding:5px;
+}
+
+.windowContent .thirdButton {
+	width:33%;
 	display:inline;
 	padding:5px;
 }

@@ -19,6 +19,11 @@ m.loadCase = function(caseData, windowDiv) {
 	var xmlData = Utilities.getXml(caseData.caseFile);
 	var resources = Parser.getResources(xmlData);
 	var categories = Parser.getCategoriesAndQuestions(xmlData, resources, windowDiv);
+	var images = [];
+	for(var i=0;i<categories.length;i++)
+		for(var j=0;j<categories[i].questions.length;j++)
+			if(images.indexOf(categories[i].questions[j].imageLink)==-1)
+				images.push(categories[i].questions[j].imageLink);
 	
 	// load the most recent progress from saveFile.ipardata
 	var questions = [];
@@ -49,7 +54,7 @@ m.loadCase = function(caseData, windowDiv) {
 		stage = 1;
 	
 	// return results
-	return {categories: categories, category:stage-1, resources:resources}; // maybe stage + 1 would be better because they are not zero indexed?
+	return {categories: categories, category:stage-1, resources:resources, images:images}; // maybe stage + 1 would be better because they are not zero indexed?
 			   
 }
 					 

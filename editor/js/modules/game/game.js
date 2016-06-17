@@ -6,14 +6,15 @@ var Constants = require('./constants.js');
 var DrawLib = require('../helper/drawlib.js');
 var DataParser = require('../helper/iparDataParser.js');
 var MouseState = require('../helper/mouseState.js');
+var KeyboardState = require('../helper/keyboardState.js');
 var FileManager = require('../helper/fileManager.js');
 var Utilities = require('../helper/utilities.js');
 var Question = require('../case/question.js');
 var Category = require('../case/category.js');
 var Popup = require('../menus/popup.js');
+var PopupWindows = require('../html/popupWindows.js');
 
-//mouse management
-var mouseState;
+//mouse & keyboard management
 var previousMouseState;
 var draggingDisabled;
 var mouseTarget;
@@ -123,8 +124,8 @@ function game(section, baseScale){
 			resourceList.parentNode.replaceChild(game.resources.xml(caseFile), resourceList);
 			caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
 			localStorage['caseDataCreate'] = JSON.stringify(caseData);
+			game.save();
 		});
-		game.save();
 		boardContext.style.display = '';
 	};
 	
@@ -132,13 +133,13 @@ function game(section, baseScale){
 	// Get and setup the node context menu
 	var nodeContext = document.querySelector('#'+this.section.id+' #node-context');
 	document.querySelector('#'+section.id+' #node-context #add-connection').onclick = function(e){
-		game.boardArray[game.activeBoardIndex].addConnection();
+		game.boardArray[game.activeBoardIndex].addConnection(game.boardArray[game.activeBoardIndex].contextNode);
 		game.save();
 		nodeContext.style.display = '';
 	};
 	document.querySelector('#'+section.id+' #node-context #remove-connection').onclick = function(e){
 		if(game.boardArray[game.activeBoardIndex].contextNode.question.connections.length>0){
-			game.boardArray[game.activeBoardIndex].removeConnection();
+			game.boardArray[game.activeBoardIndex].removeConnection(game.boardArray[game.activeBoardIndex].contextNode);
 			game.save();
 		}
 		nodeContext.style.display = '';
@@ -207,6 +208,22 @@ function game(section, baseScale){
 	
 	// Setup the save button
 	FileManager.prepareZip(document.querySelector('#'+section.id+' #blob'));
+	
+	
+	// Create the images window 
+	var tempDiv = document.createElement("DIV");
+	tempDiv.innerHTML = PopupWindows.imagesEditor;
+    this.imagesWindow = tempDiv.firstChild;
+    
+    // Fill it with the current images
+    var content = this.imagesWindow.getElementsByClassName("imageContent")[0];
+    for(var i=0;i<loadData.images.length;i++)
+    	content.innerHTML += PopupWindows.image.replace(/%image%/g, loadData.images[i]);
+
+	// Add it to all the questions
+	for(var i=0;i<this.categories.length;i++)
+		for(var j=0;j<this.categories[i].questions.length;j++)
+			this.categories[i].questions[j].imagesWindow = this.imagesWindow;
 }
 
 var p = game.prototype;
@@ -323,6 +340,7 @@ p.createLessonNodes = function(){
 	this.boardArray = [];
 	this.bottomBar = document.querySelector('#'+this.section.id+' #bottomBar');
 	this.mouseState = new MouseState();
+	this.keyboardState = new KeyboardState(this);
 	for(var i=0;i<this.categories.length;i++)
 		this.createBoard(this.categories[i], i);
 	
@@ -372,12 +390,13 @@ p.update = function(dt){
 
 p.act = function(dt){
 
-    // Update the mouse state
+    // Update the mouse and keyboard states
 	this.mouseState.update(dt, this.scale*this.getZoom());
+	this.keyboardState.update();
 	
-	/*if (this.mouseState.mouseClicked) {
-		//localStorage.setItem("autosave",DataParser.createXMLSaveFile(this.boardArray, false));
-	}*/
+	// Handle keyboard shortcuts
+	this.checkKeyboard();
+	
 	
     // Update the current board (give it the mouse only if not zooming)
     this.boardArray[this.activeBoardIndex].act(this.scale, (this.zoomout ? null : this.mouseState), dt);
@@ -542,7 +561,7 @@ p.addQuestion = function(x, y){
 	newQuestion.setAttribute('numConnections', '0');
 	newQuestion.setAttribute('numAnswers', '3');
 	newQuestion.setAttribute('correctAnswer', '0');
-	newQuestion.setAttribute('imageLink', 'https://i.gyazo.com/eb1832a80fa41e395491571d4930119b.png');
+	newQuestion.setAttribute('imageLink', window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+'eb1832a80fa41e395491571d4930119b.png');
 	newQuestion.setAttribute('revealThreshold', '0');
 	newQuestion.setAttribute('questionType', '2');
 	newQuestion.setAttribute('resourceCount', '0');
@@ -565,6 +584,7 @@ p.addQuestion = function(x, y){
 	}
 	
 	var question = new Question(newQuestion, this.resources, windowDiv, this.categories[this.activeBoardIndex].questions.length);
+	question.imagesWindow = this.imagesWindow;
 	this.categories[this.activeBoardIndex].questions.push(question);
 	var lessonNodes = this.boardArray[this.activeBoardIndex].lessonNodeArray;
 	lessonNodes.push(new LessonNode( question ) );
@@ -574,6 +594,138 @@ p.addQuestion = function(x, y){
 	
 	// Save the changes to local storage
 	this.save();
+	
+}
+
+p.checkKeyboard = function(){
+	
+	if(this.keyboardState.keyPressed[46]){ // Delete - Delete Category
+		if(this.boardArray.length>1 && confirm("Are you sure you want to delete the current category You can't undo this action!"))
+			this.deleteCategory();
+	}
+	
+	if(this.keyboardState.key[17]){ // Ctrl
+		
+		var board = this.boardArray[this.activeBoardIndex];
+		var game = this;
+		
+		if(this.keyboardState.keyPressed[67]){ // C - Add Category
+			Popup.prompt(windowDiv, "Create Category", "Category Name:", "", "Create", function(newName){
+	    		if(newName)
+	    			game.addCategory(newName);
+	    	});
+		}
+		
+		if(this.keyboardState.keyPressed[86]){ // V - Rename Category
+			Popup.prompt(windowDiv, "Rename Category", "Category Name:", this.categories[this.activeBoardIndex].name, "Rename", function(newName){
+	    		if(newName){
+	    			game.categories[game.activeBoardIndex].name = newName;
+	    			game.boardArray[game.activeBoardIndex].button.innerHTML = newName;
+	    			var caseData = JSON.parse(localStorage['caseDataCreate']);
+	    			var caseFile = Utilities.getXml(caseData.caseFile);
+	    			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerHTML = newName;
+	    			caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
+	    			localStorage['caseDataCreate'] = JSON.stringify(caseData);
+	    		}
+	    	});
+		}
+		
+		if(this.keyboardState.keyPressed[88]){ // X - Move Category forward
+			if(this.activeBoardIndex+1<this.categories.length)
+				this.moveCategory(1);
+		}
+		
+		if(this.keyboardState.keyPressed[90]){ // Z - Move Category backward
+			if(this.activeBoardIndex-1>=0)
+				this.moveCategory(-1);
+		}
+		
+		if(this.keyboardState.keyPressed[70]){ // F - Edit Case Info
+			var caseData = JSON.parse(localStorage['caseDataCreate']);
+			Popup.editInfo(windowDiv, Utilities.getXml(caseData.caseFile), function(newCaseFile, name){
+		    	localStorage['caseName'] =name+".ipar";
+				caseData = JSON.parse(localStorage['caseDataCreate']);
+				caseData.caseFile = new XMLSerializer().serializeToString(newCaseFile);
+				localStorage['caseDataCreate'] = JSON.stringify(caseData);
+			});
+		}
+		
+		if(this.keyboardState.keyPressed[82]){ // R - Edit resources
+			this.resources.openWindow(windowDiv, false, function(){
+				var caseData = JSON.parse(localStorage['caseDataCreate']);
+				var caseFile = Utilities.getXml(caseData.caseFile);
+				var resourceList = caseFile.getElementsByTagName("resourceList")[0];
+				resourceList.parentNode.replaceChild(game.resources.xml(caseFile), resourceList);
+				caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
+				localStorage['caseDataCreate'] = JSON.stringify(caseData);
+				game.save();
+			});
+		}
+		
+		if(board.target){
+
+			if(this.keyboardState.key[16]){ // Shift
+				if(this.keyboardState.keyPressed[65]){ // A - Add connection
+					board.addConnection(board.target);
+					this.save();
+				}
+				
+				if(this.keyboardState.keyPressed[83]){ // S - Remove connection
+					if(board.target.question.connections.length>0){
+						board.removeConnection(board.target);
+						this.save();
+					}
+				}
+			}
+			else{
+			
+				if(this.keyboardState.keyPressed[65]){ // A - Make question smaller
+					if(board.lessonNodeArray[board.target.question.num].question.scale>Constants.minNodeScale){
+						board.lessonNodeArray[board.target.question.num].question.scale -= Constants.nodeStep;
+						board.lessonNodeArray[board.target.question.num].updateImage();
+					}
+					this.save();
+				}
+		
+				if(this.keyboardState.keyPressed[83]){ // S - Make question larger
+					if(board.lessonNodeArray[board.target.question.num].question.scale<Constants.maxNodeScale){
+						board.lessonNodeArray[board.target.question.num].question.scale += Constants.nodeStep;
+						board.lessonNodeArray[board.target.question.num].updateImage();
+					}
+					this.save();
+				}
+				
+			}
+	
+			if(this.keyboardState.keyPressed[68]){ // D - Delete question
+				if(confirm("Are you sure want to delete this question? You can't undo this action!")){
+					var cat = this.categories[this.activeBoardIndex];
+					for(var i=0;i<cat.questions.length;i++){
+						if(cat.questions[i].num>board.target.question.num)
+							cat.questions[i].num--;
+						var con = cat.questions[i].connections.indexOf(board.target.question.num+1);
+						while(con!=-1){
+							cat.questions[i].connections.splice(con, 1);
+							con = cat.questions[i].connections.indexOf(board.target.question.num+1);
+						}
+						for(var j=0;j<cat.questions[i].connections.length;j++)
+							if(cat.questions[i].connections[j]-1>board.target.question.num)
+								cat.questions[i].connections[j]--;
+					}
+					board.lessonNodeArray.splice(board.target.question.num, 1);
+					cat.questions.splice(board.target.question.num, 1);
+					this.save();
+				}
+			}
+			
+		}
+		else{
+			if(this.keyboardState.keyPressed[81]){ // Q - Add Question
+				this.addQuestion((this.mouseState.virtualPosition.x+Constants.boardSize.x/2)/Constants.boardSize.x*100,
+						(this.mouseState.virtualPosition.y+Constants.boardSize.y/2)/Constants.boardSize.y*100);
+			}
+		}
+	}
 	
 }
 

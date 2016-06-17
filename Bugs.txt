@@ -1,4 +1,3 @@
 CSS/HTML Fixes! (Resources on Editor, File Upload button in game).
-Add Upload images and manage uploaded images.
-Add keyboard shorcuts to Editor.
-Add load previous images/resources on server start.
+Add load previous images/resources on server start. (check for duplicates on upload and if so don't upload but return the duplicate).
+Create converter from old case files.

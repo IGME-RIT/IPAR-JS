@@ -3,6 +3,7 @@ var Utilities = require('../helper/utilities.js');
 var Constants = require('../game/constants.js');
 var Windows = require('../html/questionWindows.js');
 var Popup = require('../menus/popup.js');
+var PopupWindows = require('../html/popupWindows.js');
 
 var SOLVE_STATE = Object.freeze({HIDDEN: 0, UNSOLVED: 1, SOLVED: 2});
 var QUESTION_TYPE = Object.freeze({JUSTIFICATION: 1, MULTIPLE_CHOICE: 2, SHORT_RESPONSE: 3, FILE: 4, MESSAGE: 5});
@@ -151,14 +152,72 @@ p.createTypeWindow = function(){
     var button = this.typeWindow.getElementsByClassName("imageButton")[0];
     var icon = button.getElementsByTagName("img")[0];
     button.onclick = function(){
-    	Popup.prompt(question.windowDiv, "Select Image", "Image URL:", "", "Load Image", function(newImage){
-    		if(newImage){
-    			question.imageLink = newImage;
-    			question.xml.setAttribute("imageLink", newImage);
-    			icon.src = newImage;
-    		}
-    		question.displayWindows();
-    	});
+    	
+    	question.windowDiv.innerHTML = '';
+    	question.windowDiv.appendChild(question.imagesWindow);
+        var buttons = question.imagesWindow.getElementsByTagName("button");
+        var images = question.imagesWindow.getElementsByTagName("img");
+        var input = question.imagesWindow.getElementsByTagName("input")[0];
+        var imageContent = question.imagesWindow.getElementsByClassName("imageContent")[0];
+        var close = function(){
+        	buttons[0].onclick = function(){};
+        	buttons[1].onclick = function(){};
+        	for(var i =0;i<images.length;i++)
+        		images[i].onclick = function(){};
+        	question.displayWindows();
+        }
+        buttons[0].onclick = close;
+        buttons[1].onclick = input.click.bind(input);
+        buttons[2].onclick = function(){
+        	Popup.prompt(question.windowDiv, "Select Image", "Image URL:", "", "Load Image", function(newImage){
+        		if(newImage)
+        			imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, newImage);
+        		close();
+        		button.click();
+        	});
+        }
+        for(var i=0;i<images.length;i+=2){
+        (function(i){
+        	images[i].onclick = function(){
+        		question.imageLink = images[i].src;
+    			question.xml.setAttribute("imageLink", images[i].src);
+    			icon.src = images[i].src;
+        		close();
+        	}
+        	images[i+1].onclick = function(){
+        		if(confirm("Are you sure you want to remove this image from your data bank? This can not be undone!")){
+        			var toRemove = question.imagesWindow.getElementsByClassName("image")[i/2];
+        			toRemove.parentNode.removeChild(toRemove);
+            		close();
+            		button.click();
+        		}
+        	}
+        })(i);
+        }
+
+        input.onchange = function(){
+        	if(input.files.length>0 && input.files[0].type.match(/^image.*/)){
+				for(var i=0;i<buttons.length;i++)
+					buttons[i].disabled = true;
+				var imageData = new FormData();
+				imageData.append('image', input.files[0], input.files[0].name);
+				var request = new XMLHttpRequest();
+				request.onreadystatechange = function() {
+					if (request.readyState == 4 && request.status == 200) {
+						for(var i=0;i<buttons.length;i++)
+							buttons[i].disabled = false;
+						console.log(request.responseText);
+						imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+request.responseText);
+		        		close();
+		        		button.click();
+					}
+				};
+				request.open("POST", "../image", true);
+				request.send(imageData);
+			}
+        }
+    	
+    	
     }
     
     // Setup the combo box
