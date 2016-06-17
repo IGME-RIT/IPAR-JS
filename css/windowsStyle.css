@@ -233,11 +233,11 @@
   animation: openWindow 0.25s;
 }
 @keyframes openWindow {
-    from{transform:scale(0)}
+    from{transform:scale(0)} to{transform:scale(1)}
 }
 
 @keyframes promptFade {
-    to{opacity:0}
+    from{opacity:1} to{opacity:0}
 }
 
 .window.popup {

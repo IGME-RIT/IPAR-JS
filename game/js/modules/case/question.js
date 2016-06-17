@@ -92,7 +92,7 @@ p.wrongAnswer = function(num){
 		this.feedback.innerHTML = '"'+String.fromCharCode(num + "A".charCodeAt())+
 											'" is not correct <br/>&nbsp;<span class="feedbackI">'+
 											this.feedbacks[num].innerHTML+'</span><br/>';
-	
+	this.taskContent.scrollTop = this.taskContent.scrollHeight;
 }
 
 p.correctAnswer = function(){
@@ -101,6 +101,7 @@ p.correctAnswer = function(){
 	if(this.answers)
 		for(var i=0;i<this.answers.length;i++)
 			this.answers[i].disabled = true;
+	this.taskContent.scrollTop = this.taskContent.scrollHeight;
 	
 	// If feedback display it
 	if(this.feedbacks.length>0)
@@ -179,6 +180,7 @@ p.createTaskWindow = function(xml){
     this.task.innerHTML = this.task.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
     this.task.innerHTML = this.task.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
     this.feedback = this.task.getElementsByClassName("feedback")[0];
+    this.taskContent = this.task.getElementsByClassName("windowContent")[0];
 }
 
 p.createResourceWindow = function(xml, resourceFiles){

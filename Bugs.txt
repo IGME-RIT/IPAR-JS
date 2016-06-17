@@ -1,8 +1,17 @@
 CSS/HTML Fixes! (Resources on Editor, File Upload button in game).
-Issue with ow the new board indicator appears.
-Freezes on switch baords while displaying new board.
+Issue with the new board indicator appears.
 Issue on continue with files sometimes? (Doesn't matter since it will be redone??? read below \/)
 Make submitted files upload to server using session uuid.
 check for duplicates on upload and if so don't upload but return the duplicate (too complicated, not worth it or maybe worth it??).
-ANSWERING WRONG STILL MARKS AS CORRECT!!!!!!
 Converter should make sure case file exists first and if not alert and exit.
+Load case should make sure case file exits, it is version 1 or great, and if not alert and exit.
+
+Issue - Linux_Forensics file
+
+Test on Browsers
+Opera - No Other Issues
+Firefox - 
+IE - 
+Edge - 
+Safari - 
+Chrome - 

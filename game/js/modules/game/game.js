@@ -124,7 +124,7 @@ p.createLessonNodes = function(section){
 		var game = this;
 		button.onclick = (function(i){ 
 			return function() {
-				if(game.active){
+				if(game.active && !game.zoomout && !game.zoomin){
 					game.changeBoard(i);
 				}
 		}})(i);
