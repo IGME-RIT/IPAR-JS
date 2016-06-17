@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['resource/*', 'image/*', '*.html', 'temp/*.js', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          src: ['resource/*', 'image/*', '*.ico', '*.html', 'temp/*.js', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           dest: 'build/',
           filter: 'isFile'
         }]
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         tasks: ['browserify:game', 'browserify:editor']
       },
       other: {
-          files: ['resource/*', 'image/*', '*.html', 'temp/*.js', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          files: ['resource/*', 'image/*', '*.html', '*.ico', 'temp/*.js', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           tasks: ['copy']
       },
       livereload: {

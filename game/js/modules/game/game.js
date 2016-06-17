@@ -199,21 +199,25 @@ p.act = function(dt){
 			this.zoomout = false;
 			
 			if(this.prompt){
+				proceedContainer.style.display = 'none';
 		    	windowDiv.innerHTML = '<div class="windowPrompt"><div><h1>The "'+this.categories[this.activeBoardIndex+1].name+'" category is now available!</h1></div></div>';
+		    	var windowPrompt = windowDiv.getElementsByClassName("windowPrompt")[0];
 		    	var zoomin = function(){
-					windowDiv.removeEventListener('animationend', zoomin);
+		    		windowPrompt.removeEventListener('animationend', zoomin);
 					setTimeout(function(){
-						windowDiv.style.animation = 'promptFade 1s';
+						windowPrompt.style.animation = 'promptFade 1s';
 						var fadeout = function(){
-							windowDiv.removeEventListener('animationend', fadeout);
+							windowPrompt.style.animation = '';
+							windowPrompt.removeEventListener('animationend', fadeout);
 							windowDiv.innerHTML = '';
 							windowDiv.style.animation = '';
 						}
-						windowDiv.addEventListener('animationend', fadeout, false);
+						windowPrompt.addEventListener('animationend', fadeout, false);
 					}, 500);
 				};
-				windowDiv.style.animation = 'openWindow 0.5s';
-		    	windowDiv.addEventListener('animationend', zoomin, false);
+				windowDiv.style.animation = 'none';
+				windowPrompt.style.animation = 'openWindow 0.5s';
+				windowPrompt.addEventListener('animationend', zoomin, false);
 		    	this.prompt = false;
 			}
 			

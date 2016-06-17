@@ -92,7 +92,8 @@ p.wrongAnswer = function(num){
 		this.feedback.innerHTML = '"'+String.fromCharCode(num + "A".charCodeAt())+
 											'" is not correct <br/>&nbsp;<span class="feedbackI">'+
 											this.feedbacks[num].innerHTML+'</span><br/>';
-	this.taskContent.scrollTop = this.taskContent.scrollHeight;
+	if(this.taskContent)
+		this.taskContent.scrollTop = this.taskContent.scrollHeight;
 }
 
 p.correctAnswer = function(){
@@ -101,7 +102,8 @@ p.correctAnswer = function(){
 	if(this.answers)
 		for(var i=0;i<this.answers.length;i++)
 			this.answers[i].disabled = true;
-	this.taskContent.scrollTop = this.taskContent.scrollHeight;
+	if(this.taskContent)
+		this.taskContent.scrollTop = this.taskContent.scrollHeight;
 	
 	// If feedback display it
 	if(this.feedbacks.length>0)
