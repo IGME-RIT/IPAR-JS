@@ -107,6 +107,25 @@ p.act = function(gameScale, pMouseState, dt) {
     			this.canvas.style.cursor = 'crosshair';
     		
     	}
+    	else if(this.hideCon){
+    		if(pMouseState.mouseClicked){
+    			this.hideCon = false;
+    			if(this.target && this.target!=this.startCon){
+    				var contains = 0;
+    				for(var i=0;i<this.startCon.question.connections.length && contains == 0;i++)
+    					if(this.lessonNodeArray[Math.abs(this.startCon.question.connections[i])-1]==this.target)
+    						contains = this.startCon.question.connections[i];
+    				if(contains!=0){
+    					console.log(contains);
+    					this.startCon.question.connections.splice(this.startCon.question.connections.indexOf(contains), 1);
+        				this.startCon.question.connections.push(-contains);
+    					this.save();
+    				}
+    			}
+    		}
+    		if(this.target==null)
+    			this.canvas.style.cursor = 'crosshair';
+    	}
     	else if(this.removeCon){
     		if(pMouseState.mouseClicked){
     			this.removeCon = false;
@@ -252,15 +271,21 @@ p.draw = function(gameScale, pMouseState){
         
         // draw lines
         for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
-        	var connection = this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1];
+        	var connection = this.lessonNodeArray[Math.abs(this.lessonNodeArray[i].question.connections[j]) - 1];
         	
-        	var size = Constants.arrowSize,
-        		color = "red";
-        	if((!this.removeCon && this.lessonNodeArray[i]==this.target) || 
-        			(this.removeCon && this.lessonNodeArray[i]==this.startCon && connection==this.target)){
+        	var color = "rgba(255, 0, 0, ", 
+        		size = Constants.arrowSize;
+        	
+        	if((!this.removeCon && !this.hideCon && this.lessonNodeArray[i]==this.target) || 
+        			((this.removeCon || this.hideCon) && this.lessonNodeArray[i]==this.startCon && connection==this.target)){
         		size *= 2;
-        		color =  "blue";
+        		color =  "rgba(0, 0, 255, ";
         	}
+
+        	if(this.lessonNodeArray[i].question.connections[j]<0)
+        		color += "0.25)";
+        	else
+        		color += "1)";
 
         	// -1 becase node connection index values are 1-indexed but connections is 0-indexed
         	// go to the index in the array that corresponds to the connected node on this board and save its position
@@ -338,6 +363,12 @@ p.addConnection = function(start){
 
 p.removeConnection = function(start){
 	this.removeCon = true;
+	this.canvas.style.cursor = 'crosshair';
+	this.startCon = start;
+}
+
+p.hideConnection = function(start){
+	this.hideCon = true;
 	this.canvas.style.cursor = 'crosshair';
 	this.startCon = start;
 }

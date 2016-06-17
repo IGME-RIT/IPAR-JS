@@ -137,6 +137,13 @@ function game(section, baseScale){
 		game.save();
 		nodeContext.style.display = '';
 	};
+	document.querySelector('#'+section.id+' #node-context #hide-connection').onclick = function(e){
+		if(game.boardArray[game.activeBoardIndex].contextNode.question.connections.length>0){
+			game.boardArray[game.activeBoardIndex].hideConnection(game.boardArray[game.activeBoardIndex].contextNode);
+			game.save();
+		}
+		nodeContext.style.display = '';
+	};
 	document.querySelector('#'+section.id+' #node-context #remove-connection').onclick = function(e){
 		if(game.boardArray[game.activeBoardIndex].contextNode.question.connections.length>0){
 			game.boardArray[game.activeBoardIndex].removeConnection(game.boardArray[game.activeBoardIndex].contextNode);
@@ -670,10 +677,17 @@ p.checkKeyboard = function(){
 					this.save();
 				}
 				
-				if(this.keyboardState.keyPressed[83]){ // S - Remove connection
+				if(this.keyboardState.keyPressed[68]){ // D - Remove connection
 					if(board.target.question.connections.length>0){
 						board.removeConnection(board.target);
 						this.save();
+					}
+				}
+				
+				if(this.keyboardState.keyPressed[83]){ // S - Show/Hide connection
+					if(game.boardArray[game.activeBoardIndex].contextNode.question.connections.length>0){
+						game.boardArray[game.activeBoardIndex].hideConnection(game.boardArray[game.activeBoardIndex].contextNode);
+						game.save();
 					}
 				}
 			}
@@ -695,27 +709,27 @@ p.checkKeyboard = function(){
 					this.save();
 				}
 				
-			}
-	
-			if(this.keyboardState.keyPressed[68]){ // D - Delete question
-				if(confirm("Are you sure want to delete this question? You can't undo this action!")){
-					var cat = this.categories[this.activeBoardIndex];
-					for(var i=0;i<cat.questions.length;i++){
-						if(cat.questions[i].num>board.target.question.num)
-							cat.questions[i].num--;
-						var con = cat.questions[i].connections.indexOf(board.target.question.num+1);
-						while(con!=-1){
-							cat.questions[i].connections.splice(con, 1);
-							con = cat.questions[i].connections.indexOf(board.target.question.num+1);
+				if(this.keyboardState.keyPressed[68]){ // D - Delete question
+					if(confirm("Are you sure want to delete this question? You can't undo this action!")){
+						var cat = this.categories[this.activeBoardIndex];
+						for(var i=0;i<cat.questions.length;i++){
+							if(cat.questions[i].num>board.target.question.num)
+								cat.questions[i].num--;
+							var con = cat.questions[i].connections.indexOf(board.target.question.num+1);
+							while(con!=-1){
+								cat.questions[i].connections.splice(con, 1);
+								con = cat.questions[i].connections.indexOf(board.target.question.num+1);
+							}
+							for(var j=0;j<cat.questions[i].connections.length;j++)
+								if(cat.questions[i].connections[j]-1>board.target.question.num)
+									cat.questions[i].connections[j]--;
 						}
-						for(var j=0;j<cat.questions[i].connections.length;j++)
-							if(cat.questions[i].connections[j]-1>board.target.question.num)
-								cat.questions[i].connections[j]--;
+						board.lessonNodeArray.splice(board.target.question.num, 1);
+						cat.questions.splice(board.target.question.num, 1);
+						this.save();
 					}
-					board.lessonNodeArray.splice(board.target.question.num, 1);
-					cat.questions.splice(board.target.question.num, 1);
-					this.save();
 				}
+				
 			}
 			
 		}

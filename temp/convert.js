@@ -87,12 +87,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 							document.body.appendChild(a);
 							a.click();
 							document.body.removeChild(a);
-							fileInput.value ="";
+							window.location.reload();
 						});
 						
 					}
 				}
-				
 
 				// Get the case file
 				totalCB++;

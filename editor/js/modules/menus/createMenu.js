@@ -34,47 +34,62 @@ function CreateMenu(pSection){
     };
 	var page = this;
     create.onclick = function(){
+    	
     	page.next = NEXT.BOARD;
+    	create.disabled = true;
+    	back.disabled = true;
     	
-    	// Set the inputs to the current case
-    	var curCase = caseFile.getElementsByTagName("case")[0];
-    	curCase.setAttribute('caseName', nameInput.value);
-    	curCase.setAttribute('description', descriptionInput.innerHTML);
-    	curCase.setAttribute('conclusion', conclusionInput.innerHTML);
-    	var catList = curCase.getElementsByTagName('categoryList')[0];
-    	catList.setAttribute('categoryCount', '1');
-    	catList.innerHTML = '<element>'+cat1Input.value+'</element>';
-    	var cat1 = caseFile.createElement('category');
-    	cat1.setAttribute('categoryDesignation', '0');
-    	cat1.setAttribute('questionCount', '0');
-    	curCase.appendChild(cat1);
-    	
-    	// Save the changes to local storage
-    	localStorage['caseName'] = nameInput.value+".ipar";
-    	var caseData = JSON.parse(localStorage['caseDataCreate']);
-    	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-		localStorage['caseDataCreate'] = JSON.stringify(caseData);
-    	page.close();
+    	var request = new XMLHttpRequest();
+    	request.responseType = "arraybuffer";
+    	request.onreadystatechange = function() {
+    	  if (request.readyState == 4 && request.status == 200) {
+    		  	
+    			// Create a worker for unzipping the file
+    			var zipWorker = new Worker("../lib/unzip.js");
+    			zipWorker.onmessage = function(message) {
+    				
+    				// Get the case
+    				var caseData = message.data;
+    				var caseFile = Utilities.getXml(caseData.caseFile);
+    		    	
+    		    	// Set the inputs to the current case
+    		    	var curCase = caseFile.getElementsByTagName("case")[0];
+    		    	curCase.setAttribute('caseName', nameInput.value);
+    		    	curCase.setAttribute('description', descriptionInput.innerHTML);
+    		    	curCase.setAttribute('conclusion', conclusionInput.innerHTML);
+    		    	var catList = curCase.getElementsByTagName('categoryList')[0];
+    		    	catList.setAttribute('categoryCount', '1');
+    		    	catList.innerHTML = '<element>'+cat1Input.value+'</element>';
+    		    	var cat1 = caseFile.createElement('category');
+    		    	cat1.setAttribute('categoryDesignation', '0');
+    		    	cat1.setAttribute('questionCount', '0');
+    		    	curCase.appendChild(cat1);
+    		    	
+    		    	// Save the changes to local storage
+    		    	localStorage['caseName'] = nameInput.value+".ipar";
+    		    	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
+    				localStorage['caseDataCreate'] = JSON.stringify(caseData);
+
+    		    	page.close();
+    		    	
+    			}
+    			
+    			// Start the worker
+    			zipWorker.postMessage(request.response);
+    	  }
+    	};
+    	request.open("GET", "base.ipar", true);
+    	request.send();
     };
 }
 
 var p = CreateMenu.prototype;
 
-p.open = function(pNewProfile){
-
-	
-	// Save the status of new profile for the procceed button
-	newProfile = pNewProfile;
+p.open = function(){
 	
 	// Make the menu visible
 	section.style.display = '';
-	
-	// The case data and the title element
-	var caseData = JSON.parse(localStorage['caseDataCreate']);
-	
-	// Get the case
-	caseFile = Utilities.getXml(caseData.caseFile);
-		
+
 	// Make it so that create is disabled until you at least have a name and 1st cat
 	var checkProceed = function(){
 		if(nameInput.value=="" ||

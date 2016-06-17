@@ -57,7 +57,7 @@ p.act = function(gameScale, pMouseState, dt) {
 			
 			// update each connection's connection number
 			for (var j = 0; j < activeNode.question.connections.length; j++)
-				this.lessonNodeArray[activeNode.question.connections[j] - 1].connections++;
+				this.lessonNodeArray[Math.abs(activeNode.question.connections[j]) - 1].connections++;
 			
 			// Update the node's state
 			activeNode.currentState = activeNode.question.currentState;
@@ -220,6 +220,9 @@ p.draw = function(gameScale){
         
         // draw lines
         for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
+        	
+        	// Don't draw negative connections
+        	if(this.lessonNodeArray[i].question.connections[j]<0)continue;
         	
         	// -1 becase node connection index values are 1-indexed but connections is 0-indexed
 			if (this.lessonNodeArray[this.lessonNodeArray[i].question.connections[j] - 1].question.currentState==Question.SOLVE_STATE.HIDDEN) continue;

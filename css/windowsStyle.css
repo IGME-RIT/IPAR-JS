@@ -443,11 +443,3 @@ select:hover {
 .addressInfo {
 	color: lightGray;
 }
-
-.catPrompt {
-	position: fixed;
-	top: 40vh;
-	left: 40vw;
-	width: 5vw;
-	height: 5vh;
-}

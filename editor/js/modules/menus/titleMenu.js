@@ -26,9 +26,9 @@ function TitleMenu(pSection){
 	loadButton.onclick = function(){
 		if(localStorage['caseDataCreate'] && !confirm("Are you sure you want to start a new case? Your autosave data will be lost!"))
 			return;
-		loadInput.click.bind(loadInput);
+		loadInput.click();
 	}
-	loadInput.addEventListener('change', this.loadFile.bind(this), false);
+	loadInput.onchange = this.loadFile.bind(this);
 	continueButton.onclick = this.close.bind(this);
 	menuButton.onclick = function(){window.location.href = "../index.html";};
 }
@@ -51,6 +51,7 @@ p.open = function(){
 	loadButton.disabled = false;
 	loadInput.disabled = false;
 	menuButton.disabled = false;
+	createButton.disabled = false;
 	
 }
 
@@ -59,37 +60,9 @@ p.create = function(){
 	if(localStorage['caseDataCreate'] && !confirm("Are you sure you want to start a new case? Your autosave data will be lost!"))
 		return;
 	
-	// Set the button to disabled so that it can't be pressed while loading
-	loadButton.disabled = true;
-	loadInput.disabled = true;
-	createButton.disabled = true;
-	continueButton.disabled = true;
-	continueButton.disabled = true;
-	
-	var page = this;
-	var request = new XMLHttpRequest();
-	request.responseType = "arraybuffer";
-	request.onreadystatechange = function() {
-	  if (request.readyState == 4 && request.status == 200) {
-		  	
-			// Create a worker for unzipping the file
-			var zipWorker = new Worker("../lib/unzip.js");
-			zipWorker.onmessage = function(message) {
-				
-				// Save the base url to local storage
-				localStorage['caseDataCreate'] = JSON.stringify(message.data);
-				
-				// go to the next page
-				page.next = NEXT.CREATE;
-				page.close();
-			}
-			
-			// Start the worker
-			zipWorker.postMessage(request.response);
-	  }
-	};
-	request.open("GET", "base.ipar", true);
-	request.send();
+	// go to the next page
+	this.next = NEXT.CREATE;
+	this.close();
 	
 }
 
@@ -105,7 +78,9 @@ p.loadFile = function(event){
 	// Set the button to disabled so that it can't be pressed while loading
 	loadButton.disabled = true;
 	loadInput.disabled = true;
+	menuButton.disabled = true;
 	createButton.disabled = true;
+	continueButton.disabled = true;
 	
 	// Create a reader and read the zip
 	var page = this;
