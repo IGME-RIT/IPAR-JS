@@ -95,7 +95,6 @@ function saveIPAR() {
 	zip.file("caseFile.ipardata", caseData.caseFile);
 	zip.file("saveFile.ipardata", caseData.saveFile);
 	var submitted = zip.folder('submitted');
-	console.log(caseData.submitted);
 	for (var file in caseData.submitted) {
 		if (!caseData.submitted.hasOwnProperty(file)) continue;
 		var start = caseData.submitted[file].indexOf("base64,")+"base64,".length;

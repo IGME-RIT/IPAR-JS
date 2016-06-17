@@ -2,9 +2,25 @@ var server = require('http').createServer(),
 		express = require('express'),
 		app = express(),
 		port = 80,
-		multer  = require('multer');
+		multer  = require('multer'),
+		fs = require('fs');
 var resources = [];
 var images = [];
+
+fs.readdir('build/image', function(err, files){
+	if(err)
+		console.log(err);
+	else
+		for(var i=0;i<files.length;i++)
+			images.push(files[i].substr(0, files[i].lastIndexOf('.')));
+});
+fs.readdir('build/resource', function(err, files){
+	if(err)
+		console.log(err);
+	else
+		for(var i=0;i<files.length;i++)
+			resources.push(files[i].substr(0, files[i].lastIndexOf('.')));
+});
 
 var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 function newFileName(){

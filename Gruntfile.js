@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['resource/*', 'image/*', '*.html', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          src: ['resource/*', 'image/*', '*.html', 'temp/*.js', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           dest: 'build/',
           filter: 'isFile'
         }]
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         tasks: ['browserify:game', 'browserify:editor']
       },
       other: {
-          files: ['**/*.html', '*.ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          files: ['resource/*', 'image/*', '*.html', 'temp/*.js', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           tasks: ['copy']
       },
       livereload: {
@@ -63,14 +63,10 @@ module.exports = function(grunt) {
       editor: {
           src: 'build/editor/temp/bundle.js',
           dest: 'build/editor/bundle.min.js'
-      }
-    },
-    connect: {
-      livereload: {
-        options: {
-          open: true,
-          base: 'build'
-        }
+      },
+      convert:{
+    	  src: 'build/temp/convert.js',
+    	  dest: 'build/convert.min.js'
       }
     }
   });
@@ -80,7 +76,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-connect');
 
-  grunt.registerTask('default', ["clean", "copy", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor",  "connect", "watch"]);
+  grunt.registerTask('default', ["clean", "copy", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "uglify:convert", "watch"]);
 };

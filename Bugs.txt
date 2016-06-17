@@ -1,3 +1,7 @@
 CSS/HTML Fixes! (Resources on Editor, File Upload button in game).
-Add load previous images/resources on server start. (check for duplicates on upload and if so don't upload but return the duplicate).
-Create converter from old case files.
+Issue with ow the new board indicator appears.
+Freezes on switch baords while displaying new board.
+Issue on continue with files sometimes? (Doesn't matter since it will be redone??? read below \/)
+Make submitted files upload to server using session uuid.
+check for duplicates on upload and if so don't upload but return the duplicate (too complicated, not worth it or maybe worth it??).
+ANSWERING WRONG STILL MARKS AS CORRECT!!!!!!
