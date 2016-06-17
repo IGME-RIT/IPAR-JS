@@ -257,7 +257,7 @@ p.createAnswerWindow = function(xml, answers){
 	    
 	    // Create the events for the answers
 	    for(var i=0;i<this.answers.length;i++){
-		  if(this.answers[i].className == "wrong"){
+		  if(this.answers[i].className == "answer wrong"){
 			this.answers[i].num = i;
 	        this.answers[i].onclick = function(){
 	          this.disabled = true;

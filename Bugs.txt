@@ -5,3 +5,4 @@ Issue on continue with files sometimes? (Doesn't matter since it will be redone?
 Make submitted files upload to server using session uuid.
 check for duplicates on upload and if so don't upload but return the duplicate (too complicated, not worth it or maybe worth it??).
 ANSWERING WRONG STILL MARKS AS CORRECT!!!!!!
+Converter should make sure case file exists first and if not alert and exit.
