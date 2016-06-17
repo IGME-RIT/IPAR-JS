@@ -3,7 +3,8 @@ var server = require('http').createServer(),
 		app = express(),
 		port = 80,
 		multer  = require('multer'),
-		fs = require('fs');
+		fs = require('fs'),
+		favicon = require('serve-favicon');
 var resources = [];
 var images = [];
 
@@ -60,6 +61,7 @@ function imageFilter (req, file, cb) {
 
 app.set('view engine', 'ejs');
 app.use(express.static('build'));
+app.use(favicon('favicon.ico'));
 
 // Page for testing outputs
 app.post('/test', function(req, res) {
