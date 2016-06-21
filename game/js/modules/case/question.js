@@ -38,6 +38,8 @@ function Question(xml, resources, windowDiv, num){
     //console.log(xml);
     this.imageLink = xml.getAttribute("imageLink");
     this.feedbacks = xml.getElementsByTagName("feedback");
+    console.log(xml.getElementsByTagName("questionName")[0].innerHTML);
+    console.log(this.feedbacks);
     var scale = xml.getAttribute("scale");
     if(scale==="" || !scale)
     	this.scale = 1;
@@ -86,12 +88,13 @@ p.showPrevSubmittedFiles = function(files) {
 }
 
 p.wrongAnswer = function(num){
-
+	
   // If feeback display it
 	if(this.feedbacks.length>0)
 		this.feedback.innerHTML = '"'+String.fromCharCode(num + "A".charCodeAt())+
 											'" is not correct <br/>&nbsp;<span class="feedbackI">'+
 											this.feedbacks[num].innerHTML+'</span><br/>';
+
 	if(this.taskContent)
 		this.taskContent.scrollTop = this.taskContent.scrollHeight;
 }
@@ -102,8 +105,6 @@ p.correctAnswer = function(){
 	if(this.answers)
 		for(var i=0;i<this.answers.length;i++)
 			this.answers[i].disabled = true;
-	if(this.taskContent)
-		this.taskContent.scrollTop = this.taskContent.scrollHeight;
 	
 	// If feedback display it
 	if(this.feedbacks.length>0)
@@ -138,6 +139,9 @@ p.correctAnswer = function(){
 		this.proceedElement.style.display = "block"; // animate proceed button
 	}
   }
+  
+	if(this.taskContent)
+		this.taskContent.scrollTop = this.taskContent.scrollHeight;
 	
 }
 

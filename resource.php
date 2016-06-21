@@ -15,6 +15,7 @@ if($_FILES["resource"]){
 		echo $new_resource . $extension;
         return true;
     }
+    echo "Error Moving temp file! ";
 }
 
 $upload_value = ini_get("upload_max_filesize");
