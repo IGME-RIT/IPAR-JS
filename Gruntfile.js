@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['resource/*', 'image/*', '*.html', 'htaccess', 'favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          src: ['resource/*', 'image/*', '*.html','favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           dest: 'ipar/',
           filter: 'isFile'
         }]
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'uglify:convert']
       },
       other: {
-          files: ['resource/*', 'image/*', '*.html', '.htaccess', 'favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          files: ['resource/*', 'image/*', '*.html', 'favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           tasks: ['copy']
       },
       livereload: {

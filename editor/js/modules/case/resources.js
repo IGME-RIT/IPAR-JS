@@ -235,8 +235,8 @@ p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, ind
 					if (request.readyState == 4 && request.status == 200) {
 						for(var i=0;i<buttons.length;i++)
 							buttons[i].disabled = false;
-						if(request.responseText==="404")
-							addressInfo.innerHTML = "Error Uploading File! File size limit is 50MB!";
+						if(request.responseText.match(/^error.*/i))
+							addressInfo.innerHTML = request.responseText;
 						else{
 							resources.newLink = window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/resource/"+request.responseText;
 							addressInfo.innerHTML = resources.newLink;
