@@ -47,6 +47,7 @@ p.open = function(){
 	loadButton.disabled = false;
 	loadInput.disabled = false;
 	demoButton.disabled = false;
+	menuButton.disabled = false;
 	
 }
 
@@ -110,6 +111,8 @@ p.loadFile = function(event){
 	loadButton.disabled = true;
 	loadInput.disabled = true;
 	demoButton.disabled = true;
+	continueButton.disabled = true;
+	menuButton.disabled = true;
 	
 	// Create a reader and read the zip
 	var page = this;

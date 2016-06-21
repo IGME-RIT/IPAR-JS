@@ -3,15 +3,15 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     clean: {
       build: {
-    	    src: ['build', '!build/.git/**/*', '!build/resource/*', '!build/image/*']
+    	    src: ['ipar', 'temp']
       }
     },
     copy: {
       main: {
         files: [{
           expand: true,
-          src: ['resource/*', 'image/*', '*.html', 'temp/*.js', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
-          dest: 'build/',
+          src: ['resource/*', 'image/*', '*.html', 'htaccess', 'favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          dest: 'ipar/',
           filter: 'isFile'
         }]
       }
@@ -19,17 +19,17 @@ module.exports = function(grunt) {
     watch: {
       js: {
         files: [
-          ['game/js/**/*.js', 'editor/js/**/*.js'],
+          ['game/js/**/*.js', 'editor/js/**/*.js', 'convert.js'],
           'Gruntfile.js'
         ],
-        tasks: ['browserify:game', 'browserify:editor']
+        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'uglify:convert']
       },
       other: {
-          files: ['resource/*', 'image/*', '*.html', 'temp/*.js', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          files: ['resource/*', 'image/*', '*.html', '.htaccess', 'favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           tasks: ['copy']
       },
       livereload: {
-        files: ['build/**/*'],
+        files: ['ipar/**/*'],
         options: {
           livereload: true
         }
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     browserify: {
       game: {
     	  src: ['game/js/**/*.js'],
-          dest: 'build/game/temp/bundle.js',
+          dest: 'temp/game.js',
           options: {
               browserifyOptions: {
                   debug: true
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
       },
       editor: {
     	  src: ['editor/js/**/*.js'],
-  	    dest: 'build/editor/temp/bundle.js',
+  	    dest: 'temp/editor.js',
   	    options: {
   	        browserifyOptions: {
   	            debug: true
@@ -57,17 +57,25 @@ module.exports = function(grunt) {
     },
     uglify: {
       game: {
-          src: 'build/game/temp/bundle.js',
-          dest: 'build/game/bundle.min.js'
+          src: 'temp/game.js',
+          dest: 'ipar/game/game.min.js'
       },
       editor: {
-          src: 'build/editor/temp/bundle.js',
-          dest: 'build/editor/bundle.min.js'
+          src: 'temp/editor.js',
+          dest: 'ipar/editor/editor.min.js'
       },
       convert:{
-    	  src: 'build/temp/convert.js',
-    	  dest: 'build/convert.min.js'
+    	  src: 'convert.js',
+    	  dest: 'ipar/convert.min.js'
       }
+    },
+    php: {
+    	dist: {
+    		options: {
+	          open: true,
+	          base: 'ipar'
+	        }
+        }
     }
   });
 
@@ -75,7 +83,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-php');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ["clean", "copy", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "uglify:convert", "watch"]);
+  grunt.registerTask('default', ["clean", "copy", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "uglify:convert", "php", "watch"]);
 };

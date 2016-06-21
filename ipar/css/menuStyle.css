@@ -1,0 +1,94 @@
+body { 
+	background-color: #15718F;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.menu {
+	width: 100vw;
+	height: 100vh;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	text-align:center;
+	color: white;
+}
+
+.menuButton {
+	display:flex;
+	background-color: #15718F;
+	color: white;
+	width: 20vw;
+	height: 5vh;
+	margin: 1vh 0;
+	border: 3px outset lightGrey;
+    text-decoration: none;
+	text-align:center;
+	justify-content:center;
+	align-items:center;
+}
+
+.menuButton:hover{
+	cursor: default;
+	background-color: #3591AF;
+}
+
+.menuButton:disabled {
+	background-color: #F8F8FF;
+	color: #B89880;
+}
+
+.inline {
+	display: inline;
+}
+
+.bottom {
+	position: relative;
+	top: 15vh;
+}
+
+form{
+	text-align: left;
+}
+
+form input{
+	width: 100%;
+}
+
+.logo {
+	position: fixed;
+	top: 75vh;
+	left: 85vw;
+	width: 10vw;
+}
+
+#load-input { display: none; }
+
+#left-content {
+	float: left;
+	padding: 1vh 1vw;
+	height: 40vh;
+}
+
+#right-content {
+	float: right;
+	padding: 1vh 1vw;
+	height: 40vh;
+}
+
+#description-box {
+	background-color: white;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	color: #2494C5;
+	width: 25vw;
+	height: 33vh;
+	padding: 1vh 1vw;
+	text-align: left;
+}
+
+#description {
+	padding: 0;
+	margin: 0;
+}

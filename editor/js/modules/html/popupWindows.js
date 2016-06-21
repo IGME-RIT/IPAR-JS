@@ -96,7 +96,7 @@ m.imagesEditor = '\
 		</div>\
 		<br>\
 		<input type="file" style="display:none;"/>\
-		<button class="thirdButton">Cancel</button><button class="thirdButton">Upload Image</button><button class="thirdButton">Import Image</button>\
+		<button class="thirdButton">Close</button><button class="thirdButton">Upload Image</button><button class="thirdButton">Import Image</button>\
 	</div>\
 </div>\
 ';

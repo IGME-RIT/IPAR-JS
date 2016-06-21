@@ -211,6 +211,7 @@ function game(section, baseScale){
 	this.activeBoardIndex = loadData.category;
 	this.active = true;
 	this.boardArray[this.activeBoardIndex].show();
+	this.boardArray[this.activeBoardIndex].button.className = "active";
 	zoomSlider.value = -this.getZoom();
 	
 	// Setup the save button

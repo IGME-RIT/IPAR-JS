@@ -87,6 +87,16 @@ function game(section, baseScale){
 	this.categories = loadData.categories;
 	this.createLessonNodes(section);
 	
+	// Create the final button
+	var finalButton = document.createElement("button");
+	finalButton.innerHTML = "Close Case";
+	if(!this.boardArray[this.boardArray.length-1].finished)
+		finalButton.disabled = true;
+	finalButton.onclick = function(){
+		game.submit();
+	};
+	this.bottomBar.appendChild(finalButton);
+	
 	// Display the current board
 	this.activeBoardIndex = loadData.category;
 	this.active = true;
@@ -103,7 +113,7 @@ var p = game.prototype;
 
 p.createLessonNodes = function(section){
 	this.boardArray = [];
-	var bottomBar = document.querySelector('#'+section.id+' #bottomBar');
+	this.bottomBar = document.querySelector('#'+section.id+' #bottomBar');
 	for(var i=0;i<this.categories.length;i++){
 		// initialize empty
 		
@@ -130,7 +140,7 @@ p.createLessonNodes = function(section){
 		}})(i);
 		if(i!=0 && !this.boardArray[i-1].finished)
 			button.disabled = true;
-		bottomBar.appendChild(button);
+		this.bottomBar.appendChild(button);
 		this.boardArray[i].button = button;
 		var game = this;
 		this.boardArray[i].updateNode = function(){game.updateNode();};
@@ -371,6 +381,10 @@ p.nextFileInSaveStack = function(caseData){
 		FileManager.addNewFilesToSystem(caseData, this.saveFiles[0], this.nextFileInSaveStack.bind(this));
 	}
 	this.saveFiles.shift();
+}
+
+p.submit = function(){
+	
 }
 
 module.exports = game;

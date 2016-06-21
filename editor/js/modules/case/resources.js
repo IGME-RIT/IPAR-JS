@@ -165,9 +165,10 @@ p.edit = function(index, callback){
 	}
 	
 	// Setup combo box
-	var updateEditInfo = this.updateEditInfo.bind(this, type, buttons, editInfo.getElementsByClassName("addressTag")[0], editInfo.getElementsByClassName("addressInfo")[0], editInfo.getElementsByClassName("address")[0], index);
-	updateEditInfo();
-	type.onchange = updateEditInfo;
+	this.updateEditInfo(type, buttons, editInfo.getElementsByClassName("addressTag")[0], editInfo.getElementsByClassName("addressInfo")[0], editInfo.getElementsByClassName("address")[0], index);
+	editInfo.getElementsByTagName("select")[0].onchange = function(){
+		resources.updateEditInfo(resources.windowDiv.getElementsByTagName("select")[0], resources.windowDiv.getElementsByTagName("button"), resources.windowDiv.getElementsByClassName("addressTag")[0], resources.windowDiv.getElementsByClassName("addressInfo")[0], resources.windowDiv.getElementsByClassName("address")[0], index);
+	};
 	
 	// Setup cancel button
 	buttons[2].onclick = function(){
@@ -199,6 +200,10 @@ p.edit = function(index, callback){
 }
 
 p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, index){
+
+	if(!this.newLink)
+		this.newLink = "";
+	
 	if(Number(type.value)==0){
 		addressTag.innerHTML = "Refrence File";
 		address.value = "";
@@ -208,30 +213,38 @@ p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, ind
 		addressInfo.innerHTML = this.newLink;
 		buttons[0].style.display = "";
 		buttons[1].style.display = "";
-		buttons[0].onclick = address.click.bind(address);
 		var resources = this;
+		
+		// Setup View button
 		buttons[1].onclick = function(){
 			console.log(resources.newLink);
 			if(resources.newLink && resources.newLink!="")
 				window.open(resources.newLink,'_blank');
 		};
+		
+		// Setup input button
+		buttons[0].onclick = address.click.bind(address);
 		address.onchange = function(){
 			if(address.files.length>0){
 				for(var i=0;i<buttons.length;i++)
 					buttons[i].disabled = true;
-				var imageData = new FormData();
-				imageData.append('resource', address.files[0], address.files[0].name);
+				var resourceData = new FormData();
+				resourceData.append('resource', address.files[0], address.files[0].name);
 				var request = new XMLHttpRequest();
 				request.onreadystatechange = function() {
 					if (request.readyState == 4 && request.status == 200) {
 						for(var i=0;i<buttons.length;i++)
 							buttons[i].disabled = false;
-						resources.newLink = window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/resource/"+request.responseText;
-						addressInfo.innerHTML = resources.newLink;
+						if(request.responseText==="404")
+							addressInfo.innerHTML = "Error Uploading File! File size limit is 50MB!";
+						else{
+							resources.newLink = window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/resource/"+request.responseText;
+							addressInfo.innerHTML = resources.newLink;
+						}
 					}
 				};
-				request.open("POST", "../resource", true);
-				request.send(imageData);
+				request.open("POST", "../resource.php", true);
+				request.send(resourceData);
 				addressInfo.innerHTML = "Uploading...";
 			}
 			else{

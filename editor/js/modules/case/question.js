@@ -206,13 +206,12 @@ p.createTypeWindow = function(){
 					if (request.readyState == 4 && request.status == 200) {
 						for(var i=0;i<buttons.length;i++)
 							buttons[i].disabled = false;
-						console.log(request.responseText);
 						imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+request.responseText);
 		        		close();
 		        		button.click();
 					}
 				};
-				request.open("POST", "../image", true);
+				request.open("POST", "../image.php", true);
 				request.send(imageData);
 			}
         }

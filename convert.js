@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					    			finishedCB();
 								}
 							};
-							request.open("POST", "image", true);
+							request.open("POST", "image.php", true);
 							request.send(imageData);
 							
 							});
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					    			finishedCB();
 								}
 							};
-							request.open("POST", "resource", true);
+							request.open("POST", "resource.php", true);
 							request.send(resourceData);
 							
 							});

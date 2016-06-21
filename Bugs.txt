@@ -1,6 +1,6 @@
 CSS/HTML Fixes! (Resources on Editor, File Upload button in game).
 Issue on continue with files sometimes? (Doesn't matter since it will be redone??? read below \/)
-Make submitted files upload to server using session uuid.
+****Make submitted files upload to server using session uuid.
 check for duplicates on upload and if so don't upload but return the duplicate (too complicated, not worth it or maybe worth it??).
 Converter should make sure case file exists first and if not alert and exit.
 Load case should make sure case file exits, it is version 1 or great, and if not alert and exit.
