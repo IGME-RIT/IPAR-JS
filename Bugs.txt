@@ -1,14 +1,39 @@
-CSS/HTML Fixes! (Resources on Editor, File Upload button in game).
+Finish Game:
+IPAR Reader
+IPAR Conclusion
+IPAR Close Case
+
+CSS/HTML Fixes: (Resources on Editor, File Upload button in game).
+
+Game:
+In-game (Windows very far apart! based on outer edge not inner???)
+Scroll down is currently before added submit text (Should scroll down after).
+Answer Button overflow doesn't change button size and goes to far to sides before newline. 
+Submit File Button off center.
+
+Editor:
+Answers flow off the page (may overflow-y scroll??)
+Upload resource window (Resource text too bright, should cut off instead of float off)
+Resource Window (resource Text goes to newline instead of cut off)
+Icons too Large Resource Window???
+Resource Window In Question Buttons aren't on new line (icons too large again???)
+
+
+Files:
 Issue on continue with files sometimes? (Doesn't matter since it will be redone??? read below \/)
 ****Make submitted files upload to server using session uuid.
 check for duplicates on upload and if so don't upload but return the duplicate (too complicated, not worth it or maybe worth it??).
-Converter should make sure case file exists first and if not alert and exit.
-Load case should make sure case file exits, it is version 1 or great, and if not alert and exit.
 
-Test on Browsers
+Test on Browsers:
 Opera - No Other Issues
 Firefox - 
 IE - 
 Edge - 
 Safari - 
 Chrome - 
+
+Extra:
+Converter should make sure case file exists first and if not alert and exit.
+Load case should make sure case file exits, it is version 1 or great, and if not alert and exit.
+Fix node collsion with outer walls.
+Shouldn't be able to create questions outside the board.

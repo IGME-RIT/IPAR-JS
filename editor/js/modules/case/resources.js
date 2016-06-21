@@ -184,8 +184,12 @@ p.edit = function(index, callback){
 		var form = editInfo.getElementsByTagName("form")[0];
 		newResource.setAttribute("type", form.elements["type"].value);
 		newResource.setAttribute("text", form.elements["name"].value);
-		if(resources.newLink==null)
-			newResource.setAttribute("link", form.elements["link"].value);
+		if(resources.newLink==null){
+			var newLink = form.elements["link"].value;
+			if(!newLink.match(/^https?:\/\/.*/))
+				newLink = "http://"+newLink;
+			newResource.setAttribute("link", newLink);
+		}
 		else
 			newResource.setAttribute("link", resources.newLink);
 		resources[index] = new Resource(newResource);
