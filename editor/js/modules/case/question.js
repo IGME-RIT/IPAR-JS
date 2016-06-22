@@ -196,25 +196,29 @@ p.createTypeWindow = function(){
         }
 
         input.onchange = function(){
-        	if(input.files.length>0 && input.files[0].type.match(/^image.*/)){
-				for(var i=0;i<buttons.length;i++)
-					buttons[i].disabled = true;
-				var imageData = new FormData();
-				imageData.append('image', input.files[0], input.files[0].name);
-				var request = new XMLHttpRequest();
-				request.onreadystatechange = function() {
-					if (request.readyState == 4 && request.status == 200) {
-						for(var i=0;i<buttons.length;i++)
-							buttons[i].disabled = false;
-						imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+request.responseText);
-		        		close();
-		        		button.click();
-					}
-				};
-				request.open("POST", "../image.php", true);
-				request.send(imageData);
+        	if(input.files.length>0){
+        		if(input.files[0].type.match(/^image.*/) && input.files[0].name.match(/.*\.(jpg|jpeg|png|gif)$/i)){
+					for(var i=0;i<buttons.length;i++)
+						buttons[i].disabled = true;
+					var imageData = new FormData();
+					imageData.append('image', input.files[0], input.files[0].name);
+					var request = new XMLHttpRequest();
+					request.onreadystatechange = function() {
+						if (request.readyState == 4 && request.status == 200) {
+							for(var i=0;i<buttons.length;i++)
+								buttons[i].disabled = false;
+							imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+request.responseText);
+			        		close();
+			        		button.click();
+						}
+					};
+					request.open("POST", "../image.php", true);
+					request.send(imageData);
+        		}
+        		else
+        			alert('You can only upload images with one of the following extensions! (png, gif, jpg, jpeg)');
 			}
-        }
+        };
     	
     	
     }

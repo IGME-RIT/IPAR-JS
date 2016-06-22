@@ -230,26 +230,30 @@ p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, ind
 		buttons[0].onclick = address.click.bind(address);
 		address.onchange = function(){
 			if(address.files.length>0){
-				for(var i=0;i<buttons.length;i++)
-					buttons[i].disabled = true;
-				var resourceData = new FormData();
-				resourceData.append('resource', address.files[0], address.files[0].name);
-				var request = new XMLHttpRequest();
-				request.onreadystatechange = function() {
-					if (request.readyState == 4 && request.status == 200) {
-						for(var i=0;i<buttons.length;i++)
-							buttons[i].disabled = false;
-						if(request.responseText.match(/^error.*/i))
-							addressInfo.innerHTML = request.responseText;
-						else{
-							resources.newLink = window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/resource/"+request.responseText;
-							addressInfo.innerHTML = resources.newLink;
+				if(address.files[0].type.match(/^application\/pdf.*/) && address.files[0].name.match(/.*\.pdf$/i)){
+					for(var i=0;i<buttons.length;i++)
+						buttons[i].disabled = true;
+					var resourceData = new FormData();
+					resourceData.append('resource', address.files[0], address.files[0].name);
+					var request = new XMLHttpRequest();
+					request.onreadystatechange = function() {
+						if (request.readyState == 4 && request.status == 200) {
+							for(var i=0;i<buttons.length;i++)
+								buttons[i].disabled = false;
+							if(request.responseText.match(/^error.*/i))
+								addressInfo.innerHTML = request.responseText;
+							else{
+								resources.newLink = window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/resource/"+request.responseText;
+								addressInfo.innerHTML = resources.newLink;
+							}
 						}
-					}
-				};
-				request.open("POST", "../resource.php", true);
-				request.send(resourceData);
-				addressInfo.innerHTML = "Uploading...";
+					};
+					request.open("POST", "../resource.php", true);
+					request.send(resourceData);
+					addressInfo.innerHTML = "Uploading...";
+				}
+				else
+					alert('You can only upload pdfs as resources!');
 			}
 			else{
 				resources.newLink = "";
