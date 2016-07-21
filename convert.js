@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 							var a = document.createElement("a");
 							a.style.display = 'none';
 							a.href = "data:application/zip;base64," + base64;
-							a.download = fileInput.files[0].name;
+							a.download = fileInput.files[0].name+'w';
 							document.body.appendChild(a);
 							a.click();
 							document.body.removeChild(a);

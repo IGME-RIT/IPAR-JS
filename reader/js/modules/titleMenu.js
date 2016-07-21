@@ -30,9 +30,15 @@ var p = TitleMenu.prototype;
 p.loadFile = function(event){
 	
 	// Make sure a ipar file was choosen
-	if(!loadInput.value.endsWith("iparsubmit")){
-		alert("You didn't choose an iparsubmit file! you can only load iparsubmit files!");
-		return;
+	if(!loadInput.value.endsWith("iparsubmitw")){
+		if(loadInput.value.endsWith("iparsubmit")){
+			if(!confirm("That is an old version of a case submit file! You can still load it but all the submitted files won't have names! Is that okay?"))
+				return;
+		}
+		else{
+			alert("You didn't choose an iparsubmitw file! you can only load iparsubmitw files!");
+			return;
+		}
 	}
 
 	// Set the button to disabled so that it can't be pressed while loading

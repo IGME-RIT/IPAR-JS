@@ -71,7 +71,7 @@ p.demo = function(){
 		  	
 		 	// since the user is loading a fresh file, clear the autosave (soon we won't use this at all)
 			localStorage.setItem("autosave","");
-			localStorage['caseName'] = "demo.ipar";
+			localStorage['caseName'] = "demo.iparw";
 			
 			// Create a worker for unzipping the file
 			var zipWorker = new Worker("../lib/unzip.js");
@@ -90,7 +90,7 @@ p.demo = function(){
 			zipWorker.postMessage(request.response);
 	  }
 	};
-	request.open("GET", "demo.ipar", true);
+	request.open("GET", "demo.iparw", true);
 	request.send();
 	
 }
@@ -101,8 +101,11 @@ p.loadFile = function(event){
 		return;
 	
 	// Make sure a ipar file was choosen
-	if(!loadInput.value.endsWith("ipar")){
-		alert("You didn't choose an ipar file! you can only load ipar files!");
+	if(!loadInput.value.endsWith("iparw")){
+		if(loadInput.value.endsWith("ipar"))
+			alert("That is an old version of a case file! You can use the converter on the main menu to change it to an iparw file to use in the web ipar!");
+		else
+			alert("You didn't choose an iparw file! you can only load iparw files!");
 		return;
 	}
 	localStorage['caseName'] = event.target.files[0].name;

@@ -69,8 +69,11 @@ p.create = function(){
 p.loadFile = function(event){
 	
 	// Make sure a ipar file was choosen
-	if(!loadInput.value.endsWith("ipar")){
-		alert("You didn't choose an ipar file! you can only load ipar files!");
+	if(!loadInput.value.endsWith("iparw")){
+		if(loadInput.value.endsWith("ipar"))
+			alert("That is an old version of a case file! You can use the converter on the main menu to change it to an iparw file to use in the web ipar!");
+		else
+			alert("You didn't choose an iparw file! you can only load iparw files!");
 		return;
 	}
 	localStorage['caseNameCreate'] = event.target.files[0].name;
