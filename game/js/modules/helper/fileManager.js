@@ -10,46 +10,46 @@ var m = module.exports;
 // ********************** LOADING ************************
 
 // load the file entry and parse the xml
-m.loadCase = function(caseData, windowDiv) {
+m.loadCase = function(windowDiv, callback) {
     
-    this.categories = [];
-    this.questions = [];
 	
 	// Get the xml data
-	var xmlData = Utilities.getXml(caseData.caseFile);
-	var categories = Parser.getCategoriesAndQuestions(xmlData, windowDiv);
+    localforage.getItem('caseFile').then(function(caseFile){
+    	var xmlData = Utilities.getXml(caseFile);
+    	var categories = Parser.getCategoriesAndQuestions(xmlData, windowDiv);
+        
+    	// Get the save data
+    	localforage.getItem('saveFile').then(function(saveFile){
+			var saveData = Utilities.getXml(saveFile);
+			// alert user if there is an error
+			if (!saveData) { alert ("ERROR no save data found, or save data was unreadable"); return; }
+			// progress
+			var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
+			
+			// parse the save data if not new
+			if(stage>0){
+				localforage.getItem('submitted').then(function(submitted){
+					for(var file in submitted){
+						if (!submitted.hasOwnProperty(file)) continue;
+						file = file.substr(file.lastIndexOf("/")+1);
+						var cat = file.indexOf("-"),
+							que = file.indexOf("-", cat+1),
+							fil = file.indexOf("-", que+1);
+						categories[Number(file.substr(0, cat))].
+							questions[Number(file.substr(cat+1, que-cat-1))].
+							files[Number(file.substr(que+1, fil-que-1))] = 
+								file.substr(file.indexOfAt("-", 3)+1);
+					}
+					Parser.assignQuestionStates(categories, saveData.getElementsByTagName("question"));
+					callback(categories, stage-1);
+				});
+			}
+			else
+				callback(categories, 0);
+			
+    	});	   
+    });
 	
-	// load the most recent progress from saveFile.ipardata
-	var questions = [];
-    
-	// Get the save data
-	var saveData = Utilities.getXml(caseData.saveFile);
-	// alert user if there is an error
-	if (!saveData) { alert ("ERROR no save data found, or save data was unreadable"); return; }
-	// progress
-	var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
-	
-	// parse the save data if not new
-	if(stage>0){
-		for(var file in caseData.submitted){
-			if (!caseData.submitted.hasOwnProperty(file)) continue;
-			file = file.substr(file.lastIndexOf("/")+1);
-			var cat = file.indexOf("-"),
-				que = file.indexOf("-", cat+1),
-				fil = file.indexOf("-", que+1);
-			categories[Number(file.substr(0, cat))].
-				questions[Number(file.substr(cat+1, que-cat-1))].
-				files[Number(file.substr(que+1, fil-que-1))] = 
-					file.substr(file.indexOfAt("-", 3)+1);
-		}
-		Parser.assignQuestionStates(categories, saveData.getElementsByTagName("question"));
-	}
-	else
-		stage = 1;
-	
-	// return results
-	return {categories: categories, category:stage-1}; // maybe stage + 1 would be better because they are not zero indexed?
-			   
 }
 					 
 // ********************** SAVING ************************
@@ -81,53 +81,68 @@ m.prepareZip = function(saveButton) {
 // create IPAR file and download it
 m.saveIPAR = function(submit) {
 	
-	var caseData = JSON.parse(localStorage['caseData']);
-	
 	var zip = new JSZip();
-	zip.file("caseFile.ipardata", caseData.caseFile);
-	zip.file("saveFile.ipardata", caseData.saveFile);
-	var submitted = zip.folder('submitted');
-	for (var file in caseData.submitted) {
-		if (!caseData.submitted.hasOwnProperty(file)) continue;
-		var start = caseData.submitted[file].indexOf("base64,")+"base64,".length;
-		submitted.file(file, caseData.submitted[file].substr(start), {base64: true});
+	var done = 0;
+	var zipped = function(){
+		if(++done>=4){
+			zip.generateAsync({type:"blob"}).then(function (blob) {
+				var a = document.createElement("a");
+				var url = window.URL.createObjectURL(blob);
+				a.style.display = 'none';
+				a.href = url;
+				localforage.getItem('caseName').then(function(caseName){
+					a.download = caseName;
+					if(submit)
+						a.download += "submit";
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					setTimeout(function(){window.URL.revokeObjectURL(url);}, 0);
+				});
+			});
+		}
 	}
-
 	
-	zip.generateAsync({type:"base64"}).then(function (base64) {
-		var a = document.createElement("a");
-		a.style.display = 'none';
-		a.href = "data:application/zip;base64," + base64;
-		a.download = localStorage['caseName'];
-		if(submit)
-			a.download += "submit";
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
+	localforage.getItem('caseFile').then(function(caseFile){
+		zip.file("caseFile.ipardata", caseFile);
+		zipped();
 	});
+	localforage.getItem('saveFile').then(function(saveFile){
+		zip.file("saveFile.ipardata", saveFile);
+		zipped();
+	});
+	localforage.getItem('submitted').then(function(submitted){
+		var subFolder = zip.folder('submitted');
+		for (var file in submitted) {
+			if (!submitted.hasOwnProperty(file)) continue;
+			subFolder.file(file, submitted[file]);
+		}
+		zipped();
+	});
+	zipped();
 	
 }
 
 /***************** CACHING *******************/
 
-m.removeFilesFor = function(caseData, toRemove){
+m.removeFilesFor = function(submitted, toRemove){
 
 	var questionData = toRemove.board+"-"+toRemove.question+"-";
-	for(var file in caseData.submitted){
-		if (!caseData.submitted.hasOwnProperty(file) || !file.startsWith(questionData)) continue;
-		delete caseData.submitted[file];
+	for(var file in submitted){
+		if (!submitted.hasOwnProperty(file) || !file.startsWith(questionData)) continue;
+		delete submitted[file];
 	}
 	
 }
 
 // Adds a submitted file to the local stoarge
-m.addNewFilesToSystem = function(caseData, toStore, callback){
+m.addNewFilesToSystem = function(submitted, toStore, callback){
 
 	// Used for callback
 	var totalCB = 1, curCB = 0;
 	var finished = function(){
 		if(++curCB>=totalCB){
-			callback(caseData);
+			callback(submitted);
 		}
 	}
 	
@@ -136,11 +151,8 @@ m.addNewFilesToSystem = function(caseData, toStore, callback){
 			var fileReader = new FileReader();
 			var filename = toStore.board+"-"+toStore.question+"-"+i+"-"+toStore.files[i].name;
 			totalCB++;
-			fileReader.onload = function (event) {
-				caseData.submitted[filename] =  event.target.result;
-				finished();
-		    };
-		    fileReader.readAsDataURL(toStore.files[i]);
+			submitted[filename] =  toStore.files[i];
+			finished();
 		})();
 	}
 	

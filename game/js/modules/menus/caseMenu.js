@@ -46,30 +46,31 @@ p.open = function(){
 	// Display the section holding the menu
 	section.style.display = '';
 	
-	// Get the current case data from local storage
-	var caseData = JSON.parse(localStorage['caseData']);
-	
 	// Get the case name and description from the xml
-	var curCase = Utilities.getXml(caseData.caseFile).getElementsByTagName("case")[0];
-	title.innerHTML = curCase.getAttribute("caseName");
-	description.innerHTML = curCase.getAttribute("description");
+	localforage.getItem('caseFile').then(function(caseFile){
+		var curCase = Utilities.getXml(caseFile).getElementsByTagName("case")[0];
+		title.innerHTML = curCase.getAttribute("caseName");
+		description.innerHTML = curCase.getAttribute("description");
+	});
 	
 	// Get the case save status
-	caseStatus = Utilities.getXml(caseData.saveFile).getElementsByTagName("case")[0].getAttribute("caseStatus");
-	var statusMessage = "";
-	switch(caseStatus){
-		case '0':
-			statusMessage = "";
-			resume.disabled = true;
-			break;
-		case '1':
-			statusMessage = " [In Progress]";
-			break;
-		case '2':
-			statusMessage = " [Completed]";
-			break;
-	}
-    title.innerHTML += statusMessage;
+	localforage.getItem('saveFile').then(function(saveFile){
+		caseStatus = Utilities.getXml(saveFile).getElementsByTagName("case")[0].getAttribute("caseStatus");
+		var statusMessage = "";
+		switch(caseStatus){
+			case '0':
+				statusMessage = "";
+				resume.disabled = true;
+				break;
+			case '1':
+				statusMessage = " [In Progress]";
+				break;
+			case '2':
+				statusMessage = " [Completed]";
+				break;
+		}
+	    title.innerHTML += statusMessage;
+	});
     
 }
 

@@ -1,3 +1,4 @@
+var Utilities = require('../helper/utilities.js');
 
 // HTML
 var section;
@@ -34,10 +35,12 @@ var p = TitleMenu.prototype;
 p.open = function(){
 	
 	// Setup continue button based on local stoarge
-	if(localStorage['caseData'])
-		continueButton.disabled = false;
-	else
-		continueButton.disabled = true;
+	localforage.getItem('caseName').then(function(caseName){
+		if(caseName)
+			continueButton.disabled = false;
+		else
+			continueButton.disabled = true;
+	});
 	this.next = NEXT.BOARD;
 	
 	// Display the section holding the menu
@@ -53,95 +56,71 @@ p.open = function(){
 
 p.demo = function(){
 
-	if(localStorage['caseData'] && !confirm("Are you sure you want to start a new case? Your autosave data will be lost!"))
-		return;
-		
-	// Set the button to disabled so that it can't be pressed while loading
-	loadButton.disabled = true;
-	loadInput.disabled = true;
-	demoButton.disabled = true;
-	continueButton.disabled = true;
-	menuButton.disabled = true;
-	
 	var page = this;
-	var request = new XMLHttpRequest();
-	request.responseType = "arraybuffer";
-	request.onreadystatechange = function() {
-	  if (request.readyState == 4 && request.status == 200) {
-		  	
-		 	// since the user is loading a fresh file, clear the autosave (soon we won't use this at all)
-			localStorage.setItem("autosave","");
-			localStorage['caseName'] = "demo.iparw";
+	localforage.getItem('caseName').then(function(caseName){
+		if(!caseName || confirm("Are you sure you want to start a new case? Your autosave data will be lost!")){
 			
-			// Create a worker for unzipping the file
-			var zipWorker = new Worker("../lib/unzip.js");
-			zipWorker.onmessage = function(message) {
-				
-				// Save the base url to local storage
-				localStorage['caseData'] = JSON.stringify(message.data);
-				
-				// call the callback
-				page.next = NEXT.BOARD;
-				page.close();
-			}
+			// Set the button to disabled so that it can't be pressed while loading
+			loadButton.disabled = true;
+			loadInput.disabled = true;
+			demoButton.disabled = true;
+			continueButton.disabled = true;
+			menuButton.disabled = true;
 			
-			// Start the worker
-			zipWorker.postMessage(request.response);
-	  }
-	};
-	request.open("GET", "demo.iparw", true);
-	request.send();
+			var request = new XMLHttpRequest();
+			request.responseType = "arraybuffer";
+			request.onreadystatechange = function() {
+			  if (request.readyState == 4 && request.status == 200) {
+				Utilities.loadCaseData('demo.iparw', request.response, function(){
+					page.next = NEXT.BOARD;
+					page.close();
+				});
+			  }
+			};
+			request.open("GET", "demo.iparw", true);
+			request.send();
+			
+		}
+	})
 	
 }
 
 p.loadFile = function(event){
-	
-	if(localStorage['caseData'] && !confirm("Are you sure you want to start a new case? Your autosave data will be lost!"))
-		return;
-	
-	// Make sure a ipar file was choosen
-	if(!loadInput.value.endsWith("iparw")){
-		if(loadInput.value.endsWith("ipar"))
-			alert("That is an old version of a case file! You can use the converter on the main menu to change it to an iparw file to use in the web ipar!");
-		else
-			alert("You didn't choose an iparw file! you can only load iparw files!");
-		return;
-	}
-	localStorage['caseName'] = event.target.files[0].name;
 
-	// Set the button to disabled so that it can't be pressed while loading
-	loadButton.disabled = true;
-	loadInput.disabled = true;
-	demoButton.disabled = true;
-	continueButton.disabled = true;
-	menuButton.disabled = true;
-	
-	// Create a reader and read the zip
 	var page = this;
-	var reader = new FileReader();
-	reader.onload = function(event){
+	localforage.getItem('caseName').then(function(caseName){
+		if(!caseName || confirm("Are you sure you want to start a new case? Your autosave data will be lost!")){
 	
-		// since the user is loading a fresh file, clear the autosave (soon we won't use this at all)
-		localStorage.setItem("autosave","");
-		
-		// Create a worker for unzipping the file
-		var zipWorker = new Worker("../lib/unzip.js");
-		zipWorker.onmessage = function(message) {
+			// Make sure a ipar file was choosen
+			if(!loadInput.value.endsWith("iparw")){
+				if(loadInput.value.endsWith("ipar"))
+					alert("That is an old version of a case file! You can use the converter on the main menu to change it to an iparw file to use in the web ipar!");
+				else
+					alert("You didn't choose an iparw file! you can only load iparw files!");
+				return;
+			}
+			var zipName = event.target.files[0].name;
+	
+			// Set the button to disabled so that it can't be pressed while loading
+			loadButton.disabled = true;
+			loadInput.disabled = true;
+			demoButton.disabled = true;
+			continueButton.disabled = true;
+			menuButton.disabled = true;
 			
-			// Save the base url to local storage
-			localStorage['caseData'] = JSON.stringify(message.data);
-			
-			// Redirect to the next page
-			page.next = NEXT.CASE;
-			page.close();
-			
+			// Create a reader and read the zip
+			var reader = new FileReader();
+			reader.onload = function(event){
+			console.log("LOADING");
+				Utilities.loadCaseData(zipName, event.target.result, function(){
+					page.next = NEXT.CASE;
+					page.close();
+				});
+				
+			};
+			reader.readAsArrayBuffer(event.target.files[0]);
 		}
-		
-		// Start the worker
-		zipWorker.postMessage(event.target.result);
-		
-	};
-	reader.readAsArrayBuffer(event.target.files[0]);
+	});
 	
 }
 

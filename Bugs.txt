@@ -1,7 +1,5 @@
-Finish Game:
-IPAR Reader
-IPAR Conclusion
-IPAR Close Case
+Choosing file closes question so not saving
+Change Editor to use new file storage
 
 CSS/HTML Fixes: (Resources on Editor, File Upload button in game).
 

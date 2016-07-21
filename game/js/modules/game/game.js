@@ -82,34 +82,38 @@ function game(section, baseScale){
 	// Save the given scale
 	this.scale = baseScale;
 	
-	// Load the case file
-	var loadData = FileManager.loadCase(JSON.parse(localStorage['caseData']), document.querySelector('#'+section.id+' #window'));
-	
-	// Create the boards
-	this.categories = loadData.categories;
-	this.createLessonNodes(section);
-	
-	// Create the final button
-	this.finalButton = document.createElement("button");
-	this.finalButton.innerHTML = "Close Case";
-	if(!this.boardArray[this.boardArray.length-1].finished)
-		this.finalButton.disabled = true;
-	this.finalButton.onclick = function(){
-		if(game.active && !game.zoomout && !game.zoomin)
-			game.submit();
+	// on loading the case file
+	var onload = function(categories, startCat){
+		// Create the boards
+		this.categories = categories;
+		this.createLessonNodes(section);
+		
+		// Create the final button
+		this.finalButton = document.createElement("button");
+		this.finalButton.innerHTML = "Close Case";
+		if(!this.boardArray[this.boardArray.length-1].finished)
+			this.finalButton.disabled = true;
+		this.finalButton.onclick = function(){
+			if(game.active && !game.zoomout && !game.zoomin)
+				game.submit();
+		};
+		this.bottomBar.appendChild(this.finalButton);
+		
+		// Display the current board
+		this.activeBoardIndex = startCat;
+		this.active = true;
+		this.boardArray[this.activeBoardIndex].show();
+		this.boardArray[this.activeBoardIndex].button.className = "active";
+		this.updateNode();
+		zoomSlider.value = -this.getZoom();
+		
+		// Setup the save button
+		FileManager.prepareZip(document.querySelector('#'+section.id+' #blob'));
 	};
-	this.bottomBar.appendChild(this.finalButton);
 	
-	// Display the current board
-	this.activeBoardIndex = loadData.category;
-	this.active = true;
-	this.boardArray[this.activeBoardIndex].show();
-	this.boardArray[this.activeBoardIndex].button.className = "active";
-	this.updateNode();
-	zoomSlider.value = -this.getZoom();
+	// Load the case file
+	FileManager.loadCase(document.querySelector('#'+section.id+' #window'), onload.bind(this));
 	
-	// Setup the save button
-	FileManager.prepareZip(document.querySelector('#'+section.id+' #blob'));
 }
 
 var p = game.prototype;
@@ -173,10 +177,6 @@ p.act = function(dt){
 
     // Update the mouse state
 	this.mouseState.update(dt, this.scale*this.getZoom());
-	
-	/*if (this.mouseState.mouseClicked) {
-		//localStorage.setItem("autosave",DataParser.createXMLSaveFile(this.boardArray, false));
-	}*/
 	
     // Update the current board (give it the mouse only if not zooming)
     this.boardArray[this.activeBoardIndex].act(this.scale, (this.zoomin || this.zoomout ? null : this.mouseState), dt);
@@ -366,32 +366,34 @@ p.windowClosed = function() {
 
 p.save = function(){
 	
-	// Get the current case data
-	var caseData = JSON.parse(localStorage['caseData']);
-	caseData.saveFile = DataParser.createXMLSaveFile(this.activeBoardIndex, this.boardArray, true);
+	var saveFile = DataParser.createXMLSaveFile(this.activeBoardIndex, this.boardArray, true);
 	
 	// Autosave on window close
 	var filesToStore = this.boardArray[this.activeBoardIndex].windowClosed();
 	if (filesToStore){
 		filesToStore.board = this.activeBoardIndex;
 		this.saveFiles.push(filesToStore);
-		this.nextFileInSaveStack(caseData);
+		var game = this;
+		localforage.getItem('submitted').then(function(submitted){
+			game.nextFileInSaveStack(submitted);
+		});
 	}
-	localStorage['caseData'] = JSON.stringify(caseData);
+	
+	localforage.setItem('saveFile', saveFile);
 	
 }
 
-p.nextFileInSaveStack = function(caseData){
+p.nextFileInSaveStack = function(submitted){
 	
-	var curData = JSON.parse(localStorage['caseData']);
-	curData.submitted = caseData.submitted;
-	localStorage['caseData'] = JSON.stringify(curData);
+	var game = this;
+	localforage.setItem('submitted', submitted, function(){
+		if(game.saveFiles.length>0){
+			FileManager.removeFilesFor(submitted, game.saveFiles[0]);
+			FileManager.addNewFilesToSystem(submitted, game.saveFiles[0], game.nextFileInSaveStack.bind(game));
+		}
+		game.saveFiles.shift();
+	});
 	
-	if(this.saveFiles.length>0){
-		FileManager.removeFilesFor(caseData, this.saveFiles[0]);
-		FileManager.addNewFilesToSystem(caseData, this.saveFiles[0], this.nextFileInSaveStack.bind(this));
-	}
-	this.saveFiles.shift();
 }
 
 p.submit = function(){
@@ -401,10 +403,12 @@ p.submit = function(){
 	tempDiv.innerHTML = Windows.closeCase;
     var exportWindow = tempDiv.firstChild;
 
-	var caseNode = Utilities.getXml(JSON.parse(localStorage['caseData']).caseFile).getElementsByTagName("case")[0];
-    exportWindow.innerHTML = exportWindow.innerHTML.replace(/%title%/g, caseNode.getAttribute("caseName"))
-    												.replace(/%conclusion%/g, caseNode.getAttribute("conclusion"));
-    
+    localforage.getItem('caseFile').then(function(caseFile){
+    	var caseNode = Utilities.getXml(caseFile).getElementsByTagName("case")[0];
+        exportWindow.innerHTML = exportWindow.innerHTML.replace(/%title%/g, caseNode.getAttribute("caseName"))
+        												.replace(/%conclusion%/g, caseNode.getAttribute("conclusion"));
+    });
+	
     var game = this;
     exportWindow.getElementsByTagName("button")[0].onclick = function(){
     	FileManager.saveIPAR(true);

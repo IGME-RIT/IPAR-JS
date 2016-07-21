@@ -51,10 +51,9 @@ function ProfileMenu(pSection){
     	}
     	else
 			curCase.setAttribute("caseStatus", "1");
-    	var caseData = JSON.parse(localStorage['caseData']);
-    	caseData.saveFile = new XMLSerializer().serializeToString(curCase);
-		localStorage['caseData'] = JSON.stringify(caseData);
-    	page.close();
+    	localforage.setItem('saveFile', new XMLSerializer().serializeToString(curCase), function(){
+        	page.close();
+    	});
     };
 }
 
@@ -69,61 +68,61 @@ p.open = function(pNewProfile){
 	// Make the menu visible
 	section.style.display = '';
 	
-	// The case data and the title element
-	var caseData = JSON.parse(localStorage['caseData']);
-	
 	// Get the case
-	var saveFile = Utilities.getXml(caseData.saveFile);
-	curCase = saveFile.getElementsByTagName("case")[0];
-	
-	// Set up the page for a new profile
-	if(newProfile){
+	localforage.getItem('saveFile').then(function(saveFile){
 		
-		// Update the title
-		title.innerHTML = "Enter Profile Information";
+		curCase = Utilities.getXml(saveFile).getElementsByTagName("case")[0];
 		
-		// Display the inputs and clear the names
-		email.style.display = '';
-		firstNameInput.style.display = '';
-		lastNameInput.style.display = '';
-		firstName.innerHTML = '';
-		lastName.innerHTML = '';
+		// Set up the page for a new profile
+		if(newProfile){
+			
+			// Update the title
+			title.innerHTML = "Enter Profile Information";
+			
+			// Display the inputs and clear the names
+			email.style.display = '';
+			firstNameInput.style.display = '';
+			lastNameInput.style.display = '';
+			firstName.innerHTML = '';
+			lastName.innerHTML = '';
+			
+			
+			// Make it so that proceed is disabled until all three inputs have values
+			var checkProceed = function(){
+				if(firstNameInput.value=="" ||
+					lastNameInput.value=="" ||
+					emailInput.value=="")
+					proceed.disabled = true;
+				else
+					proceed.disabled = false;
+			};
+			firstNameInput.addEventListener('change', checkProceed);
+			lastNameInput.addEventListener('change', checkProceed);
+			emailInput.addEventListener('change', checkProceed);
+			checkProceed();
+			
+		}
+		// Set up the page for an old profile
+		else{
+			
+			// Update the title
+			title.innerHTML = "Confirm Profile Information";
+			
+			// Hide the email and textboxes and display the current name
+			email.style.display = 'none';
+			firstNameInput.style.display = 'none';
+			lastNameInput.style.display = 'none';
+			firstName.innerHTML = curCase.getAttribute("profileFirst");
+			firstName.style.fontWeight = 'bold';
+			lastName.innerHTML = curCase.getAttribute("profileLast");
+			lastName.style.fontWeight = 'bold';
+			
+			// Make procceed not disabled
+			proceed.disabled = false;
+			
+		}
 		
-		
-		// Make it so that proceed is disabled until all three inputs have values
-		var checkProceed = function(){
-			if(firstNameInput.value=="" ||
-				lastNameInput.value=="" ||
-				emailInput.value=="")
-				proceed.disabled = true;
-			else
-				proceed.disabled = false;
-		};
-		firstNameInput.addEventListener('change', checkProceed);
-		lastNameInput.addEventListener('change', checkProceed);
-		emailInput.addEventListener('change', checkProceed);
-		checkProceed();
-		
-	}
-	// Set up the page for an old profile
-	else{
-		
-		// Update the title
-		title.innerHTML = "Confirm Profile Information";
-		
-		// Hide the email and textboxes and display the current name
-		email.style.display = 'none';
-		firstNameInput.style.display = 'none';
-		lastNameInput.style.display = 'none';
-		firstName.innerHTML = curCase.getAttribute("profileFirst");
-		firstName.style.fontWeight = 'bold';
-		lastName.innerHTML = curCase.getAttribute("profileLast");
-		lastName.style.fontWeight = 'bold';
-		
-		// Make procceed not disabled
-		proceed.disabled = false;
-		
-	}
+	});
 	
 }
 
