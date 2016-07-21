@@ -29,9 +29,15 @@ function Reader(section, startData){
 	addSubFile.onchange = function(){
 		
 		// Make sure a iparsubmit file was choosen
-		if(!addSubFile.value.endsWith("iparsubmitx")){
-			alert("You didn't choose an iparsubmitx file. You can only load iparsubmitx files in the ipar reader.");
-			return;
+		if(!addSubFile.value.endsWith("iparwsubmit")){
+			if(addSubFile.value.endsWith("iparsubmit")){
+				if(!confirm("That is an old version of a case submit file! You can still load it but all the submitted files won't have names! Is that okay?"))
+					return;
+			}
+			else{
+				alert("You didn't choose an iparwsubmit file! you can only load iparwsubmit files!");
+				return;
+			}
 		}
 		addSubButton.disabled = true;
 
@@ -53,7 +59,7 @@ function Reader(section, startData){
 							var data = {};
 							data.saveFile = Utilities.getXml(saveFile);
 							data.submissions = zip.filter(function (relativePath, file){
-																return relativePath.match(/^submitted\\.*/i);
+																return relativePath.match(/^submitted[\\\/].*/i) && !relativePath.endsWith('\\') && !relativePath.endsWith('/');
 							});
 							reader.addSub(data);
 
@@ -204,7 +210,8 @@ p.update = function(){
 						(function(file){
 							var name = file.name.substr('submitted\\'.length);
 							if(!name.match(new RegExp('^'+curCat+'-'+questionNum+'.*'))) return;
-							name = name.substr('0-0-0'.length);
+							if(!name.match(/^[0-9]-[0-9]-[0-9]\..*/))
+								name = name.substr('0-0-0-'.length);
 							totalFiles++;
 							file.async("arraybuffer").then(function(buffer){
 						    	zip.file(name, buffer);

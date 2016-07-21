@@ -63,14 +63,22 @@ h2{
 	text-align: center;
 }
 
-.categoryContent #multiple-choice{
-	float: right;
+.categoryContent img{
 	height: 35px;
 	margin: 15px 0;
 }
 
-.categoryContent #multiple-choice:hover{
+.categoryContent img:hover{
 	cursor: pointer;
+}
+
+#multiple-choice{
+	float: left;
+}
+
+#exit{
+	float: right;
+	background-color: #15718F;
 }
 
 #add-submission {

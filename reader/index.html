@@ -15,7 +15,7 @@
 		<div class="buttonCol">
 			<h2>Submissions</h2>
 			<div></div>
-			<input type="file" id="file-submission" style="display:none;"/>
+			<input type="file" id="file-submission" style="display:none;" accept=".iparsubmit, .iparwsubmit"/>
 		</div>
 		<div class="buttonCol">
 			<h2>Categories</h2>
@@ -23,6 +23,7 @@
 		</div>
 		<div class="categoryContent">
 			<img id="multiple-choice" title="Hide/Show Multiple Choice Questions" src="../img/iconToolboxBlue.png" />
+			<img id="exit" onclick='window.location.reload();' title="Exit to Menu" src="../img/iconExit.png" />
 			<h2>Questions</h2>
 			<div></div>
 		</div>
@@ -33,9 +34,9 @@
 			<h1>IPAR</h1>
 			<button id="load-button" class="menuButton">Load Submission</button>
 			<button id="menu-button" class="menuButton">Back to Main Menu</button>
-			<input type="file" id="load-input" />
+			<input type="file" id="load-input"  accept=".iparsubmit, .iparwsubmit"/>
 		</div>
-		<img class="logo" src="../img/nsflogo.png" />
+		<img class="logo" src="../img/nsflogo.png"/>
     </section>
 </body>
 </html>

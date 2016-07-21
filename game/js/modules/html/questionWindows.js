@@ -1,6 +1,33 @@
 
 var m = module.exports;
 
+m.closeCase = '\
+<div class="window">\
+	<div class="title">\
+		Closing the Case\
+	</div>\
+	<div class="windowContent" style="overflow-y:scroll;">\
+		<h3><b>%title%</b></h3>\
+		<p style="height: 60%;">%conclusion%</p>\
+		<hr>\
+		<p class="center">Click the export case button below to export an .iparwsubmit type file that you can deliver to your instructor for grading.</p>\
+	  <button class="answer">Export Case</button>\
+	</div>\
+</div>\
+';
+
+m.caseClosed = '\
+<div class="window">\
+	<div class="title">\
+		Case Closed\
+	</div>\
+	<div class="windowContent" style="overflow-y:scroll;">\
+		<p class="center">Deliver the submission file to your instructor for evaluation. The quality of your findings will determine the outcome of the cases.</p>\
+	  <button class="answer" onclick="window.location.href=\'../index.html\';">Return to Main Menu</button>\
+	</div>\
+</div>\
+';
+
 m.taskWindow = '\
 <div class="window left">\
 	<div class="title">\

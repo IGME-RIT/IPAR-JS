@@ -42,8 +42,6 @@ m.loadCase = function(caseData, windowDiv) {
 				files[Number(file.substr(que+1, fil-que-1))] = 
 					file.substr(file.indexOfAt("-", 3)+1);
 		}
-		console.log(categories[1].questions[4].files);
-		console.log(categories[1].questions[4].imageLink);
 		Parser.assignQuestionStates(categories, saveData.getElementsByTagName("question"));
 	}
 	else
@@ -71,19 +69,17 @@ now we use createZip
 m.prepareZip = function(saveButton) {
 	//var content = zip.generate();
 	
-	//console.log("prepare zip");
 	
 	// code from JSZip site
 	if (JSZip.support.blob) {
-		//console.log("supports blob");
 		
 		// link download to click
-		saveButton.onclick = saveIPAR;
+		saveButton.onclick = function(){ m.saveIPAR(false); };
   	}
 }
 
 // create IPAR file and download it
-function saveIPAR() {
+m.saveIPAR = function(submit) {
 	
 	var caseData = JSON.parse(localStorage['caseData']);
 	
@@ -91,7 +87,6 @@ function saveIPAR() {
 	zip.file("caseFile.ipardata", caseData.caseFile);
 	zip.file("saveFile.ipardata", caseData.saveFile);
 	var submitted = zip.folder('submitted');
-	console.log(caseData.submitted);
 	for (var file in caseData.submitted) {
 		if (!caseData.submitted.hasOwnProperty(file)) continue;
 		var start = caseData.submitted[file].indexOf("base64,")+"base64,".length;
@@ -104,6 +99,8 @@ function saveIPAR() {
 		a.style.display = 'none';
 		a.href = "data:application/zip;base64," + base64;
 		a.download = localStorage['caseName'];
+		if(submit)
+			a.download += "submit";
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);

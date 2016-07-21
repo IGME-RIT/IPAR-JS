@@ -7,6 +7,8 @@ var DrawLib = require('../helper/drawlib.js');
 var DataParser = require('../helper/iparDataParser.js');
 var MouseState = require('../helper/mouseState.js');
 var FileManager = require('../helper/fileManager.js');
+var Windows = require('../html/questionWindows.js');
+var Utilities = require('../helper/utilities.js');
 
 //mouse management
 var mouseState;
@@ -88,14 +90,15 @@ function game(section, baseScale){
 	this.createLessonNodes(section);
 	
 	// Create the final button
-	var finalButton = document.createElement("button");
-	finalButton.innerHTML = "Close Case";
+	this.finalButton = document.createElement("button");
+	this.finalButton.innerHTML = "Close Case";
 	if(!this.boardArray[this.boardArray.length-1].finished)
-		finalButton.disabled = true;
-	finalButton.onclick = function(){
-		game.submit();
+		this.finalButton.disabled = true;
+	this.finalButton.onclick = function(){
+		if(game.active && !game.zoomout && !game.zoomin)
+			game.submit();
 	};
-	this.bottomBar.appendChild(finalButton);
+	this.bottomBar.appendChild(this.finalButton);
 	
 	// Display the current board
 	this.activeBoardIndex = loadData.category;
@@ -173,18 +176,23 @@ p.act = function(dt){
 	
 	/*if (this.mouseState.mouseClicked) {
 		//localStorage.setItem("autosave",DataParser.createXMLSaveFile(this.boardArray, false));
-		//console.log(localStorage.getItem("autosave"));
 	}*/
 	
     // Update the current board (give it the mouse only if not zooming)
     this.boardArray[this.activeBoardIndex].act(this.scale, (this.zoomin || this.zoomout ? null : this.mouseState), dt);
     
     // Check if new board available
-    if(this.activeBoardIndex < this.boardArray.length-1 &&
-    		this.boardArray[this.activeBoardIndex+1].button.disabled && 
-    		this.boardArray[this.activeBoardIndex].finished){
-    	this.boardArray[this.activeBoardIndex+1].button.disabled = false;
-    	this.prompt = true;
+    if(this.boardArray[this.activeBoardIndex].finished){
+	    if(this.activeBoardIndex < this.boardArray.length-1){
+	    	if(this.boardArray[this.activeBoardIndex+1].button.disabled){
+		    	this.boardArray[this.activeBoardIndex+1].button.disabled = false;
+		    	this.prompt = true;
+	    	}
+	    }
+	    else if(this.finalButton.disabled){
+	    	this.finalButton.disabled = false;
+	    	this.prompt = true;
+	    }
     }
 
     
@@ -210,8 +218,11 @@ p.act = function(dt){
 			
 			if(this.prompt){
 				proceedContainer.style.display = 'none';
-		    	windowDiv.innerHTML = '<div class="windowPrompt"><div><h1>The "'+this.categories[this.activeBoardIndex+1].name+'" category is now available!</h1></div></div>';
-		    	var windowPrompt = windowDiv.getElementsByClassName("windowPrompt")[0];
+				if(this.activeBoardIndex+1<this.categories.length)
+					windowDiv.innerHTML = '<div class="windowPrompt"><div><h1>The "'+this.categories[this.activeBoardIndex+1].name+'" category is now available!</h1></div></div>';
+				else
+					windowDiv.innerHTML = '<div class="windowPrompt"><div><h1>The investigation has been completed! YOu can now conclude the investigation.</h1></div></div>';
+				var windowPrompt = windowDiv.getElementsByClassName("windowPrompt")[0];
 		    	var zoomin = function(){
 		    		windowPrompt.removeEventListener('animationend', zoomin);
 					setTimeout(function(){
@@ -385,6 +396,29 @@ p.nextFileInSaveStack = function(caseData){
 
 p.submit = function(){
 	
+	// Create the export case window
+	var tempDiv = document.createElement("DIV");
+	tempDiv.innerHTML = Windows.closeCase;
+    var exportWindow = tempDiv.firstChild;
+
+	var caseNode = Utilities.getXml(JSON.parse(localStorage['caseData']).caseFile).getElementsByTagName("case")[0];
+    exportWindow.innerHTML = exportWindow.innerHTML.replace(/%title%/g, caseNode.getAttribute("caseName"))
+    												.replace(/%conclusion%/g, caseNode.getAttribute("conclusion"));
+    
+    var game = this;
+    exportWindow.getElementsByTagName("button")[0].onclick = function(){
+    	FileManager.saveIPAR(true);
+    	windowDiv.innerHTML = Windows.caseClosed;
+    }
+    
+    var exitButton = new Image();
+	exitButton.src = "../img/iconClose.png";
+	exitButton.className = "exit-button";
+    exitButton.style.left = "75vw";
+	exitButton.onclick = function() { windowDiv.innerHTML = ''; };
+	windowDiv.appendChild(exportWindow);
+	windowDiv.appendChild(exitButton);
+    
 }
 
 module.exports = game;

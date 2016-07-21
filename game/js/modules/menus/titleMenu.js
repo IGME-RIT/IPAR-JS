@@ -82,7 +82,6 @@ p.demo = function(){
 				
 				// call the callback
 				page.next = NEXT.BOARD;
-				console.log(message.data);
 				page.close();
 			}
 			

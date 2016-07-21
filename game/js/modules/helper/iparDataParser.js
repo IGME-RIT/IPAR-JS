@@ -45,12 +45,10 @@ var m = module.exports;
 
 // set the question states
 m.assignQuestionStates = function(categories, questionElems) {
-	console.log("qelems: " + questionElems.length);
 	var tally = 0; // track total index in nested loop
 	
 	// all questions
 	for (var i=0; i<categories.length; i++) {
-		console.log("CATEGORY " + i);
 		for (var j=0; j<categories[i].questions.length; j++, tally++) {
 			// store question  for easy reference
 			var q = categories[i].questions[j];
@@ -115,7 +113,7 @@ m.recreateCaseFile = function(boards) {
 	// create save file text
 	var dataToSave = m.createXMLSaveFile(boards, true);
 	
-	console.log ("saveData.ipar data created");
+	
 	
 	//if (callback) callback(dataToSave);
 	return dataToSave;

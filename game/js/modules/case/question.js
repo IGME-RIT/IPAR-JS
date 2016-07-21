@@ -35,11 +35,9 @@ function Question(xml, resources, windowDiv, num){
     this.positionPercentX = Utilities.map(parseInt(xml.getAttribute("xPositionPercent")), 0, 100, 0, Constants.boardSize.x);
     this.positionPercentY = Utilities.map(parseInt(xml.getAttribute("yPositionPercent")), 0, 100, 0, Constants.boardSize.y);
     this.revealThreshold = parseInt(xml.getAttribute("revealThreshold"));
-    //console.log(xml);
+
     this.imageLink = xml.getAttribute("imageLink");
     this.feedbacks = xml.getElementsByTagName("feedback");
-    console.log(xml.getElementsByTagName("questionName")[0].innerHTML);
-    console.log(this.feedbacks);
     var scale = xml.getAttribute("scale");
     if(scale==="" || !scale)
     	this.scale = 1;
@@ -301,7 +299,6 @@ p.createFileWindow = function(){
     this.fileInput = this.answer.getElementsByTagName("input")[0];
     var question = this;
     this.answer.getElementsByClassName("fileButton")[0].onclick = function(){
-    	console.log("FILE BUTTON CLICKED!");
     	question.fileInput.click();
     }
     this.fileInput.addEventListener("change", function(event){

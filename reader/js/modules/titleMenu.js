@@ -30,13 +30,13 @@ var p = TitleMenu.prototype;
 p.loadFile = function(event){
 	
 	// Make sure a ipar file was choosen
-	if(!loadInput.value.endsWith("iparsubmitw")){
+	if(!loadInput.value.endsWith("iparwsubmit")){
 		if(loadInput.value.endsWith("iparsubmit")){
 			if(!confirm("That is an old version of a case submit file! You can still load it but all the submitted files won't have names! Is that okay?"))
 				return;
 		}
 		else{
-			alert("You didn't choose an iparsubmitw file! you can only load iparsubmitw files!");
+			alert("You didn't choose an iparwsubmit file! you can only load iparwsubmit files!");
 			return;
 		}
 	}
@@ -53,8 +53,8 @@ p.loadFile = function(event){
 		JSZip.loadAsync(event.target.result).then(function(zip){
 			var done = false;
 			page.loadData = {submissions: zip.filter(function (relativePath, file){
-											return relativePath.match(/^submitted\\.*/i);
-							})};
+												return relativePath.match(/^submitted[\\\/].*/i) && !relativePath.endsWith('\\') && !relativePath.endsWith('/');
+									})};
 			// Save the case and save files as text
 			zip.file('saveFile.ipardata').async("string").then(function(saveFile){
 				page.loadData.saveFile = Utilities.getXml(saveFile);

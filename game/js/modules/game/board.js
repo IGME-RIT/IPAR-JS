@@ -100,7 +100,6 @@ p.act = function(gameScale, pMouseState, dt) {
 			
 			lNode.mouseOver = false;
 			
-			//console.log("node update");
 			// if hovering, show hover glow
 			/*if (pMouseState.relativePosition.x > lNode.position.x-lNode.width/2 
 			&& pMouseState.relativePosition.x < lNode.position.x+lNode.width/2
@@ -109,7 +108,6 @@ p.act = function(gameScale, pMouseState, dt) {
 			if (Utilities.mouseIntersect(pMouseState,lNode,this.boardOffset)) {
 				lNode.mouseOver = true;
 				this.target = lNode;
-				//console.log(pMouseState.hasTarget);
 			}
 		}
 		if(this.target){
@@ -187,7 +185,6 @@ p.draw = function(gameScale){
     this.ctx.translate(-this.canvas.width/2, -this.canvas.height/2);
     // move the board to where the user dragged it
     //translate to the center of the board
-    //console.log(this);
     this.ctx.translate(this.canvas.width/2 - this.boardOffset.x, this.canvas.height/2 - this.boardOffset.y);
     
 	
@@ -283,7 +280,6 @@ p.moveTowards = function(point, dt, speed){
 }
 
 p.windowClosed = function(){
-	console.log("window closed:"+this.lastQuestion.newFiles);
 	// if it is file type
 	if (this.lastQuestion.newFiles) {
 		// add a file to the file system

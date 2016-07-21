@@ -48,12 +48,10 @@ window.onload = function(e){
 	menus[PAGE.CASE].onclose = function(){
 		switch(this.next){
 		case CaseMenu.NEXT.NEW_PROFILE:
-			console.log("LOADING NEW PROFILE MENU");
 			curPage = PAGE.PROFILE;
 			menus[PAGE.PROFILE].open(true);
 			break;
 		case CaseMenu.NEXT.OLD_PROFILE:
-			console.log("LOADING OLD PROFILE MENU");
 			curPage = PAGE.PROFILE;
 			menus[PAGE.PROFILE].open(false);
 			break;
