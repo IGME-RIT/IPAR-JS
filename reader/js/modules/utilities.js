@@ -25,6 +25,16 @@ m.getXml = function(xml){
 	return xmlDoc;
 }
 
+m.getString = function(xml){
+	if (window.ActiveXObject) {
+		return xml.xml;
+	} 
+	// code for Chrome, Safari, Firefox, Opera, etc.
+	else {
+		return (new XMLSerializer()).serializeToString(xml);
+	}
+}
+
 m.replaceAll = function (str, target, replacement) {
 	while (str.indexOf(target) > -1) {
 		str = str.replace(target,replacement);

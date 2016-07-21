@@ -106,7 +106,7 @@ function saveIPAR() {
 		var a = document.createElement("a");
 		a.style.display = 'none';
 		a.href = "data:application/zip;base64," + base64;
-		a.download = localStorage['caseName'];
+		a.download = localStorage['caseNameCreate'];
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);

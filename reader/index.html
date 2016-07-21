@@ -4,8 +4,7 @@
 	<meta charset="utf-8" />
 	<title>IPAR</title>
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="../css/styles.css">
-	<link rel="stylesheet" type="text/css" href="../css/windowsStyle.css">
+	<link rel="stylesheet" type="text/css" href="../css/readerStyle.css">
 	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
     <script src="../lib/preloadjs-0.6.1.min.js"></script>
     <script src="../lib/jszip.min.js"></script>
@@ -14,18 +13,25 @@
 <body>
 	<section id="case" style="display:none;">
 		<div class="buttonCol">
+			<h2>Submissions</h2>
+			<div></div>
+			<input type="file" id="file-submission" style="display:none;"/>
 		</div>
 		<div class="buttonCol">
+			<h2>Categories</h2>
+			<div></div>
 		</div>
 		<div class="categoryContent">
+			<img id="multiple-choice" title="Hide/Show Multiple Choice Questions" src="../img/iconToolboxBlue.png" />
+			<h2>Questions</h2>
+			<div></div>
 		</div>
     </section>
     <!-- Section For Menus -->
     <section id="titleMenu" class="menu" style="display:none;">
     	<div>
 			<h1>IPAR</h1>
-			<button id="load-button" class="menuButton">Load Case</button>
-			<button id="continue-button" class="menuButton">Continue</button>
+			<button id="load-button" class="menuButton">Load Submission</button>
 			<button id="menu-button" class="menuButton">Back to Main Menu</button>
 			<input type="file" id="load-input" />
 		</div>

@@ -24,9 +24,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var fileInput = document.getElementById("fileInput");
 	var buttons = document.getElementsByClassName("menuButton");
 	
-	buttons[2].onclick = fileInput.click.bind(fileInput);
+	buttons[3].onclick = fileInput.click.bind(fileInput);
 	fileInput.onchange = function(){
-		console.log("CHANGED");
+		
 		// Check for an ipar file
 		if(fileInput.files.length!=1 || !fileInput.files[0].name.match(/.*\.ipar$/)){
 			alert("You must select an IPAR file to convert!");

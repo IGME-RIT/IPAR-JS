@@ -66,7 +66,7 @@ function CreateMenu(pSection){
     		    	curCase.appendChild(cat1);
     		    	
     		    	// Save the changes to local storage
-    		    	localStorage['caseName'] = nameInput.value+".ipar";
+    		    	localStorage['caseNameCreate'] = nameInput.value+".ipar";
     		    	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
     				localStorage['caseDataCreate'] = JSON.stringify(caseData);
 

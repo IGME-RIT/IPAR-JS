@@ -1,8 +1,6 @@
-body { 
-	background-color: #15718F;
+body {
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
 }
 
 .menu {
@@ -13,6 +11,8 @@ body {
 	align-items:center;
 	text-align:center;
 	color: white;
+	overflow: hidden;
+	background-color: #15718F;
 }
 
 .menuButton {

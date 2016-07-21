@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['resource/*', 'image/*', '*.html','favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          src: ['resource/*', 'image/*', '*.html','favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', 'reader/*.html', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           dest: 'ipar/',
           filter: 'isFile'
         }]
@@ -19,13 +19,13 @@ module.exports = function(grunt) {
     watch: {
       js: {
         files: [
-          ['game/js/**/*.js', 'editor/js/**/*.js', 'convert.js'],
+          ['game/js/**/*.js', 'editor/js/**/*.js', 'reader/js/**/*.js', 'convert.js'],
           'Gruntfile.js'
         ],
-        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'uglify:convert']
+        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'browserify:reader', 'uglify:reader', 'uglify:convert']
       },
       other: {
-          files: ['resource/*', 'image/*', '*.html', 'favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          files: ['resource/*', 'image/*', '*.html', 'favicon.ico', '*.php', '*.ipar', 'game/*.html', 'game/*.ipar', 'editor/*.html', 'editor/*ipar', 'reader/*.html', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           tasks: ['copy']
       },
       livereload: {
@@ -53,6 +53,15 @@ module.exports = function(grunt) {
   	            debug: true
   	        }
   	    }
+      },
+      reader: {
+    	  src: ['reader/js/**/*.js'],
+  	    dest: 'temp/reader.js',
+  	    options: {
+  	        browserifyOptions: {
+  	            debug: true
+  	        }
+  	    }
       }
     },
     uglify: {
@@ -63,6 +72,10 @@ module.exports = function(grunt) {
       editor: {
           src: 'temp/editor.js',
           dest: 'ipar/editor/editor.min.js'
+      },
+      reader: {
+          src: 'temp/reader.js',
+          dest: 'ipar/reader/reader.min.js'
       },
       convert:{
     	  src: 'convert.js',
@@ -86,5 +99,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-php');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ["clean", "copy", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "uglify:convert", "php", "watch"]);
+  grunt.registerTask('default', ["clean", "copy", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader", "uglify:convert", "php", "watch"]);
 };
