@@ -45,7 +45,6 @@ var m = module.exports;
 
 // set the question states
 m.assignQuestionStates = function(categories, questionElems) {
-
 	var tally = 0; // track total index in nested loop
 	
 	// all questions
@@ -82,15 +81,14 @@ m.getResources = function(xmlData){
 	return new Resources(resourceElements, xmlData);
 }
 
-// takes the xml structure and fills in the data for the question object
-m.getCategoriesAndQuestions = function(xmlData, resources, windowDiv) {
+m.getCategoriesAndQuestions = function(xmlData, saveData, resources, windowDiv) {
 	// if there is a case file
 	if (xmlData != null) {
 		
 		// Get player data 
-		firstName = xmlData.getElementsByTagName("case")[0].getAttribute("profileFirst");
-		lastName = xmlData.getElementsByTagName("case")[0].getAttribute("profileLast");
-		xmlData.getElementsByTagName("case")[0].getAttribute("profileMail");
+		firstName = saveData.getElementsByTagName("case")[0].getAttribute("profileFirst");
+		lastName = saveData.getElementsByTagName("case")[0].getAttribute("profileLast");
+		email = saveData.getElementsByTagName("case")[0].getAttribute("profileMail");
 		
 		// Then load the categories
 		var categoryElements = xmlData.getElementsByTagName("category");
@@ -110,6 +108,8 @@ m.recreateCaseFile = function(boards) {
 
 	// create save file text
 	var dataToSave = m.createXMLSaveFile(boards, true);
+	
+	
 	
 	//if (callback) callback(dataToSave);
 	return dataToSave;

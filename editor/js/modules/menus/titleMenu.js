@@ -1,3 +1,4 @@
+var Utilities = require('../helper/utilities.js');
 
 // HTML
 var section;
@@ -23,11 +24,7 @@ function TitleMenu(pSection){
 	
 	// Setup the buttons
 	createButton.onclick = this.create.bind(this);
-	loadButton.onclick = function(){
-		if(localStorage['caseDataCreate'] && !confirm("Are you sure you want to start a new case? Your autosave data will be lost!"))
-			return;
-		loadInput.click();
-	}
+	loadButton.onclick = loadInput.click.bind(loadInput);
 	loadInput.onchange = this.loadFile.bind(this);
 	continueButton.onclick = this.close.bind(this);
 	menuButton.onclick = function(){window.location.href = "../index.html";};
@@ -41,10 +38,12 @@ p.open = function(){
 	section.style.display = '';
 	
 	// Setup continue button based on local stoarge
-	if(localStorage['caseDataCreate'])
-		continueButton.disabled = false;
-	else
-		continueButton.disabled = true;
+	localforage.getItem('caseName').then(function(caseName){
+		if(caseName)
+			continueButton.disabled = false;
+		else
+			continueButton.disabled = true;
+	});
 	this.next = NEXT.BOARD;
 	
 	// Set the button to not disabled in case coming back to this menu
@@ -57,60 +56,47 @@ p.open = function(){
 
 p.create = function(){
 
-	if(localStorage['caseDataCreate'] && !confirm("Are you sure you want to start a new case? Your autosave data will be lost!"))
-		return;
-	
-	// go to the next page
-	this.next = NEXT.CREATE;
-	this.close();
+	var page = this;
+	localforage.getItem('caseName').then(function(caseName){
+		if(!caseName || confirm("Are you sure you want to start a new case? Your autosave data will be lost!")){
+			page.next = NEXT.CREATE;
+			page.close();
+		}
+	});
 	
 }
 
 p.loadFile = function(event){
 	
-	// Make sure a ipar file was choosen
-	if(!loadInput.value.endsWith("iparw")){
-		if(loadInput.value.endsWith("ipar"))
-			alert("That is an old version of a case file! You can use the converter on the main menu to change it to an iparw file to use in the web ipar!");
-		else
-			alert("You didn't choose an iparw file! you can only load iparw files!");
-		return;
-	}
-	localStorage['caseNameCreate'] = event.target.files[0].name;
-
-	// Set the button to disabled so that it can't be pressed while loading
-	loadButton.disabled = true;
-	loadInput.disabled = true;
-	menuButton.disabled = true;
-	createButton.disabled = true;
-	continueButton.disabled = true;
-	
-	// Create a reader and read the zip
 	var page = this;
-	var reader = new FileReader();
-	reader.onload = function(event){
-	
-		// since the user is loading a fresh file, clear the autosave (soon we won't use this at all)
-		localStorage.setItem("autosave","");
-		
-		// Create a worker for unzipping the file
-		var zipWorker = new Worker("lib/unzip.js");
-		zipWorker.onmessage = function(message) {
+	localforage.getItem('caseName').then(function(caseName){
+		if(!caseName || confirm("Are you sure you want to start a new case? Your autosave data will be lost!")){
+			// Make sure a ipar file was choosen
+			if(!loadInput.value.endsWith("iparw")){
+				if(loadInput.value.endsWith("ipar"))
+					alert("That is an old version of a case file! You can use the converter on the main menu to change it to an iparw file to use in the web ipar!");
+				else
+					alert("You didn't choose an iparw file! you can only load iparw files!");
+				return;
+			}
 			
-			// Save the base url to local storage
-			localStorage['caseDataCreate'] = JSON.stringify(message.data);
+			// Set the button to disabled so that it can't be pressed while loading
+			loadButton.disabled = true;
+			loadInput.disabled = true;
+			menuButton.disabled = true;
+			createButton.disabled = true;
+			continueButton.disabled = true;
 			
-			// Redirect to the next page
-			page.next = NEXT.BOARD;
-			page.close();
-			
+			var reader = new FileReader();
+			reader.onload = function(event){
+				Utilities.loadCaseData(caseName, event.target.result, function(){
+					page.next = NEXT.BOARD;
+					page.close();
+				});
+			};
+			reader.readAsArrayBuffer(event.target.files[0]);
 		}
-		
-		// Start the worker
-		zipWorker.postMessage(event.target.result);
-		
-	};
-	reader.readAsArrayBuffer(event.target.files[0]);
+	});
 	
 }
 

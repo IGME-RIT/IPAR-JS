@@ -313,7 +313,6 @@ p.updateResources = function(resourceFiles){
 			    	}
 		}
 	    for(var i=0;i<resources.length;i++){
-	    	
 	    	// Create the current resource element
     		var curResource = Windows.resource.replace("%icon%", resourceFiles[parseInt(resources[i].innerHTML)].icon);
 	    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerHTML)].title);

@@ -86,6 +86,54 @@ m.replaceAll = function (str, target, replacement) {
 	return str;
 }
 
+//Gets the files from the given case and the save and case data and then stores it to the local storage
+m.loadCaseData = function(zipName, zipBuffer, callback){
+
+	localforage.setItem('caseName', zipName, function(){
+		JSZip.loadAsync(zipBuffer).then(function(zip){
+			
+			// Function and variables used to keep track of async methods
+			var submitted = {};
+			var totalCB = 1, curCB = 0;
+			var finishedCB = function(){
+				if(++curCB>=totalCB){
+					localforage.setItem('submitted', submitted, callback);
+				}
+			};
+			
+			// Save the case and save files as text
+			totalCB += 2;
+			zip.file('caseFile.ipardata').async("string").then(function(caseFile){
+				localforage.setItem('caseFile', caseFile, finishedCB);
+			});
+			zip.file('saveFile.ipardata').async("string").then(function(saveFile){
+				localforage.setItem('saveFile', saveFile, finishedCB);
+			});
+			
+			// Write the submitted files to blobs
+			zip.folder("submitted").forEach(function (relativePath, file){
+			    totalCB++;
+				file.async("arraybuffer").then(function(buffer){
+					
+					var blob = new Blob([buffer], {type: getMimeType(relativePath)});
+	                submitted[relativePath] =  blob;
+	    			finishedCB();
+		            
+			    });
+			});
+			
+			finishedCB();
+			
+		});
+	});
+	
+}
+
+Element.prototype.innerText = function(){
+	return this.innerHTML || this.textContent;
+}
+
+
 // Gets the index of the nth search string (starting at 1, 0 will always return 0)
 String.prototype.indexOfAt = function(search, num){
 	var curIndex = 0;

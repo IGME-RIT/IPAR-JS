@@ -77,15 +77,15 @@ m.assignQuestionStates = function(categories, questionElems) {
 }
 
 // takes the xml structure and fills in the data for the question object
-m.getCategoriesAndQuestions = function(xmlData, windowDiv) {
+m.getCategoriesAndQuestions = function(xmlData, saveData, windowDiv) {
 	// if there is a case file
 	if (xmlData != null) {
 		
 		// Get player data 
-		firstName = xmlData.getElementsByTagName("case")[0].getAttribute("profileFirst");
-		lastName = xmlData.getElementsByTagName("case")[0].getAttribute("profileLast");
-		xmlData.getElementsByTagName("case")[0].getAttribute("profileMail");
-		
+		firstName = saveData.getElementsByTagName("case")[0].getAttribute("profileFirst");
+		lastName = saveData.getElementsByTagName("case")[0].getAttribute("profileLast");
+		email = saveData.getElementsByTagName("case")[0].getAttribute("profileMail");
+
 		// First load the resources
 		var resourceElements = xmlData.getElementsByTagName("resourceList")[0].getElementsByTagName("resource");
 		var resources = [];
@@ -100,7 +100,7 @@ m.getCategoriesAndQuestions = function(xmlData, windowDiv) {
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
-			categories[i] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, windowDiv);
+			categories[i] = new Category(categoryNames[i].innerText(), categoryElements[i], resources, windowDiv);
 		}
 		return categories;
 	}

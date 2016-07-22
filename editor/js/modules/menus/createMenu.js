@@ -44,15 +44,11 @@ function CreateMenu(pSection){
     	request.onreadystatechange = function() {
     	  if (request.readyState == 4 && request.status == 200) {
     		  	
-    			// Create a worker for unzipping the file
-    			var zipWorker = new Worker("../lib/unzip.js");
-    			zipWorker.onmessage = function(message) {
+    		Utilities.loadCaseData(nameInput.value+".iparw", request.response, function(){
+    			localforage.getItem('caseFile').then(function(caseFile){
+    				caseFile = Utilities.getXml(caseFile);
     				
-    				// Get the case
-    				var caseData = message.data;
-    				var caseFile = Utilities.getXml(caseData.caseFile);
-    		    	
-    		    	// Set the inputs to the current case
+    				// Set the inputs to the current case
     		    	var curCase = caseFile.getElementsByTagName("case")[0];
     		    	curCase.setAttribute('caseName', nameInput.value);
     		    	curCase.setAttribute('description', descriptionInput.innerHTML);
@@ -66,19 +62,12 @@ function CreateMenu(pSection){
     		    	curCase.appendChild(cat1);
     		    	
     		    	// Save the changes to local storage
-    		    	localStorage['caseNameCreate'] = nameInput.value+".ipar";
-    		    	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-    				localStorage['caseDataCreate'] = JSON.stringify(caseData);
-
-    		    	page.close();
-    		    	
-    			}
-    			
-    			// Start the worker
-    			zipWorker.postMessage(request.response);
+    		    	localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile), page.close.bind(page));
+    			});
+    		});
     	  }
     	};
-    	request.open("GET", "base.ipar", true);
+    	request.open("GET", "base.iparw", true);
     	request.send();
     };
 }

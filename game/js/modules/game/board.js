@@ -214,7 +214,7 @@ p.draw = function(gameScale){
 		// set line style
         this.ctx.strokeStyle = "rgba(0,0,105,0.2)";
         this.ctx.lineWidth = 1;
-        
+
         // draw lines
         for (var j=0; j<this.lessonNodeArray[i].question.connections.length; j++) {
         	

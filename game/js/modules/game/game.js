@@ -407,14 +407,13 @@ p.submit = function(){
     	var caseNode = Utilities.getXml(caseFile).getElementsByTagName("case")[0];
         exportWindow.innerHTML = exportWindow.innerHTML.replace(/%title%/g, caseNode.getAttribute("caseName"))
         												.replace(/%conclusion%/g, caseNode.getAttribute("conclusion"));
+        exportWindow.getElementsByTagName("button")[0].onclick = function(){
+        	FileManager.saveIPAR(true);
+        	windowDiv.innerHTML = Windows.caseClosed;
+        };
     });
 	
     var game = this;
-    exportWindow.getElementsByTagName("button")[0].onclick = function(){
-    	FileManager.saveIPAR(true);
-    	windowDiv.innerHTML = Windows.caseClosed;
-    }
-    
     var exitButton = new Image();
 	exitButton.src = "../img/iconClose.png";
 	exitButton.className = "exit-button";

@@ -80,11 +80,11 @@ function game(section, baseScale){
     		if(newName){
     			game.categories[game.activeBoardIndex].name = newName;
     			game.boardArray[game.activeBoardIndex].button.innerHTML = newName;
-    			var caseData = JSON.parse(localStorage['caseDataCreate']);
-    			var caseFile = Utilities.getXml(caseData.caseFile);
-    			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerHTML = newName;
-    			caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-    			localStorage['caseDataCreate'] = JSON.stringify(caseData);
+    			localforage.getItem('caseFile').then(function(caseFile){
+    				caseFile = Utilities.getXml(caseFile);
+        			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerHTML = newName;
+        			localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile));
+    			});
     		}
     	});
 		boardContext.style.display = '';
@@ -107,23 +107,16 @@ function game(section, baseScale){
 	
 	
 	document.querySelector('#'+section.id+' #board-context #edit-info').onclick = function(e){
-		var caseData = JSON.parse(localStorage['caseDataCreate']);
-		Popup.editInfo(windowDiv, Utilities.getXml(caseData.caseFile), function(newCaseFile, name){
-	    	localStorage['caseName'] =name+".ipar";
-			caseData = JSON.parse(localStorage['caseDataCreate']);
-			caseData.caseFile = new XMLSerializer().serializeToString(newCaseFile);
-			localStorage['caseDataCreate'] = JSON.stringify(caseData);
+		localforage.getItem('caseFile').then(function(caseFile){
+			Popup.editInfo(windowDiv, Utilities.getXml(caseFile), function(newCaseFile, name){
+		    	localforage.setItem('caseName', name+".iparw");
+		    	localforage.setItem('caseFile', new XMLSerializer().serializeToString(newCaseFile));
+			});
 		});
 		boardContext.style.display = '';
 	};
 	document.querySelector('#'+section.id+' #board-context #edit-resources').onclick = function(e){
 		game.resources.openWindow(windowDiv, false, function(){
-			var caseData = JSON.parse(localStorage['caseDataCreate']);
-			var caseFile = Utilities.getXml(caseData.caseFile);
-			var resourceList = caseFile.getElementsByTagName("resourceList")[0];
-			resourceList.parentNode.replaceChild(game.resources.xml(caseFile), resourceList);
-			caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-			localStorage['caseDataCreate'] = JSON.stringify(caseData);
 			game.save();
 		});
 		boardContext.style.display = '';
@@ -196,65 +189,70 @@ function game(section, baseScale){
 	
 	// Save the given scale
 	this.scale = baseScale;
+
+	// on loading the case file
+	var onload = function(categories, resources, images, startCat){
+		
+		// Create the boards
+		this.resources = resources;
+		this.categories = categories;
+		this.nodeContext = nodeContext;
+		this.boardContext = boardContext;
+		this.createLessonNodes();
+		
+		// Display the current board
+		this.activeBoardIndex = startCat;
+		this.active = true;
+		this.boardArray[this.activeBoardIndex].show();
+		zoomSlider.value = -this.getZoom();
+		
+		// Setup the save button
+		FileManager.prepareZip(document.querySelector('#'+section.id+' #blob'));
+		
+		// Create the images window 
+		var tempDiv = document.createElement("DIV");
+		tempDiv.innerHTML = PopupWindows.imagesEditor;
+	    this.imagesWindow = tempDiv.firstChild;
+	    
+	    // Fill it with the current images
+	    var content = this.imagesWindow.getElementsByClassName("imageContent")[0];
+	    for(var i=0;i<images.length;i++)
+	    	content.innerHTML += PopupWindows.image.replace(/%image%/g, images[i]);
+
+		// Add it to all the questions
+		for(var i=0;i<this.categories.length;i++)
+			for(var j=0;j<this.categories[i].questions.length;j++)
+				this.categories[i].questions[j].imagesWindow = this.imagesWindow;
+		
+	};
 	
 	// Load the case file
-	var loadData = FileManager.loadCase(JSON.parse(localStorage['caseDataCreate']), document.querySelector('#'+section.id+' #window'));
+	FileManager.loadCase(document.querySelector('#'+section.id+' #window'), onload.bind(this));
 	
-	// Create the boards
-	this.resources = loadData.resources;
-	this.categories = loadData.categories;
-	this.nodeContext = nodeContext;
-	this.boardContext = boardContext;
-	this.createLessonNodes();
-	
-	// Display the current board
-	this.activeBoardIndex = loadData.category;
-	this.active = true;
-	this.boardArray[this.activeBoardIndex].show();
-	this.boardArray[this.activeBoardIndex].button.className = "active";
-	zoomSlider.value = -this.getZoom();
-	
-	// Setup the save button
-	FileManager.prepareZip(document.querySelector('#'+section.id+' #blob'));
-	
-	
-	// Create the images window 
-	var tempDiv = document.createElement("DIV");
-	tempDiv.innerHTML = PopupWindows.imagesEditor;
-    this.imagesWindow = tempDiv.firstChild;
-    
-    // Fill it with the current images
-    var content = this.imagesWindow.getElementsByClassName("imageContent")[0];
-    for(var i=0;i<loadData.images.length;i++)
-    	content.innerHTML += PopupWindows.image.replace(/%image%/g, loadData.images[i]);
-
-	// Add it to all the questions
-	for(var i=0;i<this.categories.length;i++)
-		for(var j=0;j<this.categories[i].questions.length;j++)
-			this.categories[i].questions[j].imagesWindow = this.imagesWindow;
 }
 
 var p = game.prototype;
 
 p.addCategory = function(name){
 	
-	var caseData = JSON.parse(localStorage['caseDataCreate']);
-	var caseFile = Utilities.getXml(caseData.caseFile);
-	var cat = caseFile.createElement("category");
-	cat.setAttribute("categoryDesignation", this.categories.length);
-	cat.setAttribute("questionCount", 0);
-	caseFile.getElementsByTagName("case")[0].appendChild(cat);
-	this.categories.push(new Category(name, cat, this.resources, windowDiv));
-	this.createBoard(this.categories[this.categories.length-1], this.categories.length-1);
-	
-	caseFile.getElementsByTagName("case")[0].appendChild(cat);
-	var list = caseFile.getElementsByTagName("categoryList")[0];
-	list.setAttribute("categoryCount", this.categories.length);
-	var newElement = caseFile.createElement("element");
-	newElement.innerHTML = name;
-	list.appendChild(newElement);
-	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-	localStorage['caseDataCreate'] = JSON.stringify(caseData);
+	var game = this;
+	localforage.getItem('caseFile').then(function(caseFile){
+		caseFile = Utilities.getXml(caseFile);
+		var cat = caseFile.createElement("category");
+		cat.setAttribute("categoryDesignation", game.categories.length);
+		cat.setAttribute("questionCount", 0);
+		caseFile.getElementsByTagName("case")[0].appendChild(cat);
+		game.categories.push(new Category(name, cat, game.resources, windowDiv));
+		game.createBoard(game.categories[game.categories.length-1], game.categories.length-1);
+		
+		caseFile.getElementsByTagName("case")[0].appendChild(cat);
+		var list = caseFile.getElementsByTagName("categoryList")[0];
+		list.setAttribute("categoryCount", game.categories.length);
+		var newElement = caseFile.createElement("element");
+		newElement.innerHTML = name;
+		list.appendChild(newElement);
+		localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile));
+	});
 	
 }
 
@@ -280,25 +278,26 @@ p.moveCategory = function(dir){
 	this.boardArray[this.activeBoardIndex] = temp;
 	
 	// Finally, flip the data in the xml and save
-	var caseData = JSON.parse(localStorage['caseDataCreate']);
-	var caseFile = Utilities.getXml(caseData.caseFile);
-	var list = caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element");
-	list[this.activeBoardIndex].innerHTML = this.categories[this.activeBoardIndex].name;
-	list[this.activeBoardIndex+dir].innerHTML = this.categories[this.activeBoardIndex+dir].name;
-	var cats = caseFile.getElementsByTagName("category");
-	for(var i=0;i<cats.length;i++){
-		if(Number(cats[i].getAttribute("categoryDesignation"))==this.activeBoardIndex)
-			cats[i].setAttribute("categoryDesignation", this.activeBoardIndex+dir);
-		else if(Number(cats[i].getAttribute("categoryDesignation"))==this.activeBoardIndex+dir)
-			cats[i].setAttribute("categoryDesignation", this.activeBoardIndex);
-	}
-	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-	localStorage['caseDataCreate'] = JSON.stringify(caseData);
+	var game = this;
+	localforage.getItem('caseFile').then(function(caseFile){
+		caseFile = Utilities.getXml(caseFile);
+		var list = caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element");
+		list[game.activeBoardIndex].innerHTML = game.categories[game.activeBoardIndex].name;
+		list[game.activeBoardIndex+dir].innerHTML = game.categories[game.activeBoardIndex+dir].name;
+		var cats = caseFile.getElementsByTagName("category");
+		for(var i=0;i<cats.length;i++){
+			if(Number(cats[i].getAttribute("categoryDesignation"))==game.activeBoardIndex)
+				cats[i].setAttribute("categoryDesignation", game.activeBoardIndex+dir);
+			else if(Number(cats[i].getAttribute("categoryDesignation"))==game.activeBoardIndex+dir)
+				cats[i].setAttribute("categoryDesignation", game.activeBoardIndex);
+		}
+		localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile), function(){
+			game.boardArray[game.activeBoardIndex+dir].button.className = "active";
+			game.boardArray[game.activeBoardIndex].button.className = "";
+			game.activeBoardIndex += dir;
+		});
+	});
 	
-	
-	this.boardArray[this.activeBoardIndex+dir].button.className = "active";
-	this.boardArray[this.activeBoardIndex].button.className = "";
-	this.activeBoardIndex += dir;
 }
 
 p.deleteCategory = function() {
@@ -318,30 +317,31 @@ p.deleteCategory = function() {
 	this.categories.pop();
 	
 	// Then remove it from the xml
-	var caseData = JSON.parse(localStorage['caseDataCreate']);
-	var caseFile = Utilities.getXml(caseData.caseFile);
-	var list = caseFile.getElementsByTagName("categoryList")[0];
-	list.setAttribute("categoryCount", this.categories.length);
-	list.removeChild(list.getElementsByTagName("element")[this.activeBoardIndex]);
-	var cats = caseFile.getElementsByTagName("category");
-	for(var i=0;i<cats.length;i++){
-		if(Number(cats[i].getAttribute("categoryDesignation"))==this.activeBoardIndex){
-			cats[i].parentNode.removeChild(cats[i]);
-			break;
+	var game = this;
+	localforage.getItem('caseFile').then(function(caseFile){
+		caseFile = Utilities.getXml(caseFile);
+		var list = caseFile.getElementsByTagName("categoryList")[0];
+		list.setAttribute("categoryCount", game.categories.length);
+		list.removeChild(list.getElementsByTagName("element")[game.activeBoardIndex]);
+		var cats = caseFile.getElementsByTagName("category");
+		for(var i=0;i<cats.length;i++){
+			if(Number(cats[i].getAttribute("categoryDesignation"))==game.activeBoardIndex){
+				cats[i].parentNode.removeChild(cats[i]);
+				break;
+			}
 		}
-	}
-	cats = caseFile.getElementsByTagName("category");
-	for(var i=0;i<cats.length;i++)
-		if(Number(cats[i].getAttribute("categoryDesignation"))>this.activeBoardIndex)
-			cats[i].setAttribute("categoryDesignation", this.activeBoardIndex-1);
-	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-	localStorage['caseDataCreate'] = JSON.stringify(caseData);
-	
-	if(this.activeBoardIndex>=this.boardArray.length)
-		this.activeBoardIndex = this.boardArray.length-1;
-	this.boardArray[this.activeBoardIndex].button.className = "active";
-	this.newBoard = this.activeBoardIndex;
-	this.zoomout = true;
+		cats = caseFile.getElementsByTagName("category");
+		for(var i=0;i<cats.length;i++)
+			if(Number(cats[i].getAttribute("categoryDesignation"))>game.activeBoardIndex)
+				cats[i].setAttribute("categoryDesignation", game.activeBoardIndex-1);
+		localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile), function(){
+			if(game.activeBoardIndex>=game.boardArray.length)
+				game.activeBoardIndex = game.boardArray.length-1;
+			game.boardArray[game.activeBoardIndex].button.className = "active";
+			game.newBoard = game.activeBoardIndex;
+			game.zoomout = true;
+		});
+	});
 }
 
 p.createLessonNodes = function(){
@@ -518,21 +518,23 @@ p.windowClosed = function() {
 	var save = this.boardArray[this.activeBoardIndex].windowClosed();
 	
 	if(save){
-		var caseData = JSON.parse(localStorage['caseDataCreate']);
-		var caseFile = Utilities.getXml(caseData.caseFile);
-		if(save.xml){
-			var cat = caseFile.getElementsByTagName('category')[this.activeBoardIndex];
-			cat.replaceChild(save.xml, cat.getElementsByTagName('button')[save.num]);
-			caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-			localStorage['caseDataCreate'] = JSON.stringify(caseData);
-		}
-		else{
-			this.categories[this.activeBoardIndex].questions[save.num].xml = caseFile.getElementsByTagName('category')[this.activeBoardIndex].getElementsByTagName('button')[save.num];
-			this.categories[this.activeBoardIndex].questions[save.num].refresh();
-		}
+		var game = this;
+		localforage.getItem('caseFile').then(function(caseFile){
+			caseFile = Utilities.getXml(caseFile);
+			if(save.xml){
+				var cat = caseFile.getElementsByTagName('category')[game.activeBoardIndex];
+				cat.replaceChild(save.xml, cat.getElementsByTagName('button')[save.num]);
+				localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile), game.save.bind(game));
+			}
+			else{
+				game.categories[game.activeBoardIndex].questions[save.num].xml = caseFile.getElementsByTagName('category')[game.activeBoardIndex].getElementsByTagName('button')[save.num];
+				game.categories[game.activeBoardIndex].questions[save.num].refresh();
+				game.save();
+			}
+		});
 	}
-	
-	this.save();
+	else
+		this.save();
 	
 }
 
@@ -542,66 +544,74 @@ p.save = function(){
 	for(var i=0;i<lessonNodes.length;i++)
 		lessonNodes[i].save();
 	
-	var caseData = JSON.parse(localStorage['caseDataCreate']);
-	var caseFile = Utilities.getXml(caseData.caseFile);
-	var caseNode = caseFile.getElementsByTagName("case")[0];
-	var cat = caseNode.getElementsByTagName("category")[0];
-	while(cat){
-		caseNode.removeChild(cat);
-		cat = caseNode.getElementsByTagName("category")[0];
-	}
-	for(var i=0;i<this.categories.length;i++)
-		caseNode.appendChild(this.categories[i].xml(caseFile, i));
-	caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-	localStorage['caseDataCreate'] = JSON.stringify(caseData);
+	var game = this;
+	localforage.getItem('caseFile').then(function(caseFile){
+		caseFile = Utilities.getXml(caseFile);
+		
+		var resourceList = caseFile.getElementsByTagName("resourceList")[0];
+		resourceList.parentNode.replaceChild(game.resources.xml(caseFile), resourceList);
+		
+		var caseNode = caseFile.getElementsByTagName("case")[0];
+		var cat = caseNode.getElementsByTagName("category")[0];
+		while(cat){
+			caseNode.removeChild(cat);
+			cat = caseNode.getElementsByTagName("category")[0];
+		}
+		for(var i=0;i<game.categories.length;i++)
+			caseNode.appendChild(game.categories[i].xml(caseFile, i));
+		localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile));
+	});
 	
 }
 
 p.addQuestion = function(x, y){
 	
 	// Get the case to add the question
-	var caseData = JSON.parse(localStorage['caseDataCreate']);
-	var caseFile = Utilities.getXml(caseData.caseFile);
-	var newQuestion = caseFile.createElement('button');
-	newQuestion.setAttribute('xPositionPercent', x);
-	newQuestion.setAttribute('yPositionPercent', y);
-	newQuestion.setAttribute('scale', '1');
-	newQuestion.setAttribute('numConnections', '0');
-	newQuestion.setAttribute('numAnswers', '3');
-	newQuestion.setAttribute('correctAnswer', '0');
-	newQuestion.setAttribute('imageLink', window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+'eb1832a80fa41e395491571d4930119b.png');
-	newQuestion.setAttribute('revealThreshold', '0');
-	newQuestion.setAttribute('questionType', '2');
-	newQuestion.setAttribute('resourceCount', '0');
-	newQuestion.appendChild(caseFile.createElement('questionName'));
-	newQuestion.appendChild(caseFile.createElement('instructions'));
-	newQuestion.appendChild(caseFile.createElement('questionText'));
-	newQuestion.appendChild(caseFile.createElement('answer'));
-	newQuestion.appendChild(caseFile.createElement('answer'));
-	newQuestion.appendChild(caseFile.createElement('answer'));
-	newQuestion.appendChild(caseFile.createElement('feedback'));
-	newQuestion.appendChild(caseFile.createElement('feedback'));
-	newQuestion.appendChild(caseFile.createElement('feedback'));
-	var cats = caseFile.getElementsByTagName('category');
-	for(var i=0;i<cats.length;i++){
-		if(Number(cats[i].getAttribute("categoryDesignation"))==this.activeBoardIndex)
-		{
-			cats[i].appendChild(newQuestion);
-			break;
+	var game = this;
+	localforage.getItem('caseFile').then(function(caseFile){
+
+		caseFile = Utilities.getXml(caseFile);
+		var newQuestion = caseFile.createElement('button');
+		newQuestion.setAttribute('xPositionPercent', x);
+		newQuestion.setAttribute('yPositionPercent', y);
+		newQuestion.setAttribute('scale', '1');
+		newQuestion.setAttribute('numConnections', '0');
+		newQuestion.setAttribute('numAnswers', '3');
+		newQuestion.setAttribute('correctAnswer', '0');
+		newQuestion.setAttribute('imageLink', window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+'eb1832a80fa41e395491571d4930119b.png');
+		newQuestion.setAttribute('revealThreshold', '0');
+		newQuestion.setAttribute('questionType', '2');
+		newQuestion.setAttribute('resourceCount', '0');
+		newQuestion.appendChild(caseFile.createElement('questionName'));
+		newQuestion.appendChild(caseFile.createElement('instructions'));
+		newQuestion.appendChild(caseFile.createElement('questionText'));
+		newQuestion.appendChild(caseFile.createElement('answer'));
+		newQuestion.appendChild(caseFile.createElement('answer'));
+		newQuestion.appendChild(caseFile.createElement('answer'));
+		newQuestion.appendChild(caseFile.createElement('feedback'));
+		newQuestion.appendChild(caseFile.createElement('feedback'));
+		newQuestion.appendChild(caseFile.createElement('feedback'));
+		var cats = caseFile.getElementsByTagName('category');
+		for(var i=0;i<cats.length;i++){
+			if(Number(cats[i].getAttribute("categoryDesignation"))==game.activeBoardIndex)
+			{
+				cats[i].appendChild(newQuestion);
+				break;
+			}
 		}
-	}
-	
-	var question = new Question(newQuestion, this.resources, windowDiv, this.categories[this.activeBoardIndex].questions.length);
-	question.imagesWindow = this.imagesWindow;
-	this.categories[this.activeBoardIndex].questions.push(question);
-	var lessonNodes = this.boardArray[this.activeBoardIndex].lessonNodeArray;
-	lessonNodes.push(new LessonNode( question ) );
-	// attach question object to lesson node
-	lessonNodes[lessonNodes.length-1].question = question;
-	this.boardArray[this.activeBoardIndex].lessonNodeArray = lessonNodes;
-	
-	// Save the changes to local storage
-	this.save();
+		
+		var question = new Question(newQuestion, game.resources, windowDiv, game.categories[game.activeBoardIndex].questions.length);
+		question.imagesWindow = game.imagesWindow;
+		game.categories[game.activeBoardIndex].questions.push(question);
+		var lessonNodes = game.boardArray[game.activeBoardIndex].lessonNodeArray;
+		lessonNodes.push(new LessonNode( question ) );
+		// attach question object to lesson node
+		lessonNodes[lessonNodes.length-1].question = question;
+		game.boardArray[game.activeBoardIndex].lessonNodeArray = lessonNodes;
+		
+		// Save the changes to local storage
+		game.save();
+	});
 	
 }
 
@@ -629,11 +639,11 @@ p.checkKeyboard = function(){
 	    		if(newName){
 	    			game.categories[game.activeBoardIndex].name = newName;
 	    			game.boardArray[game.activeBoardIndex].button.innerHTML = newName;
-	    			var caseData = JSON.parse(localStorage['caseDataCreate']);
-	    			var caseFile = Utilities.getXml(caseData.caseFile);
-	    			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerHTML = newName;
-	    			caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-	    			localStorage['caseDataCreate'] = JSON.stringify(caseData);
+	    			localforage.getItem('caseFile').then(function(caseFile){
+	    				caseFile = Utilities.getXml(caseFile);
+		    			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerHTML = newName;
+	    				localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile));
+	    			})
 	    		}
 	    	});
 		}
@@ -649,23 +659,16 @@ p.checkKeyboard = function(){
 		}
 		
 		if(this.keyboardState.keyPressed[70]){ // F - Edit Case Info
-			var caseData = JSON.parse(localStorage['caseDataCreate']);
-			Popup.editInfo(windowDiv, Utilities.getXml(caseData.caseFile), function(newCaseFile, name){
-		    	localStorage['caseName'] =name+".ipar";
-				caseData = JSON.parse(localStorage['caseDataCreate']);
-				caseData.caseFile = new XMLSerializer().serializeToString(newCaseFile);
-				localStorage['caseDataCreate'] = JSON.stringify(caseData);
+			localforage.getItem('caseFile').then(function(caseFile){
+				Popup.editInfo(windowDiv, Utilities.getXml(caseFile), function(newCaseFile, name){
+					localforage.setItem('caseName', name+".ipar");
+					localforage.setItem('caseFile', new XMLSerializer().serializeToString(newCaseFile));
+				});
 			});
 		}
 		
 		if(this.keyboardState.keyPressed[82]){ // R - Edit resources
 			this.resources.openWindow(windowDiv, false, function(){
-				var caseData = JSON.parse(localStorage['caseDataCreate']);
-				var caseFile = Utilities.getXml(caseData.caseFile);
-				var resourceList = caseFile.getElementsByTagName("resourceList")[0];
-				resourceList.parentNode.replaceChild(game.resources.xml(caseFile), resourceList);
-				caseData.caseFile = new XMLSerializer().serializeToString(caseFile);
-				localStorage['caseDataCreate'] = JSON.stringify(caseData);
 				game.save();
 			});
 		}
@@ -686,8 +689,8 @@ p.checkKeyboard = function(){
 				}
 				
 				if(this.keyboardState.keyPressed[83]){ // S - Show/Hide connection
-					if(game.boardArray[game.activeBoardIndex].contextNode.question.connections.length>0){
-						game.boardArray[game.activeBoardIndex].hideConnection(game.boardArray[game.activeBoardIndex].contextNode);
+					if(board.target.question.connections.length>0){
+						game.boardArray[game.activeBoardIndex].hideConnection(board.target);
 						game.save();
 					}
 				}

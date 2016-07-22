@@ -12,15 +12,15 @@ var m = module.exports;
 // load the file entry and parse the xml
 m.loadCase = function(windowDiv, callback) {
     
-	
 	// Get the xml data
     localforage.getItem('caseFile').then(function(caseFile){
     	var xmlData = Utilities.getXml(caseFile);
-    	var categories = Parser.getCategoriesAndQuestions(xmlData, windowDiv);
-        
+
     	// Get the save data
     	localforage.getItem('saveFile').then(function(saveFile){
 			var saveData = Utilities.getXml(saveFile);
+	    	var categories = Parser.getCategoriesAndQuestions(xmlData, saveData, windowDiv);
+	    	
 			// alert user if there is an error
 			if (!saveData) { alert ("ERROR no save data found, or save data was unreadable"); return; }
 			// progress
@@ -86,18 +86,10 @@ m.saveIPAR = function(submit) {
 	var zipped = function(){
 		if(++done>=4){
 			zip.generateAsync({type:"blob"}).then(function (blob) {
-				var a = document.createElement("a");
-				var url = window.URL.createObjectURL(blob);
-				a.style.display = 'none';
-				a.href = url;
 				localforage.getItem('caseName').then(function(caseName){
-					a.download = caseName;
 					if(submit)
-						a.download += "submit";
-					document.body.appendChild(a);
-					a.click();
-					document.body.removeChild(a);
-					setTimeout(function(){window.URL.revokeObjectURL(url);}, 0);
+						caseName += "submit";
+					saveAs(blob, caseName);
 				});
 			});
 		}

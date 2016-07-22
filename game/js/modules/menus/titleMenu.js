@@ -25,7 +25,7 @@ function TitleMenu(pSection){
 	// Setup the buttons
 	demoButton.onclick = this.demo.bind(this);
 	loadButton.onclick = loadInput.click.bind(loadInput);
-	loadInput.addEventListener('change', this.loadFile.bind(this), false);
+	loadInput.onchange = this.loadFile.bind(this);
 	continueButton.onclick = this.close.bind(this);
 	menuButton.onclick = function(){window.location.href = "../index.html";};
 }
@@ -111,12 +111,10 @@ p.loadFile = function(event){
 			// Create a reader and read the zip
 			var reader = new FileReader();
 			reader.onload = function(event){
-			console.log("LOADING");
 				Utilities.loadCaseData(zipName, event.target.result, function(){
 					page.next = NEXT.CASE;
 					page.close();
 				});
-				
 			};
 			reader.readAsArrayBuffer(event.target.files[0]);
 		}

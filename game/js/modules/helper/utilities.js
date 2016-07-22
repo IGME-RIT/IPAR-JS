@@ -72,14 +72,6 @@ m.replaceAll = function (str, target, replacement) {
 	return str;
 }
 
-// Gets the index of the nth search string (starting at 1, 0 will always return 0)
-String.prototype.indexOfAt = function(search, num){
-	var curIndex = 0;
-	for(var i=0;i<num && curIndex!=-1;i++)
-		curIndex = this.indexOf(search, curIndex+1);
-	return curIndex;
-}
-
 // Gets the files from the given case and the save and case data and then stores it to the local storage
 m.loadCaseData = function(zipName, zipBuffer, callback){
 
@@ -121,4 +113,16 @@ m.loadCaseData = function(zipName, zipBuffer, callback){
 		});
 	});
 	
+}
+
+Element.prototype.innerText = function(){
+	return this.innerHTML || this.textContent;
+}
+
+//Gets the index of the nth search string (starting at 1, 0 will always return 0)
+String.prototype.indexOfAt = function(search, num){
+	var curIndex = 0;
+	for(var i=0;i<num && curIndex!=-1;i++)
+		curIndex = this.indexOf(search, curIndex+1);
+	return curIndex;
 }

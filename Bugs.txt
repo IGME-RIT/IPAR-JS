@@ -1,5 +1,8 @@
 Choosing file closes question so not saving
+not load game from editor?
+not load editor?
 Change Editor to use new file storage
+
 
 CSS/HTML Fixes: (Resources on Editor, File Upload button in game).
 
