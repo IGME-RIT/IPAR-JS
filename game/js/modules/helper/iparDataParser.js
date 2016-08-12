@@ -100,7 +100,7 @@ m.getCategoriesAndQuestions = function(xmlData, saveData, windowDiv) {
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
-			categories[i] = new Category(categoryNames[i].innerText(), categoryElements[i], resources, windowDiv);
+			categories[i] = new Category(categoryNames[i].innerXML(), categoryElements[i], resources, windowDiv);
 		}
 		return categories;
 	}
@@ -112,8 +112,6 @@ m.recreateCaseFile = function(boards) {
 
 	// create save file text
 	var dataToSave = m.createXMLSaveFile(boards, true);
-	
-	
 	
 	//if (callback) callback(dataToSave);
 	return dataToSave;

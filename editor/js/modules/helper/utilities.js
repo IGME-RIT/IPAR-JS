@@ -129,8 +129,27 @@ m.loadCaseData = function(zipName, zipBuffer, callback){
 	
 }
 
-Element.prototype.innerText = function(){
-	return this.innerHTML || this.textContent;
+Element.prototype.innerXML = function(newText){
+	if(newText==null){
+		if(this.innerHTML)
+			return this.innerHTML;
+		var innerHTML = '';
+		var XMLS = new XMLSerializer(); 
+		for(var i=0;i<this.childNodes.length;i++)
+			innerHTML += XMLS.serializeToString(this.childNodes[i]);
+		return innerHTML;
+	}
+	else{
+		if(this.innerHTML)
+			this.innerHTML = newText;
+		else{
+			var newXml = m.getXml('<wrapper>'+newText+'</wrapper>').getElementsByTagName('wrapper')[0];
+			while(this.firstChild)
+				this.removeChild(this.firstChild);
+			while(newXml.firstChild)
+				this.appendChild(newXml.firstChild);
+		}
+	}
 }
 
 

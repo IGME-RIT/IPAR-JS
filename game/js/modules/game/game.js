@@ -61,8 +61,9 @@ function game(section, baseScale){
 			if(bounds.left < e.clientX && bounds.right > e.clientX && bounds.top < e.clientY && bounds.bottom > e.clientY)
 				window = true;
 		}
-		if(!window)
-			windowDiv.innerHTML = ''; 
+		
+		if(!window && e.isTrusted && e.isPrimary!=false)
+			windowDiv.innerHTML = '';
 	};
 	
 	// Get and setup the zoom slider
@@ -81,6 +82,9 @@ function game(section, baseScale){
 	
 	// Save the given scale
 	this.scale = baseScale;
+	
+	// on case info
+	document.getElementById("infoButton").onclick = this.showInfo.bind(this);
 	
 	// on loading the case file
 	var onload = function(categories, startCat){
@@ -360,7 +364,10 @@ p.windowClosed = function() {
 	windowFilm.style.display = 'none';
 	proceedContainer.style.display = 'none';
 	
-	this.save();
+	if(!this.popup)
+		this.save();
+	else
+		this.popup = false;
 	
 }
 
@@ -399,6 +406,7 @@ p.nextFileInSaveStack = function(submitted){
 p.submit = function(){
 	
 	// Create the export case window
+	this.popup = true;
 	var tempDiv = document.createElement("DIV");
 	tempDiv.innerHTML = Windows.closeCase;
     var exportWindow = tempDiv.firstChild;
@@ -422,6 +430,35 @@ p.submit = function(){
 	windowDiv.appendChild(exportWindow);
 	windowDiv.appendChild(exitButton);
     
+}
+
+p.showInfo = function(){
+	
+	// Create the info case window
+	this.popup = true;
+	var tempDiv = document.createElement("DIV");
+	tempDiv.innerHTML = Windows.caseInfo;
+    var infoWindow = tempDiv.firstChild;
+
+    localforage.getItem('caseFile').then(function(caseFile){
+    	var caseNode = Utilities.getXml(caseFile).getElementsByTagName("case")[0];
+    	infoWindow.innerHTML = infoWindow.innerHTML.replace(/%title%/g, caseNode.getAttribute("caseName"))
+        												.replace(/%description%/g, caseNode.getAttribute("description"));
+    });
+    localforage.getItem('saveFile').then(function(saveFile){
+    	var caseNode = Utilities.getXml(saveFile).getElementsByTagName("case")[0];
+    	infoWindow.innerHTML = infoWindow.innerHTML.replace(/%email%/g, caseNode.getAttribute("profileMail"))
+        												.replace(/%name%/g, caseNode.getAttribute("profileLast")+", "+caseNode.getAttribute("profileFirst"));
+    });
+	
+    var game = this;
+    var exitButton = new Image();
+	exitButton.src = "../img/iconClose.png";
+	exitButton.className = "exit-button";
+    exitButton.style.left = "75vw";
+	exitButton.onclick = function() { windowDiv.innerHTML = ''; };
+	windowDiv.appendChild(infoWindow);
+	windowDiv.appendChild(exitButton);
 }
 
 module.exports = game;

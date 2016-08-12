@@ -82,7 +82,7 @@ function game(section, baseScale){
     			game.boardArray[game.activeBoardIndex].button.innerHTML = newName;
     			localforage.getItem('caseFile').then(function(caseFile){
     				caseFile = Utilities.getXml(caseFile);
-        			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerHTML = newName;
+        			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerXML(newName);
         			localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile));
     			});
     		}
@@ -219,6 +219,50 @@ function game(section, baseScale){
 	    for(var i=0;i<images.length;i++)
 	    	content.innerHTML += PopupWindows.image.replace(/%image%/g, images[i]);
 
+	    // Setup the uploaded images button
+	    this.imagesWindow.getElementsByTagName("button")[3].onclick = function(){
+	    	var question = game.boardArray[game.activeBoardIndex].target.question;
+	        var icon = question.typeWindow.getElementsByClassName("imageButton")[0].getElementsByTagName("img")[0];
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function() {
+				if (request.readyState == 4 && request.status == 200) {
+					
+					// Create the images window 
+					var tempDiv = document.createElement("DIV");
+					tempDiv.innerHTML = request.responseText;
+				    var uploadedWindow = tempDiv.firstChild;
+				    
+				    question.windowDiv.innerHTML = '';
+			    	question.windowDiv.appendChild(uploadedWindow);
+			        var buttons = uploadedWindow.getElementsByTagName("button");
+			        var images = uploadedWindow.getElementsByTagName("img");
+			        buttons[0].onclick = question.displayWindows.bind(question);
+			        for(var i=0;i<images.length;i+=2){
+				        (function(i){
+				        	images[i].onclick = function(){
+				        		question.imageLink = images[i].src;
+				    			question.xml.setAttribute("imageLink", images[i].src);
+				    			icon.src = images[i].src;
+				    			question.displayWindows();
+				        	}
+				        	images[i+1].onclick = function(){
+				        		if(confirm("Are you sure you want to remove this image from uploaded images? This can not be undone and any cases that currently use this image will use a default image instead!")){
+				        			var toRemove = uploadedWindow.getElementsByClassName("image")[i/2];
+				        			toRemove.parentNode.removeChild(toRemove);
+				            		close();
+				            		button.click();
+				        		}
+				        	}
+				        })(i);
+			        }
+			        
+				}
+			};
+			request.open("POST", "./preImage.php", true);
+			request.send();
+	    };
+	    
+	    
 		// Add it to all the questions
 		for(var i=0;i<this.categories.length;i++)
 			for(var j=0;j<this.categories[i].questions.length;j++)
@@ -282,8 +326,8 @@ p.moveCategory = function(dir){
 	localforage.getItem('caseFile').then(function(caseFile){
 		caseFile = Utilities.getXml(caseFile);
 		var list = caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element");
-		list[game.activeBoardIndex].innerHTML = game.categories[game.activeBoardIndex].name;
-		list[game.activeBoardIndex+dir].innerHTML = game.categories[game.activeBoardIndex+dir].name;
+		list[game.activeBoardIndex].innerXML(game.categories[game.activeBoardIndex].name);
+		list[game.activeBoardIndex+dir].innerXML(game.categories[game.activeBoardIndex+dir].name);
 		var cats = caseFile.getElementsByTagName("category");
 		for(var i=0;i<cats.length;i++){
 			if(Number(cats[i].getAttribute("categoryDesignation"))==game.activeBoardIndex)
@@ -578,7 +622,7 @@ p.addQuestion = function(x, y){
 		newQuestion.setAttribute('numConnections', '0');
 		newQuestion.setAttribute('numAnswers', '3');
 		newQuestion.setAttribute('correctAnswer', '0');
-		newQuestion.setAttribute('imageLink', window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+'eb1832a80fa41e395491571d4930119b.png');
+		newQuestion.setAttribute('imageLink', window.location.href.substr(0, window.location.href.lastIndexOf("editor/")-1)+"/image/default.png");
 		newQuestion.setAttribute('revealThreshold', '0');
 		newQuestion.setAttribute('questionType', '2');
 		newQuestion.setAttribute('resourceCount', '0');
@@ -641,7 +685,7 @@ p.checkKeyboard = function(){
 	    			game.boardArray[game.activeBoardIndex].button.innerHTML = newName;
 	    			localforage.getItem('caseFile').then(function(caseFile){
 	    				caseFile = Utilities.getXml(caseFile);
-		    			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerHTML = newName;
+		    			caseFile.getElementsByTagName("categoryList")[0].getElementsByTagName("element")[game.activeBoardIndex].innerXML(newName);
 	    				localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile));
 	    			})
 	    		}

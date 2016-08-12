@@ -37,8 +37,8 @@ m.resource = '\
 <div class="resourceItem">\
   <img src="%icon%" class="icon"/>\
   <img src="../img/iconClose.png" class="delete"/>\
-  <div class="resourceText">%title%</div>\
-  <a href="%link%" target="_blank">\
+  %title%\
+  <a href="%link%" target="_blank" class="alignBot" >\
     <div class="center">\
       Open\
       <img src="../img/iconLaunch.png"/>\
@@ -52,7 +52,7 @@ m.answerWindow = '\
 	<div class="title">\
 		Answers\
 	</div>\
-	<div class="windowContent" style="min-height:20vh;">\
+	<div class="windowContent" style="min-height:20vh;max-height:50vh;overflow-y:scroll;">\
 		<select>\
 			<option value="2">2</option>\
 			<option value="3">3</option>\

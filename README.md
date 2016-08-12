@@ -1,4 +1,6 @@
-#IGME Tutorial Project (working title)
+# IPAR Web
+IPAR - Web was developed using HTML/CSS, Javascript, and some PHP and is compatible with most modern browsers. This web version of IPAR has all the functionally of the original Windows Program, with some added features, but is now able to run on any operating system by simply using any modern browser to access the website with the program. Since the program is now on the web users no longer have to download/install any software to use it. The browser-based version builds on the orginal with added features like panning, zooming, and scaling to window size. With the use of PHP images and resources are stored on the server so as to reduce the file size of cases for the user.
+
 
 #Start
 Click Demo to start the demo project that is complete.

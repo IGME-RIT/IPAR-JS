@@ -38,16 +38,15 @@ function CreateMenu(pSection){
     	page.next = NEXT.BOARD;
     	create.disabled = true;
     	back.disabled = true;
-    	
     	var request = new XMLHttpRequest();
     	request.responseType = "arraybuffer";
     	request.onreadystatechange = function() {
     	  if (request.readyState == 4 && request.status == 200) {
-    		  	
+    		  
     		Utilities.loadCaseData(nameInput.value+".iparw", request.response, function(){
     			localforage.getItem('caseFile').then(function(caseFile){
     				caseFile = Utilities.getXml(caseFile);
-    				
+
     				// Set the inputs to the current case
     		    	var curCase = caseFile.getElementsByTagName("case")[0];
     		    	curCase.setAttribute('caseName', nameInput.value);
@@ -55,7 +54,7 @@ function CreateMenu(pSection){
     		    	curCase.setAttribute('conclusion', conclusionInput.innerHTML);
     		    	var catList = curCase.getElementsByTagName('categoryList')[0];
     		    	catList.setAttribute('categoryCount', '1');
-    		    	catList.innerHTML = '<element>'+cat1Input.value+'</element>';
+    		    	catList.innerXML('<element>'+cat1Input.value+'</element>');
     		    	var cat1 = caseFile.createElement('category');
     		    	cat1.setAttribute('categoryDesignation', '0');
     		    	cat1.setAttribute('questionCount', '0');

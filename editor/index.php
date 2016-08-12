@@ -1,3 +1,9 @@
+<?php
+	session_start();
+	if(!$_SESSION || !$_SESSION["user"]){
+		header("Location: ../login/");
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,14 +79,17 @@
     <!-- Section For Menus -->
     <section id="titleMenu" class="menu" style="display:none;">
     	<div>
-			<h1>IPAR Editor</h1>
+			<h1>IPAR Editor Cases</h1>
 			<button id="load-button" class="menuButton">Load Case</button>
 			<button id="create-button" class="menuButton">Create Case</button>
 			<button id="continue-button" class="menuButton">Continue</button>
+			<button id="convert-button" class="menuButton">Convert Case</button>
 			<button id="menu-button" class="menuButton">Back to Main Menu</button>
 			<input type="file" id="load-input" accept=".ipar, .iparw" />
+			<input type="file" id="convert-input" accept=".ipar" />
 		</div>
 		<img class="logo" src="../img/nsflogo.png" />
+    	<a href="./account.php" class="menuButton accountName"><?php echo $_SESSION["user"]; ?></a>
     </section>
     <section id="createMenu" class="menu" style="display:none;">
     	<div>

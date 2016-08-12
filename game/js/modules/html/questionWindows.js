@@ -1,6 +1,20 @@
 
 var m = module.exports;
 
+m.caseInfo = '\
+<div class="window">\
+	<div class="title">\
+		Closing the Case\
+	</div>\
+	<div class="windowContent" style="overflow-y:scroll;">\
+		<h3><b>%title%</b></h3>\
+		<p style="height: 60%;">%description%</p>\
+		<hr>\
+		Name: %name%<br>Email: %email%<br>\
+	</div>\
+</div>\
+';
+
 m.closeCase = '\
 <div class="window">\
 	<div class="title">\
@@ -60,7 +74,7 @@ m.resource = '\
 <div class="resourceItem">\
   <img src="%icon%"/>\
   %title%\
-  <a href="%link%" target="_blank">\
+  <a href="%link%" target="_blank" class="alignBot">\
     <div class="center">\
       Open\
       <img src="../img/iconLaunch.png"/>\
@@ -85,12 +99,12 @@ m.fileWindow = '\
   <div class="title">\
     Files\
   </div>\
-  <div class="windowContent" style="height:25vh;min-height: 100px;">\
-	<div class="fileButton full">\
+  <div class="windowContent" style="height:25vh;min-height: 100px;text-align:center;">\
+    <input type="file" style="display:none;" multiple/>\
+	<button class="fileButton">\
 		<img src="../img/iconFileSubmit.png"/><br>\
 		Browse And Submit\
 	</div>\
-    <input type="file" style="display:none;" multiple/>\
   </div>\
 </div>\
 ';

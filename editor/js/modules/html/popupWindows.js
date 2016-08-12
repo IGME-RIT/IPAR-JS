@@ -21,7 +21,7 @@ m.editInfo = '\
 ';
 
 m.resourcesWindow = '\
-<div class="window popup">\
+<div class="window popup" style="width:35vh;">\
 	<div class="title">\
 		Resources\
 	</div>\
@@ -35,13 +35,12 @@ m.resourcesWindow = '\
 ';
 
 m.resource = '\
-<div class="resourceItem">\
+<div class="resourceItem overNone">\
   <img src="%icon%" class="icon"/>\
   <img src="../img/iconClose.png" class="delete"/>\
   <img src="../img/iconTools.png" class="edit"/>\
-  <div class="resourceText">%title%\
-  <br>\
-  <span style="color:gray;">%link%</span></div>\
+  %title%\
+  <div class="flavor">%link%</div>\
 </div>\
 ';
 
@@ -56,6 +55,7 @@ m.resourceEditor = '\
 				<option value="0">File Refrence</option>\
 				<option value="1">Web Link</option>\
 				<option value="2">Video Link</option>\
+				<option value="3">Previous File Refrence</option>\
 			</select>\
 			<b>Display Name</b><br>\
 			<input name="name" value="%name%"><br>\
@@ -63,6 +63,7 @@ m.resourceEditor = '\
 			<input class="address" name="link" value="%link%">\
 			<button class="halfButton">Choose File</button><button class="halfButton">View File</button>\
 			<span class="addressInfo"></span>\
+			<div class="preResources"></div>\
 		</form>\
 		<br>\
 		<button class="halfButton">Cancel</button><button class="halfButton">%apply%</button>\
@@ -97,6 +98,7 @@ m.imagesEditor = '\
 		<br>\
 		<input type="file" style="display:none;"/>\
 		<button class="thirdButton">Close</button><button class="thirdButton">Upload Image</button><button class="thirdButton">Import Image</button>\
+		<button class="full">Previously Uploaded Images</button>\
 	</div>\
 </div>\
 ';

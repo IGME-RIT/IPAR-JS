@@ -47,7 +47,7 @@ p.refresh = function() {
     this.positionPercentX = Number(this.xml.getAttribute("xPositionPercent"));
     this.positionPercentY = Number(this.xml.getAttribute("yPositionPercent"));
     this.revealThreshold = parseInt(this.xml.getAttribute("revealThreshold"));
-    //console.log(xml);
+
     this.imageLink = this.xml.getAttribute("imageLink");
     this.feedbacks = this.xml.getElementsByTagName("feedback");
     var scale = this.xml.getAttribute("scale");
@@ -59,7 +59,7 @@ p.refresh = function() {
     var connectionElements = this.xml.getElementsByTagName("connections");
     this.connections = [];
     for(var i=0;i<connectionElements.length;i++)
-    	this.connections[i] = parseInt(connectionElements[i].innerHTML);
+    	this.connections[i] = parseInt(connectionElements[i].innerXML());
     
     // Create the windows for this question based on the question type
     this.questionType = parseInt(this.xml.getAttribute("questionType"));
@@ -81,7 +81,7 @@ p.saveXML = function(){
 	}
 	for(var i=0;i<this.connections.length;i++){
 		var connection = this.xml.ownerDocument.createElement("connections");
-		connection.innerHTML = this.connections[i];
+		connection.innerXML(this.connections[i]);
 		this.xml.appendChild(connection);
 	}
 }
@@ -185,7 +185,7 @@ p.createTypeWindow = function(){
         		close();
         	}
         	images[i+1].onclick = function(){
-        		if(confirm("Are you sure you want to remove this image from your data bank? This can not be undone!")){
+        		if(confirm("Are you sure you want to remove this image from view? This will not remove it from the server! To do that, delete it from the previous uploads window.")){
         			var toRemove = question.imagesWindow.getElementsByClassName("image")[i/2];
         			toRemove.parentNode.removeChild(toRemove);
             		close();
@@ -207,12 +207,15 @@ p.createTypeWindow = function(){
 						if (request.readyState == 4 && request.status == 200) {
 							for(var i=0;i<buttons.length;i++)
 								buttons[i].disabled = false;
-							imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/image/"+request.responseText);
+							if(request.responseText.match(/^!.*$/))
+								alert(request.responseText.substr(1));
+							else
+								imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, window.location.href.substr(0, window.location.href.lastIndexOf("editor/")-1)+"/image/"+request.responseText);
 			        		close();
 			        		button.click();
 						}
 					};
-					request.open("POST", "../image.php", true);
+					request.open("POST", "./image.php", true);
 					request.send(imageData);
         		}
         		else
@@ -246,9 +249,9 @@ p.createTaskWindow = function(){
 	var tempDiv = document.createElement("DIV");
 	tempDiv.innerHTML = Windows.taskWindow;
     this.task = tempDiv.firstChild;
-    this.task.innerHTML = this.task.innerHTML.replace("%title%", this.xml.getElementsByTagName("questionName")[0].innerHTML.replace(/\n/g, '<br/>'));
-    this.task.innerHTML = this.task.innerHTML.replace("%instructions%", this.xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
-    this.task.innerHTML = this.task.innerHTML.replace("%question%", this.xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
+    this.task.innerHTML = this.task.innerHTML.replace("%title%", this.xml.getElementsByTagName("questionName")[0].innerXML().replace(/\n/g, '<br/>'));
+    this.task.innerHTML = this.task.innerHTML.replace("%instructions%", this.xml.getElementsByTagName("instructions")[0].innerXML().replace(/\n/g, '<br/>'));
+    this.task.innerHTML = this.task.innerHTML.replace("%question%", this.xml.getElementsByTagName("questionText")[0].innerXML().replace(/\n/g, '<br/>'));
     
     // Setup to update xml on changing
     var textBoxes = this.task.getElementsByClassName("text-box");
@@ -257,9 +260,9 @@ p.createTaskWindow = function(){
 }
 
 p.updateXML = function(textBoxes){
-	this.xml.getElementsByTagName("questionName")[0].innerHTML = textBoxes[0].innerHTML;
-	this.xml.getElementsByTagName("instructions")[0].innerHTML = textBoxes[1].innerHTML;
-	this.xml.getElementsByTagName("questionText")[0].innerHTML = textBoxes[2].innerHTML;
+	this.xml.getElementsByTagName("questionName")[0].innerXML(textBoxes[0].innerHTML);
+	this.xml.getElementsByTagName("instructions")[0].innerXML(textBoxes[1].innerHTML);
+	this.xml.getElementsByTagName("questionText")[0].innerXML(textBoxes[2].innerHTML);
 }
 
 p.createResourceWindow = function(resourceFiles){
@@ -279,7 +282,7 @@ p.createResourceWindow = function(resourceFiles){
     	resourceFiles.openWindow(question.windowDiv, true, function(selectedResource){
     		if(selectedResource!=null){
     			var newResource = question.xml.ownerDocument.createElement("resourceIndex");
-    			newResource.innerHTML = selectedResource;
+    			newResource.innerXML(selectedResource);
     			question.xml.appendChild(newResource);
     			question.updateResources(this);
     		}
@@ -304,8 +307,8 @@ p.updateResources = function(resourceFiles){
 		var used = [];
 		for(var i=0;i<resources.length;i++){
 			    	
-			    	if(used.indexOf(resources[i].innerHTML)==-1)
-			    		used.push(resources[i].innerHTML);
+			    	if(used.indexOf(resources[i].innerXML())==-1)
+			    		used.push(resources[i].innerXML());
 			    	else{
 			    		this.xml.removeChild(resources[i]);
 			    		i = 0;
@@ -314,9 +317,9 @@ p.updateResources = function(resourceFiles){
 		}
 	    for(var i=0;i<resources.length;i++){
 	    	// Create the current resource element
-    		var curResource = Windows.resource.replace("%icon%", resourceFiles[parseInt(resources[i].innerHTML)].icon);
-	    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerHTML)].title);
-	    	curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerHTML)].link);
+    		var curResource = Windows.resource.replace("%icon%", resourceFiles[parseInt(resources[i].innerXML())].icon);
+	    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerXML())].title);
+	    	curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerXML())].link);
 	    	var tempDiv = document.createElement("DIV");
 	    	tempDiv.innerHTML = curResource;
 	        curResource = tempDiv.firstChild;
@@ -365,8 +368,8 @@ p.createAnswerWindow = function(){
 		var answers = question.xml.getElementsByTagName("answer");
 		var feedback = question.xml.getElementsByTagName("feedback");
 		for(var i=0;i<answers.length;i++){
-			answers[i].innerHTML = this.elements["answer"+(i+1)].value;
-			feedback[i].innerHTML = this.elements["feedback"+(i+1)].value;
+			answers[i].innerXML(this.elements["answer"+(i+1)].value);
+			feedback[i].innerXML(this.elements["feedback"+(i+1)].value);
 		}
 	}
 	this.correct = -1;
@@ -382,8 +385,8 @@ p.setNumberAnswers = function(num){
 	var answers = this.answerForm.getElementsByTagName("div");
 	for(var i=0;i<answers.length;i++){
 		var inputs = answers[i].getElementsByTagName("input");
-		answersXml[i].innerHTML = inputs[0].value;
-		feedbackXml[i].innerHTML = inputs[1].value;
+		answersXml[i].innerXML(inputs[0].value);
+		feedbackXml[i].innerXML(inputs[1].value);
 	}
 	
 	this.xml.setAttribute("numAnswers", num);
@@ -405,7 +408,7 @@ p.setNumberAnswers = function(num){
 
 	this.answerForm.innerHTML = '';
 	for(var i=0;i<answersXml.length;i++)
-		this.answerForm.innerHTML += Windows.answer.replace(/%num%/g, i+1).replace(/%answer%/g, answersXml[i].innerHTML).replace(/%feedback%/g, feedbackXml[i].innerHTML);
+		this.answerForm.innerHTML += Windows.answer.replace(/%num%/g, i+1).replace(/%answer%/g, answersXml[i].innerXML()).replace(/%feedback%/g, feedbackXml[i].innerXML());
 	if(this.correct<answersXml.length)
 		this.answerForm.elements["answer"].value = this.correct+1;
 	else{
@@ -438,9 +441,9 @@ p.createMessageWindow = function(){
 	var tempDiv = document.createElement("DIV");
 	tempDiv.innerHTML = Windows.messageWindow;
     this.message = tempDiv.firstChild;
-    this.message.innerHTML = this.message.innerHTML.replace("%title%", this.xml.getElementsByTagName("questionName")[0].innerHTML.replace(/\n/g, '<br/>'));
-    this.message.innerHTML = this.message.innerHTML.replace("%instructions%", this.xml.getElementsByTagName("instructions")[0].innerHTML.replace(/\n/g, '<br/>'));
-    this.message.innerHTML = this.message.innerHTML.replace("%question%", this.xml.getElementsByTagName("questionText")[0].innerHTML.replace(/\n/g, '<br/>'));
+    this.message.innerHTML = this.message.innerHTML.replace("%title%", this.xml.getElementsByTagName("questionName")[0].innerXML().replace(/\n/g, '<br/>'));
+    this.message.innerHTML = this.message.innerHTML.replace("%instructions%", this.xml.getElementsByTagName("instructions")[0].innerXML().replace(/\n/g, '<br/>'));
+    this.message.innerHTML = this.message.innerHTML.replace("%question%", this.xml.getElementsByTagName("questionText")[0].innerXML().replace(/\n/g, '<br/>'));
 
     // Setup to update xml on changing
     var textBoxes = this.message.getElementsByClassName("text-box");

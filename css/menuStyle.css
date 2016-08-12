@@ -1,6 +1,7 @@
 body {
 	margin: 0;
 	padding: 0;
+	overflow: hidden;
 }
 
 .menu {
@@ -27,6 +28,21 @@ body {
 	text-align:center;
 	justify-content:center;
 	align-items:center;
+}
+
+.menuLinks{
+	text-align: left;
+	padding: 10px 0;
+}
+
+.menuLinks a{
+	color: white;
+	text-decoration: underline;
+}
+
+.menuLinks a:hover{
+	cursor: pointer;
+	color: grey;
 }
 
 .menuButton:hover{
@@ -64,6 +80,7 @@ form input{
 }
 
 #load-input { display: none; }
+#convert-input { display: none; }
 
 #left-content {
 	float: left;
@@ -91,4 +108,11 @@ form input{
 #description {
 	padding: 0;
 	margin: 0;
+}
+
+.accountName{
+	position: absolute;
+	right: 10px;
+	top: 0;
+	width: 20vh;
 }

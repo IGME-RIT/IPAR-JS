@@ -49,3 +49,26 @@ String.prototype.indexOfAt = function(search, num){
 		curIndex = this.indexOf(search, curIndex+1);
 	return curIndex;
 }
+
+Element.prototype.innerXML = function(newText){
+	if(newText==null){
+		if(this.innerHTML)
+			return this.innerHTML;
+		var innerHTML = '';
+		var XMLS = new XMLSerializer(); 
+		for(var i=0;i<this.childNodes.length;i++)
+			innerHTML += XMLS.serializeToString(this.childNodes[i]);
+		return innerHTML;
+	}
+	else{
+		if(this.innerHTML)
+			this.innerHTML = newText;
+		else{
+			var newXml = getXml('<wrapper>'+newText+'</wrapper>').getElementsByTagName('wrapper')[0];
+			while(this.firstChild)
+				this.removeChild(this.firstChild);
+			while(newXml.firstChild)
+				this.appendChild(newXml.firstChild);
+		}
+	}
+}

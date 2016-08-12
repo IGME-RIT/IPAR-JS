@@ -96,7 +96,7 @@ m.getCategoriesAndQuestions = function(xmlData, saveData, resources, windowDiv) 
 		var categories = [];
 		for (var i=0; i<categoryElements.length; i++) {
 			// Load each category (which loads each question)
-			categories[parseInt(categoryElements[i].getAttribute("categoryDesignation"))] = new Category(categoryNames[i].innerHTML, categoryElements[i], resources, windowDiv);
+			categories[parseInt(categoryElements[i].getAttribute("categoryDesignation"))] = new Category(categoryNames[i].innerXML(), categoryElements[i], resources, windowDiv);
 		}
 		return categories;
 	}

@@ -34,26 +34,7 @@ m.loadCase = function(windowDiv, callback) {
 			// progress
 			var stage = saveData.getElementsByTagName("case")[0].getAttribute("caseStatus");
 			
-			// parse the save data if not new
-			if(stage>0){
-				localforage.getItem('submitted').then(function(submitted){
-					for(var file in submitted){
-						if (!submitted.hasOwnProperty(file)) continue;
-						file = file.substr(file.lastIndexOf("/")+1);
-						var cat = file.indexOf("-"),
-							que = file.indexOf("-", cat+1),
-							fil = file.indexOf("-", que+1);
-						categories[Number(file.substr(0, cat))].
-							questions[Number(file.substr(cat+1, que-cat-1))].
-							files[Number(file.substr(que+1, fil-que-1))] = 
-								file.substr(file.indexOfAt("-", 3)+1);
-					}
-					Parser.assignQuestionStates(categories, saveData.getElementsByTagName("question"));
-					callback(categories, resources, images, stage-1);
-				});
-			}
-			else
-				callback(categories, resources, images, 0);
+			callback(categories, resources, images, 0);
 			
     	});	   
     });

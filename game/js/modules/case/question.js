@@ -29,7 +29,7 @@ function Question(xml, resources, windowDiv, num){
     this.currentState = SOLVE_STATE.HIDDEN;
     this.windowDiv = windowDiv;
     this.num = num;
-    
+
     // Get and save the given index, correct answer, position, reveal threshold, image link, feedback, and connections
     this.correct = parseInt(xml.getAttribute("correctAnswer"));
     this.positionPercentX = Utilities.map(parseInt(xml.getAttribute("xPositionPercent")), 0, 100, 0, Constants.boardSize.x);
@@ -47,7 +47,7 @@ function Question(xml, resources, windowDiv, num){
     var connectionElements = xml.getElementsByTagName("connections");
     this.connections = [];
     for(var i=0;i<connectionElements.length;i++)
-    	this.connections[i] = parseInt(connectionElements[i].innerText());
+    	this.connections[i] = parseInt(connectionElements[i].innerXML());
     
     // Create the windows for this question based on the question type
     this.questionType = parseInt(xml.getAttribute("questionType"));
@@ -90,10 +90,10 @@ p.wrongAnswer = function(num){
 	if(this.feedbacks.length>0)
 		this.feedback.innerHTML = '"'+String.fromCharCode(num + "A".charCodeAt())+
 											'" is not correct <br/>&nbsp;<span class="feedbackI">'+
-											this.feedbacks[num].innerText()+'</span><br/>';
-
-	if(this.taskContent)
-		this.taskContent.scrollTop = this.taskContent.scrollHeight;
+											this.feedbacks[num].innerXML()+'</span><br/>';
+	  var question = this;
+	  if(this.taskContent)
+		setTimeout(function(){question.taskContent.scrollTop = question.taskContent.scrollHeight}, 100);
 }
 
 p.correctAnswer = function(){
@@ -107,7 +107,7 @@ p.correctAnswer = function(){
 	if(this.feedbacks[0])
 		this.feedback.innerHTML = '"'+String.fromCharCode(this.correct + "A".charCodeAt())+
 											'" is the correct response <br/><span class="feedbackI">'+
-											this.feedbacks[this.correct].innerText()+'</span><br/>';
+											this.feedbacks[this.correct].innerXML()+'</span><br/>';
 	
 	if(this.questionType===3 && this.justification.value != '')
 		this.feedback.innerHTML = 'Submitted Text:<br/><span class="feedbackI">'+this.justification.value+'</span><br/>';
@@ -132,8 +132,10 @@ p.correctAnswer = function(){
 		this.proceedElement.style.display = "block"; // animate proceed button
 	}
   }
-	if(this.taskContent)
-		this.taskContent.scrollTop = this.taskContent.scrollHeight;
+  
+  var question = this;
+  if(this.taskContent)
+	setTimeout(function(){question.taskContent.scrollTop = question.taskContent.scrollHeight}, 100);
 	
 }
 
@@ -174,9 +176,9 @@ p.createTaskWindow = function(xml){
 	var tempDiv = document.createElement("DIV");
 	tempDiv.innerHTML = Windows.taskWindow;
     this.task = tempDiv.firstChild;
-    this.task.innerHTML = this.task.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerText().replace(/\n/g, '<br/>'));
-    this.task.innerHTML = this.task.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerText().replace(/\n/g, '<br/>'));
-    this.task.innerHTML = this.task.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerText().replace(/\n/g, '<br/>'));
+    this.task.innerHTML = this.task.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerXML().replace(/\n/g, '<br/>'));
+    this.task.innerHTML = this.task.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerXML().replace(/\n/g, '<br/>'));
+    this.task.innerHTML = this.task.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerXML().replace(/\n/g, '<br/>'));
     this.feedback = this.task.getElementsByClassName("feedback")[0];
     this.taskContent = this.task.getElementsByClassName("windowContent")[0];
 }
@@ -195,9 +197,9 @@ p.createResourceWindow = function(xml, resourceFiles){
     	// Get the html for each resource and then add the result to the window
     	var resourceHTML = '';
 	    for(var i=0;i<resources.length;i++){
-    		var curResource = Windows.resource.replace("%icon%", resourceFiles[parseInt(resources[i].innerText())].icon);
-	    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerText())].title);
-	    	curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerText())].link);
+    		var curResource = Windows.resource.replace("%icon%", resourceFiles[parseInt(resources[i].innerXML())].icon);
+	    	curResource = curResource.replace("%title%", resourceFiles[parseInt(resources[i].innerXML())].title);
+	    	curResource = curResource.replace("%link%", resourceFiles[parseInt(resources[i].innerXML())].link);
 	    	resourceHTML += curResource;
 	    }
 	  	this.resource.innerHTML = this.resource.innerHTML.replace("%resources%", resourceHTML);
@@ -252,7 +254,7 @@ p.createAnswerWindow = function(xml, answers){
 	    		this.answers[i].className = "answer correct";
 	    	else
 	    		this.answers[i].className = "answer wrong";
-	    	this.answers[i].innerHTML = String.fromCharCode(i + "A".charCodeAt())+". "+answersXml[i].innerText();
+	    	this.answers[i].innerHTML = String.fromCharCode(i + "A".charCodeAt())+". "+answersXml[i].innerXML();
 	    }
 	    
 	    // Create the events for the answers
@@ -311,9 +313,9 @@ p.createMessageWindow = function(xml){
 	var tempDiv = document.createElement("DIV");
 	tempDiv.innerHTML = Windows.messageWindow;
     this.message = tempDiv.firstChild;
-    this.message.innerHTML = this.message.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerText().replace(/\n/g, '<br/>'));
-    this.message.innerHTML = this.message.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerText().replace(/\n/g, '<br/>'));
-    this.message.innerHTML = this.message.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerText().replace(/\n/g, '<br/>'));
+    this.message.innerHTML = this.message.innerHTML.replace("%title%", xml.getElementsByTagName("questionName")[0].innerXML().replace(/\n/g, '<br/>'));
+    this.message.innerHTML = this.message.innerHTML.replace("%instructions%", xml.getElementsByTagName("instructions")[0].innerXML().replace(/\n/g, '<br/>'));
+    this.message.innerHTML = this.message.innerHTML.replace("%question%", xml.getElementsByTagName("questionText")[0].innerXML().replace(/\n/g, '<br/>'));
     var question = this;
     this.message.getElementsByTagName("button")[0].onclick = function() {
     	question.currentState = SOLVE_STATE.SOLVED;

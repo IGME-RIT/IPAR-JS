@@ -77,7 +77,6 @@ p.act = function(gameScale, pMouseState, dt) {
 			
 			lNode.mouseOver = false;
 			
-			//console.log("node update");
 			// if hovering, show hover glow
 			/*if (pMouseState.relativePosition.x > lNode.position.x-lNode.width/2 
 			&& pMouseState.relativePosition.x < lNode.position.x+lNode.width/2
@@ -87,7 +86,6 @@ p.act = function(gameScale, pMouseState, dt) {
 				lNode.mouseOver = true;
 				this.target = lNode;
 				
-				//console.log(pMouseState.hasTarget);
 			}
 		}
 
@@ -116,7 +114,6 @@ p.act = function(gameScale, pMouseState, dt) {
     					if(this.lessonNodeArray[Math.abs(this.startCon.question.connections[i])-1]==this.target)
     						contains = this.startCon.question.connections[i];
     				if(contains!=0){
-    					console.log(contains);
     					this.startCon.question.connections.splice(this.startCon.question.connections.indexOf(contains), 1);
         				this.startCon.question.connections.push(-contains);
     					this.save();
@@ -247,7 +244,6 @@ p.draw = function(gameScale, pMouseState){
     this.ctx.translate(-this.canvas.width/2, -this.canvas.height/2);
     // move the board to where the user dragged it
     //translate to the center of the board
-    //console.log(this);
     this.ctx.translate(this.canvas.width/2 - this.boardOffset.x, this.canvas.height/2 - this.boardOffset.y);
     
 	

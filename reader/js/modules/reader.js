@@ -29,8 +29,8 @@ function Reader(section, startData){
 	addSubFile.onchange = function(){
 		
 		// Make sure a iparsubmit file was choosen
-		if(!addSubFile.value.endsWith("iparwsubmit")){
-			if(addSubFile.value.endsWith("iparsubmit")){
+		if(!addSubFile.value.match(/.*iparwsubmit$/)){
+			if(addSubFile.value.match(/.*iparsubmit$/)){
 				if(!confirm("That is an old version of a case submit file! You can still load it but all the submitted files won't have names! Is that okay?"))
 					return;
 			}
@@ -59,7 +59,7 @@ function Reader(section, startData){
 							var data = {};
 							data.saveFile = Utilities.getXml(saveFile);
 							data.submissions = zip.filter(function (relativePath, file){
-																return relativePath.match(/^submitted[\\\/].*/i) && !relativePath.endsWith('\\') && !relativePath.endsWith('/');
+																return relativePath.match(/^submitted[\\\/].*/i) && !relativePath.match(/.*\\$/) && !relativePath.match(/.*\/$/);
 							});
 							reader.addSub(data);
 
@@ -80,7 +80,7 @@ function Reader(section, startData){
 	for(var i=0;i<cats.length;i++){
 		(function(i){
 			var button = document.createElement("button");
-			button.innerHTML = cats[i].innerHTML;
+			button.innerHTML = cats[i].innerXML();
 			button.onclick = function(){
 		    	curCat = i;
 		    	reader.update();
@@ -159,15 +159,15 @@ p.update = function(){
 		
 		if(questionType==5 || (questionType==2 && !multiChoice))
 			continue;
-		var questionName = catData[curCat][i].getElementsByTagName("questionName")[0].innerHTML;
+		var questionName = catData[curCat][i].getElementsByTagName("questionName")[0].innerXML();
 		var curQuestion = HtmlElements.questionStart.replace(/%title%/g, questionName).
-														replace(/%instructions%/g, catData[curCat][i].getElementsByTagName("instructions")[0].innerHTML).
-														replace(/%question%/g, catData[curCat][i].getElementsByTagName("questionText")[0].innerHTML);
+														replace(/%instructions%/g, catData[curCat][i].getElementsByTagName("instructions")[0].innerXML()).
+														replace(/%question%/g, catData[curCat][i].getElementsByTagName("questionText")[0].innerXML());
 		if(questionType==3 || questionType==2){
 			var answers = catData[curCat][i].getElementsByTagName("answer");
 			var correct = Number(catData[curCat][i].getAttribute("correctAnswer"));
 			for(var j=0;j<answers.length;j++)
-				curQuestion += HtmlElements.answer.replace(/%answer%/g, String.fromCharCode(j + "A".charCodeAt())+". "+answers[j].innerHTML).replace(/%correct%/g, correct==j);
+				curQuestion += HtmlElements.answer.replace(/%answer%/g, String.fromCharCode(j + "A".charCodeAt())+". "+answers[j].innerXML()).replace(/%correct%/g, correct==j);
 		}
 		var questionNum = i;
 		for(var j=0;j<curCat;j++)
@@ -188,24 +188,19 @@ p.update = function(){
 					var zip = new JSZip();
 					var fileCount = 0, totalFiles = 0;
 					var savedFile = function(){
+						
 						if(++fileCount>=totalFiles)
 						{
 							zip.generateAsync({type:"blob"}).then(function (blob) {
-								var url = window.URL.createObjectURL(blob);
-								var a = document.createElement("a");
-								a.style.display = "none";
-								a.href = url;
 								var space;
 								while((space = questionName.indexOf(' '))!=-1)
 									questionName = questionName.substr(0, space)+questionName.substr(space+1, 1).toUpperCase()+questionName.substr(space+2);
-						        a.download = curSub.lastName+curSub.firstName.substr(0, 1).toUpperCase()+curSub.firstName.substr(1)+"_"+questionName+".zip";
-						        document.body.appendChild(a);
-						        a.click();
-						        document.body.removeChild(a);
-					        	setTimeout(function(){window.URL.revokeObjectURL(url);}, 0);
+								saveAs(blob, curSub.lastName+curSub.firstName.substr(0, 1).toUpperCase()+curSub.firstName.substr(1)+"_"+questionName+".zip");
 							});
 						}
 					}
+					if(submissions.length==0)
+						alert("NO FILES WERE SUBMITTED!");
 					for(var i=0;i<submissions.length;i++){
 						(function(file){
 							var name = file.name.substr('submitted\\'.length);

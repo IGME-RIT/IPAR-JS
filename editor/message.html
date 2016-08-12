@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>IPAR</title>
+	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
+</head>
+<body>
+    <section class="menu">
+    	<div>
+    		<p id="message"></p>
+			<a href="./account.php" class="menuButton">Back</a>
+		</div>
+		<img class="logo" src="../img/nsflogo.png" />
+    </section>
+	<script type='text/javascript'>
+		var message = /(?:&|\?)message=(.*?)&/g.exec(window.location.search);
+		document.getElementById("message").innerHTML = decodeURIComponent(message[1]);
+	</script>
+</body>
+</html>

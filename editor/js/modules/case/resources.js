@@ -40,6 +40,11 @@ function Resources(resourceElements, doc){
 	}
 	this.length = resourceElements.length;
 	this.doc = doc;
+}
+
+var p = Resources.prototype;
+
+p.openWindow = function(windowDiv, select, callback){
 	
 	// Create the resource window 
 	var tempDiv = document.createElement("DIV");
@@ -50,12 +55,6 @@ function Resources(resourceElements, doc){
 	
 	// Store the buttons
 	this.buttons = this.resource.getElementsByTagName("button");
-	
-}
-
-var p = Resources.prototype;
-
-p.openWindow = function(windowDiv, select, callback){
 	
 	// Setup the buttons
 	var resources = this;
@@ -165,9 +164,9 @@ p.edit = function(index, callback){
 	}
 	
 	// Setup combo box
-	this.updateEditInfo(type, buttons, editInfo.getElementsByClassName("addressTag")[0], editInfo.getElementsByClassName("addressInfo")[0], editInfo.getElementsByClassName("address")[0], index);
+	this.updateEditInfo(type, buttons, editInfo.getElementsByClassName("addressTag")[0], editInfo.getElementsByClassName("addressInfo")[0], editInfo.getElementsByClassName("address")[0], editInfo.getElementsByClassName("preResources")[0], index);
 	editInfo.getElementsByTagName("select")[0].onchange = function(){
-		resources.updateEditInfo(resources.windowDiv.getElementsByTagName("select")[0], resources.windowDiv.getElementsByTagName("button"), resources.windowDiv.getElementsByClassName("addressTag")[0], resources.windowDiv.getElementsByClassName("addressInfo")[0], resources.windowDiv.getElementsByClassName("address")[0], index);
+		resources.updateEditInfo(resources.windowDiv.getElementsByTagName("select")[0], resources.windowDiv.getElementsByTagName("button"), resources.windowDiv.getElementsByClassName("addressTag")[0], resources.windowDiv.getElementsByClassName("addressInfo")[0], resources.windowDiv.getElementsByClassName("address")[0], resources.windowDiv.getElementsByClassName("preResources")[0], index);
 	};
 	
 	// Setup cancel button
@@ -178,23 +177,29 @@ p.edit = function(index, callback){
 	
 	// Setup confirm button
 	buttons[3].onclick = function(){
-		if(index==null)
-			index = resources.length++;
-		var newResource = resources.doc.createElement("resource");
 		var form = editInfo.getElementsByTagName("form")[0];
-		newResource.setAttribute("type", form.elements["type"].value);
-		newResource.setAttribute("text", form.elements["name"].value);
-		if(resources.newLink==null){
-			var newLink = form.elements["link"].value;
-			if(!newLink.match(/^https?:\/\/.*/))
-				newLink = "http://"+newLink;
-			newResource.setAttribute("link", newLink);
+		if(form.elements["name"].value && form.elements["name"].value!="" && ((form.elements["type"].value=="3" || form.elements["type"].value=="0") && resources.newLink && resources.newLink!="") && ((resources.newLink && resources.newLink!="") || Number(form.elements["type"].value)!=0)){
+			if(index==null)
+				index = resources.length++;
+			var newResource = resources.doc.createElement("resource");
+			if(form.elements["type"].value=="3")
+				newResource.setAttribute("type", 0);
+			else
+				newResource.setAttribute("type", form.elements["type"].value);
+			newResource.setAttribute("text", form.elements["name"].value);
+			if(resources.newLink==null){
+				var newLink = form.elements["link"].value;
+				if(!newLink.match(/^https?:\/\/.*/))
+					newLink = "http://"+newLink;
+				newResource.setAttribute("link", newLink);
+			}
+			else
+				newResource.setAttribute("link", resources.newLink);
+			alert(form.elements["type"].value+":"+form.elements["name"].value+":"+resources.newLink);
+			resources[index] = new Resource(newResource);
+			resources.windowDiv.innerHTML = '';
+			callback();
 		}
-		else
-			newResource.setAttribute("link", resources.newLink);
-		resources[index] = new Resource(newResource);
-		resources.windowDiv.innerHTML = '';
-    	callback();
 	}
 	
 
@@ -203,25 +208,26 @@ p.edit = function(index, callback){
 	this.windowDiv.appendChild(editInfo);
 }
 
-p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, index){
+p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, preResources, index){
 
 	if(!this.newLink)
 		this.newLink = "";
+	var resources = this;
 	
 	if(Number(type.value)==0){
 		addressTag.innerHTML = "Refrence File";
 		address.value = "";
 		address.type = "file";
 		address.style.display = "none";
+		preResources.innerHTML = '';
 		addressInfo.style.display = "";
 		addressInfo.innerHTML = this.newLink;
 		buttons[0].style.display = "";
 		buttons[1].style.display = "";
-		var resources = this;
+		resources.loading = false;
 		
 		// Setup View button
 		buttons[1].onclick = function(){
-			console.log(resources.newLink);
 			if(resources.newLink && resources.newLink!="")
 				window.open(resources.newLink,'_blank');
 		};
@@ -229,45 +235,82 @@ p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, ind
 		// Setup input button
 		buttons[0].onclick = address.click.bind(address);
 		address.onchange = function(){
-			if(address.files.length>0){
-				if(address.files[0].type.match(/^application\/pdf.*/) && address.files[0].name.match(/.*\.pdf$/i)){
-					for(var i=0;i<buttons.length;i++)
-						buttons[i].disabled = true;
-					var resourceData = new FormData();
-					resourceData.append('resource', address.files[0], address.files[0].name);
-					var request = new XMLHttpRequest();
-					request.onreadystatechange = function() {
-						if (request.readyState == 4 && request.status == 200) {
-							for(var i=0;i<buttons.length;i++)
-								buttons[i].disabled = false;
-							if(request.responseText.match(/^error.*/i))
-								addressInfo.innerHTML = request.responseText;
-							else{
-								resources.newLink = window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/resource/"+request.responseText;
-								addressInfo.innerHTML = resources.newLink;
+			if(!resources.loading){
+				if(address.files.length>0){
+					if(address.files[0].type.match(/^application\/pdf.*/) && address.files[0].name.match(/.*\.pdf$/i)){
+						resources.loading = true;
+						var resourceData = new FormData();
+						resourceData.append('resource', address.files[0], address.files[0].name);
+						var request = new XMLHttpRequest();
+						request.onreadystatechange = function() {
+							if (request.readyState == 4 && request.status == 200) {
+								resources.loading = false;
+								if(request.responseText.match(/^!.*/i))
+									addressInfo.innerHTML = request.responseText.substr(1);
+								else{
+									resources.newLink = window.location.href.substr(0, window.location.href.substr(0, window.location.href.length-1).lastIndexOf("/"))+"/resource/"+request.responseText;
+									addressInfo.innerHTML = 'Uploaded!';
+								}
 							}
-						}
-					};
-					request.open("POST", "../resource.php", true);
-					request.send(resourceData);
-					addressInfo.innerHTML = "Uploading...";
+						};
+						request.open("POST", "./resource.php", true);
+						request.send(resourceData);
+						addressInfo.innerHTML = "Uploading...";
+					}
+					else
+						alert('You can only upload pdfs as resources!');
 				}
-				else
-					alert('You can only upload pdfs as resources!');
-			}
-			else{
-				resources.newLink = "";
-				addressInfo.innerHTML = resources.newLink;
+				else{
+					resources.newLink = "";
+					addressInfo.innerHTML = resources.newLink;
+				}
 			}
 		}
 	}
 	else{
-		addressTag.innerHTML = "Link Address";
-		address.value = "";
-		address.type = "text";
-		address.style.display = "";
-		address.value = this.newLink;
-		this.newLink = null;
+		if(Number(type.value)==3){
+			addressTag.innerHTML = "Refrence File";
+			address.style.display = "none";
+			preResources.innerHTML = '';
+			var request = new XMLHttpRequest();
+			request.onreadystatechange = function() {
+				if (request.readyState == 4 && request.status == 200) {
+					preResources.innerHTML = request.responseText;
+			        var images = preResources.getElementsByTagName("img");
+			        var links = preResources.getElementsByTagName("a");
+					for(var i=0;i<images.length;i+=2){
+				        (function(i){
+				        	images[i].onclick = function(){
+								window.open(images[i].getAttribute("file"),'_blank');
+				        	}
+				        	images[i+1].onclick = function(){
+				        		if(confirm("Are you sure you want to remove this resource from uploaded resources? This can not be undone and any cases that currently use this resource will now have dead links!")){
+				        			var toRemove = preResources.getElementsByClassName("image")[i/2];
+				        			toRemove.parentNode.removeChild(toRemove);
+				        		}
+				        	}
+				        	links[i/2].onclick = function(){
+				        		for(var j=0;j<links.length;j++)
+				        			links[j].className = 'unactiveLink';
+				        		links[i/2].className = 'activeLink';
+								resources.newLink = images[i].getAttribute("file");
+				        	}
+				        })(i);
+			        }
+				}
+			};
+			request.open("POST", "./preResource.php", true);
+			request.send();
+		}
+		else{
+			addressTag.innerHTML = "Link Address";
+			preResources.innerHTML = '';
+			address.value = "";
+			address.type = "text";
+			address.style.display = "";
+			address.value = this.newLink;
+			this.newLink = null;
+		}
 		address.onchange = function(){};
 		addressInfo.style.display = "none";
 		buttons[0].style.display = "none";

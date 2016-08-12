@@ -86,21 +86,21 @@ p.demo = function(){
 }
 
 p.loadFile = function(event){
-
+console.log("LOAD FILE");
 	var page = this;
 	localforage.getItem('caseName').then(function(caseName){
 		if(!caseName || confirm("Are you sure you want to start a new case? Your autosave data will be lost!")){
-	
+	console.log("LOAD");
 			// Make sure a ipar file was choosen
-			if(!loadInput.value.endsWith("iparw")){
-				if(loadInput.value.endsWith("ipar"))
+			if(!loadInput.value.match(/.*iparw$/)){
+				if(loadInput.value.match(/.*ipar$/))
 					alert("That is an old version of a case file! You can use the converter on the main menu to change it to an iparw file to use in the web ipar!");
 				else
 					alert("You didn't choose an iparw file! you can only load iparw files!");
 				return;
 			}
 			var zipName = event.target.files[0].name;
-	
+	console.log("NAME");
 			// Set the button to disabled so that it can't be pressed while loading
 			loadButton.disabled = true;
 			loadInput.disabled = true;
@@ -110,8 +110,8 @@ p.loadFile = function(event){
 			
 			// Create a reader and read the zip
 			var reader = new FileReader();
-			reader.onload = function(event){
-				Utilities.loadCaseData(zipName, event.target.result, function(){
+			reader.onload = function(event){console.log("ZIP");
+				Utilities.loadCaseData(zipName, event.target.result, function(){console.log("UNZIP");
 					page.next = NEXT.CASE;
 					page.close();
 				});
