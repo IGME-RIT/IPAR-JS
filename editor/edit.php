@@ -44,7 +44,7 @@
 	    			Current:
 	    			<?php 
 	    				$user = $_SESSION["user"];
-	    				$db = new SQLite3('../../../users.sql') or die ("cannot open");
+	    				$db = new SQLite3('../../../db/users.sql') or die ("cannot open");
 						$result = $db->query("SELECT email FROM users WHERE username = '$user'");
 		    			if($res = $result->fetchArray())
 	    					echo $res["email"]; 

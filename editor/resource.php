@@ -1,6 +1,6 @@
 <?php
 session_start();
-$db = new SQLite3('../../../users.sql');
+$db = new SQLite3('../../../db/users.sql');
 $user = $_SESSION["user"];
 
 if($_FILES["resource"]){
@@ -15,6 +15,7 @@ if($_FILES["resource"]){
 		if($extension=='.pdf' && preg_match('/^application\/pdf.*/', $type)){
 			$new_resource = uniqid($user, true);
 			if (move_uploaded_file($_FILES["resource"]["tmp_name"], $resource_folder . $new_resource . $extension)) {
+			        chmod($resource_folder . $new_resource . $extension, 0644);
 				echo $new_resource . $extension;
 				$fileName = $_FILES["resource"]["name"];
 				$db->query("INSERT INTO resources VALUES ('$new_resource$extension','$fileName','$user');");

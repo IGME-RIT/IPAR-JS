@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	$db = new SQLite3('../../../users.sql') or die ("cannot open");
+	$db = new SQLite3('../../../db/users.sql') or die ("cannot open");
 	$user = $_SESSION["user"];
 	$email = strtolower($_POST['email']);
 	if(!$email || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){

@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	$db = new SQLite3('../../../users.sql') or die ("cannot open");
+	$db = new SQLite3('../../../db/users.sql') or die ("cannot open");
 	$user = $_SESSION["user"];
 	$result = $db->query("SELECT password FROM users WHERE username = '$user'");
 	if($res = $result->fetchArray()){

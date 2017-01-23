@@ -1,6 +1,6 @@
 <?php
 session_start();
-$db = new SQLite3('../../../users.sql');
+$db = new SQLite3('../../../db/users.sql');
 $user = $_SESSION["user"];
 
 if($_FILES["image"] && getimagesize($_FILES["image"]["tmp_name"]) !== false){
@@ -11,10 +11,11 @@ if($_FILES["image"] && getimagesize($_FILES["image"]["tmp_name"]) !== false){
 		$characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		$extension = '.' . pathinfo(basename($_FILES["image"]["name"]), PATHINFO_EXTENSION);
 		if($extension=='.png' || $extension=='.jpg' || $extension=='.jpeg' || $extension=='.gif'){
-			$new_image = uniqid($user, true);
+			$new_image = str_replace(".", "-", uniqid($user, true));
 			if (move_uploaded_file($_FILES["image"]["tmp_name"], $image_folder . $new_image . $extension)) {
-	   		    echo $new_image . $extension;
+			    chmod($image_folder . $new_image . $extension, 0644);
 	   		    $fileName = $_FILES["image"]["name"];
+	   		    echo $new_image . $extension;
 	   		    $result = $db->query("INSERT INTO images VALUES ('$new_image$extension','$fileName','$user');");
 	    	    exit();
 	   		}
@@ -27,6 +28,7 @@ if($_FILES["image"] && getimagesize($_FILES["image"]["tmp_name"]) !== false){
 }
 
 echo "!Error Uploading File!";
+echo $_FILES["image"];
 exit();
 
 ?>

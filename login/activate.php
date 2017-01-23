@@ -1,5 +1,5 @@
 <?php 
-    $db = new SQLite3('../../../users.sql') or die ("cannot open");
+    $db = new SQLite3('../../../db/users.sql') or die ("cannot open");
 	$key = $_GET['key'];
 	if(!$key) 
 		header("Location: ./message.html?message=That recovery link is expired!&");

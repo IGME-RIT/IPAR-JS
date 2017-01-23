@@ -1,7 +1,7 @@
 <?php
    session_start();
    if($_POST){
-	   $db = new SQLite3('../../../users.sql') or die ("cannot open");
+	   $db = new SQLite3('../../../db/users.sql') or die ("cannot open");
 	   $user = strtolower($_POST['username']);
 	   if($user && $_POST['password'] && $_POST['password']!="" && preg_match('/^[a-z0-9_]+$/', $user)==1){
 		   $result = $db->query("SELECT password FROM users WHERE username = '$user'");
