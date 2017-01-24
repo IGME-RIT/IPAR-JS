@@ -1,7 +1,8 @@
 var server = require('http').createServer(),
 		express = require('express'),
 		app = express(),
-		port = 80,
+//		port = 80, // prod. port, uncomment for production
+		port = 2109, // development port
 		multer  = require('multer'),
 		fs = require('fs'),
 		favicon = require('serve-favicon');
