@@ -5,21 +5,20 @@
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/igme-rit/igme-rit.github.io.git"
+    "url": "git+https://github.com/IGME-RIT/IPAR-JS.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/igme-rit/igme-rit.github.io/issues"
+    "url": "https://github.com/IGME-RIT/IPAR-JS/issues"
   },
-  "homepage": "https://github.com/igme-rit/igme-rit.github.io#readme",
+  "homepage": "https://github.com/IGME-RIT/IPAR-JS",
   "dependencies": {
     "serve-favicon": "^2.3.0",
     "xhr": "^2.2.0"
   },
   "devDependencies": {
     "browserify": "^13.0.0",
-    "ejs": "^2.4.1",
     "express": "^4.13.4",
     "grunt": "^0.4.5",
     "grunt-browserify": "^4.0.1",
