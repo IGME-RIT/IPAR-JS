@@ -17,13 +17,13 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      js: {
-        files: [
-          ['game/js/**/*.js', 'editor/js/**/*.js', 'reader/js/**/*.js'],
-          'Gruntfile.js'
-        ],
-        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'browserify:reader', 'uglify:reader']
-      },
+//      js: {
+//        files: [
+//          ['game/js/**/*.js', 'editor/js/**/*.js', 'reader/js/**/*.js'],
+//          'Gruntfile.js'
+//        ],
+//        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'browserify:reader', 'uglify:reader']
+//      },
       other: {
           files: ['.htaccess', 'resource/*', 'image/*', '*.html', 'favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'reader/*.html', 'login/*.html', 'login/*.php', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
           tasks: ['copy']
