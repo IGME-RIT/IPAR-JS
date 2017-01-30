@@ -17,6 +17,7 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+        // TODO: reenable this and figure out how to properly fix warnings -ntr
 //      js: {
 //        files: [
 //          ['game/js/**/*.js', 'editor/js/**/*.js', 'reader/js/**/*.js'],
