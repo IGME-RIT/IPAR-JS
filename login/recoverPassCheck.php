@@ -1,14 +1,18 @@
 <?php
    session_start();
    if($_POST && $_POST['username'] && $_POST['username']!=""){
-	   $db = new SQLite3('../../../db/users.sql') or die ("cannot open");
+	   $dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
 	   $user = strtolower($_POST['username']);
-	   $result = $db->query("SELECT email FROM users WHERE username = '$user'");
-	   if($res = $result->fetchArray()){
+	   //$result = $db->query("SELECT email FROM users WHERE username = '$user'");
+	   $sth = $dbh->prepare("SELECT email FROM users WHERE username = :username");
+       $sth->execute(array(":username"=>$user));
+       if($res = $sth->fetch()){
 	   	
 		   	$key = uniqid($user, true);
-		   	$db->query("UPDATE users SET curKey = '$key' WHERE username = '$user'");
-		   	
+		   	//$db->query("UPDATE users SET curKey = '$key' WHERE username = '$user'");
+		   	$sth = $dbh->prepare("UPDATE users SET curKey = :curKey WHERE username = :username");
+            $sth->execute(array(":curKey"=>$key, ":username"=>$user));
+           
 		   	$parts = explode('/',$_SERVER['REQUEST_URI']);
 		   	$path = '';
 		   	for($i = 0;$i<count($parts)-2;$i++)

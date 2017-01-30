@@ -29,10 +29,11 @@
 			<a href="./edit.php" class="menuButton">Edit Account</a>
 			<a href="#" onclick="logout();" class="menuButton">Logout</a>
 			<?php 
-				$db = new SQLite3('../../../db/users.sql') or die ("cannot open");
-				$user = $_SESSION["user"];
-				$result = $db->query("SELECT active FROM users WHERE username = '$user'");
-				if($res = $result->fetchArray())
+                $db = new PDO('sqlite:../../../db/users.sql') or die("cannot open");
+                $sth = $db->prepare("SELECT active FROM users WHERE username = :username");
+                $sth -> execute(array(":username" => $_SESSION["user"]));
+            
+				if($res = $sth->fetchAll())
 					if($res['active']==0)  
 						echo '<a href="./activeEmail.php" class="menuButton">Resend Activation Email</a>';
 			?>

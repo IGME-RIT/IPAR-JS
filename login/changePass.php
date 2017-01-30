@@ -1,10 +1,12 @@
 <?php 
-	$db = new SQLite3('../../../db/users.sql') or die ("cannot open");
+	$dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
 	$key = $_POST['key'];
 	if(!$key)
 		header("Location: ./message.html?message=That recovery link is expired!&");
-	$result = $db->query("SELECT username FROM users WHERE curKey = '$key'");
-	if(!$result->fetchArray())
+	//$result = $db->query("SELECT username FROM users WHERE curKey = '$key'");
+    $sth = $dbh->prepare("SELECT username FROM users WHERE curKey = :curKey");
+    $sth->execute(array(":curKey"=>$key));
+	if(!$sth->fetch())
 		header("Location: ./message.html?message=That recovery link is expired!&");
 	if(strlen($_POST['password'])<6 || preg_match('/^[A-Za-z0-9_]*$/', $_POST['password'])!=1 || preg_match('/[A-Z]+/', $_POST['password'])!=1 || preg_match('/[a-z]+/', $_POST['password'])!=1 || preg_match('/[0-9]+/', $_POST['password'])!=1){
 			echo "<script type='text/javascript'>
@@ -14,6 +16,8 @@
 		exit();
 	}
     $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
-	$db->query("UPDATE users SET password = '$pass' WHERE curKey = '$key'"); 
+	//$db->query("UPDATE users SET password = '$pass' WHERE curKey = '$key'"); 
+    $sth = $dbh->prepare("UPDATE users SET password = :password WHERE curKey = :curKey");
+    $sth->execute(array(":password"=>$pass, ":curKey"=>$key));
     header("Location: ./message.html?message=Your password has been changed!&"); 
 ?>

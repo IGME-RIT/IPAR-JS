@@ -1,12 +1,14 @@
 <?php
 session_start();
-$db = new SQLite3('../../../db/users.sql');
+$dbh = new SDO('sqlite:../../../db/users.sql');
 $user = $_SESSION["user"];
 
 if($_FILES["resource"]){
 	
-	$result = $db->query("SELECT active FROM users WHERE username = '$user'");
-	if(($res = $result->fetchArray()) && $res['active']!=0){
+	//$result = $db->query("SELECT active FROM users WHERE username = '$user'");
+    $sth = $dbh->prepare("SELECT active FROM users WHERE username = :username");
+    $sth->execute(array(":username"=>$user));
+	if(($res = $sth->fetch()) && $res['active']!=0){
 		$resource_folder = "../resource/";
 		$characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		$extension = '.' . pathinfo(basename($_FILES["resource"]["name"]), PATHINFO_EXTENSION);
@@ -18,13 +20,19 @@ if($_FILES["resource"]){
 			        chmod($resource_folder . $new_resource . $extension, 0644);
 				echo $new_resource . $extension;
 				$fileName = $_FILES["resource"]["name"];
-				$db->query("INSERT INTO resources VALUES ('$new_resource$extension','$fileName','$user');");
+				//$db->query("INSERT INTO resources VALUES ('$new_resource$extension','$fileName','$user');");
+                $sth = $dbh->prepare("INSERT INTO resources VALUES (:resource, :filename, :username)");
+                $sth.execute(array(
+                    ":resource"=>($new_resource.$extension),
+                    ":filename"=>$fileName,
+                    ":username"=>$user
+                ));
 				exit();
 			}
 		}
 	}
 	else{
-		echo"!Error Uploading File! Your account is not active!";
+		echo"Error Uploading File! Your account is not active!";
 		exit();
 	}
 	

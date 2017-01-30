@@ -44,9 +44,11 @@
 	    			Current:
 	    			<?php 
 	    				$user = $_SESSION["user"];
-	    				$db = new SQLite3('../../../db/users.sql') or die ("cannot open");
-						$result = $db->query("SELECT email FROM users WHERE username = '$user'");
-		    			if($res = $result->fetchArray())
+	    				$dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
+						//$result = $db->query("SELECT email FROM users WHERE username = '$user'");
+                        $sth = $dbh->prepare("SELECT email FROM users WHERE username = :username");
+                        $sth->execute(array(":username"=>$user));
+		    			if($res = $sth->fetch())
 	    					echo $res["email"]; 
 	    			?>
 					<hr>

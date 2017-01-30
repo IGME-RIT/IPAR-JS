@@ -1,9 +1,10 @@
 <?php 
 	session_start();
-	$db = new SQLite3('../../../db/users.sql') or die ("cannot open");
+    $dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
 	$user = $_SESSION["user"];
 	$key = uniqid($user, true);
-	$db->query("UPDATE users SET curKey = '$key' WHERE username = '$user'");
+    $sdh = $dbh->prepare("UPDATE users SET curKey = :curKey WHERE username = :username");
+    $sdh->execute(array(":curKey"=>$key, ":username"=>$user));
 	$parts = explode('/',$_SERVER['REQUEST_URI']);
 	$path = '';
 	for($i = 0;$i<count($parts)-2;$i++)

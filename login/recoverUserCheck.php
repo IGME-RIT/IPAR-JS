@@ -1,10 +1,11 @@
 <?php
    session_start();
    if($_POST && $_POST['email'] && $_POST['email']!=""){
-	   $db = new SQLite3('../../../db/users.sql') or die ("cannot open");
+	   $dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
 	   $email = strtolower($_POST['email']);
-	   $result = $db->query("SELECT username FROM users WHERE email = '$email'");
-	   if($res = $result->fetchArray()){
+	   //$result = $db->query("SELECT username FROM users WHERE email = '$email'");
+	   $sth = $dbh->prepare("SELECT username FROM users WHERE email = :email");
+       if($res = $sth->fetch()){
 
 	   		$user = strtolower($res['username']);
 		   	$parts = explode('/',$_SERVER['REQUEST_URI']);
