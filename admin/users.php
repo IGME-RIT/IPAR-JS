@@ -1,37 +1,61 @@
 <?php
-#session_start();
-#
-#// direct to login screen if user is not logged in
-#if(!$_SESSION || !$_SESSION["user"]){
-#    header("Location: ../login/");
-#    exit();
-#}
-#
-#$user = $_SESSION["user"];
-#
-#// check if user has admin rights
-#$authenticated = false;
-#$dbh = new PDO("sqlite:../../../db/users.sql") or die ("Could not establish a database connection.");
-#$sth = $dbh->prepare("SELECT roles.name FROM users_roles JOIN roles ON roles.rowid = users_roles.roleid WHERE users_roles.username = :username");
-#if($sth->execute(array(":username"=> $user))){
-#    $rows = $sth->fetchAll();
-#    foreach($rows as $row){
-#        if($row["name"] == "admin"){
-#            // authenticated
-#            $authenticated = true;
-#        }
-#    }
-#}
-#
-#if(!$authenticated){
-#    header("Location: ../login/message.html?message=You are not authorized to view this page.&");
-#    exit();
-#}
+$dbh = new PDO("sqlite:../../../db/users.sql");
+$query =    "SELECT users.*, usermetadata.ip, usermetadata.useragent, usermetadata.datetime FROM users 
+            LEFT JOIN usermetadata
+            ON users.username = usermetadata.username";
+if(!$res = $dbh->query($query)){
+    print_r($dbh->errorinfo());
+    die("Failed to read from database.");
+}
+
+// prepare roles statement
+$rolesth = $dbh->prepare("SELECT roles.name FROM users_roles 
+                            INNER JOIN roles ON users_roles.roleid = roles.rowid 
+                            WHERE users_roles.username = :username")
+
 ?>
 
 <html>
     <head></head>
     <body>
-        It works!
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Organization</th>
+                <th>Role(s)</th>
+                <th>IP Address</th>
+                <th>Useragent</th>
+                <th>Signup Date</th>
+            </tr>
+            <?php
+            foreach($res as $row){
+                $ip = long2ip($row['ip']);
+                $date = date("m/d/Y H:i:s", $row['datetime']);
+
+                // get roles
+                if(!$rolesth->execute(array(":username"=>$row['username']))){
+                    print_r($dbh->errorinfo());
+                    die("\n Failed to get roles for user ".$row['username']);
+                }
+         
+            ?>
+                <tr>
+                    <td><?php echo $row['username']; ?></td>
+                    <td><?php echo $row['email']; ?></td>
+                    <td><?php echo $row['firstname']; ?></td>
+                    <td><?php echo $row['lastname']; ?></td>
+                    <td><?php echo $row['organization'] ?></td>
+                    <td><?php while($rolerow = $rolesth->fetch()) { echo $rolerow['name'].","; } ?></td>
+                    <td><?php echo $ip ?></td>
+                    <td><?php echo $row['useragent'] ?></td>
+                    <td><?php echo $date ?></td>
+                </tr>
+                <?php
+            }
+            ?>
+        </table>
     </body>
 </html>
