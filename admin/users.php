@@ -15,47 +15,56 @@ $rolesth = $dbh->prepare("SELECT roles.name FROM users_roles
 
 ?>
 
-<html>
-    <head></head>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>IPAR</title>
+        <link href="https://fonts.googleapis.com/css?family=Quicksand:700" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="../css/styles.css">
+        <link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
+    </head>
     <body>
-        <table>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Organization</th>
-                <th>Role(s)</th>
-                <th>IP Address</th>
-                <th>Useragent</th>
-                <th>Signup Date</th>
-            </tr>
-            <?php
-            foreach($res as $row){
-                $ip = long2ip($row['ip']);
-                $date = date("m/d/Y H:i:s", $row['datetime']);
-
-                // get roles
-                if(!$rolesth->execute(array(":username"=>$row['username']))){
-                    print_r($dbh->errorinfo());
-                    die("\n Failed to get roles for user ".$row['username']);
-                }
-         
-            ?>
+        <section class="menu">
+            <table>
                 <tr>
-                    <td><?php echo $row['username']; ?></td>
-                    <td><?php echo $row['email']; ?></td>
-                    <td><?php echo $row['firstname']; ?></td>
-                    <td><?php echo $row['lastname']; ?></td>
-                    <td><?php echo $row['organization'] ?></td>
-                    <td><?php while($rolerow = $rolesth->fetch()) { echo $rolerow['name'].","; } ?></td>
-                    <td><?php echo $ip ?></td>
-                    <td><?php echo $row['useragent'] ?></td>
-                    <td><?php echo $date ?></td>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Organization</th>
+                    <th>Role(s)</th>
+                    <th>IP Address</th>
+                    <th>Useragent</th>
+                    <th>Signup Date</th>
                 </tr>
                 <?php
-            }
-            ?>
-        </table>
+                foreach($res as $row){
+                    $ip = long2ip($row['ip']);
+                    $date = date("m/d/Y H:i:s", $row['datetime']);
+    
+                    // get roles
+                    if(!$rolesth->execute(array(":username"=>$row['username']))){
+                        print_r($dbh->errorinfo());
+                        die("\n Failed to get roles for user ".$row['username']);
+                    }
+             
+                ?>
+                    <tr>
+                        <td><?php echo $row['username']; ?></td>
+                        <td><?php echo $row['email']; ?></td>
+                        <td><?php echo $row['firstname']; ?></td>
+                        <td><?php echo $row['lastname']; ?></td>
+                        <td><?php echo $row['organization'] ?></td>
+                        <td><?php while($rolerow = $rolesth->fetch()) { echo $rolerow['name'].","; } ?></td>
+                        <td><?php echo $ip ?></td>
+                        <td><?php echo $row['useragent'] ?></td>
+                        <td><?php echo $date ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
+        </section>
     </body>
 </html>

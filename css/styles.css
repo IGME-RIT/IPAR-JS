@@ -295,3 +295,16 @@ section{
 .context .hotkey {
 	float: right;
 }
+
+table {
+	text-align: left;
+}
+
+th {
+	text-align: center;
+	font-weight: bold;
+}
+
+td {
+	max-width: 320px;
+}
