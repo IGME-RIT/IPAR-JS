@@ -305,6 +305,6 @@ th {
 	font-weight: bold;
 }
 
-td {
+td, th {
 	max-width: 320px;
 }
