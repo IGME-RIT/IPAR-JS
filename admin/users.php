@@ -52,7 +52,7 @@ $rolesth = $dbh->prepare("SELECT roles.name FROM users_roles
                 ?>
                     <tr>
                         <td><?php echo $row['username']; ?></td>
-                        <td><?php echo $row['email']; ?></td>
+                        <td><?php echo "<a href='mailto:".$row['email']."'>".$row['email']."</a>"; ?></td>
                         <td><?php echo $row['firstname']; ?></td>
                         <td><?php echo $row['lastname']; ?></td>
                         <td><?php echo $row['organization'] ?></td>
