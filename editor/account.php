@@ -31,11 +31,12 @@
 			<?php 
                 $db = new PDO('sqlite:../../../db/users.sql') or die("cannot open");
                 $sth = $db->prepare("SELECT active FROM users WHERE username = :username");
-                $sth -> execute(array(":username" => $_SESSION["user"]));
-            
-				if($res = $sth->fetchAll())
-					if($res['active']==0)  
+				if($sth -> execute(array(":username" => $_SESSION["user"]))
+				&& $res = $sth->fetch()) {
+					if($res['active'] == 0){
 						echo '<a href="./activeEmail.php" class="menuButton">Resend Activation Email</a>';
+					}
+				}
 			?>
 			<a href="./index.php" class="menuButton">Back</a>
 		</div>
