@@ -150,7 +150,9 @@
         
         // send new user email to admin
         $msg = "A new IPAR account has just been created:\nUsername: ".$user."\nEmail: ".$email."\nName: ".$firstname." ".$lastname."\nOrganization: ".$organization."\nIP: ".$ip."Useragent: ".$useragent;
-//        mail('yin.pan@rit.edu', 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>");
+
+        // TODO: send to all admin users?
+        mail('yin.pan@rit.edu', 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>");
         mail('ntr5008@rit.edu', 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>"); //debug email, uncomment above for prod.
 
         // redirect to message screen
