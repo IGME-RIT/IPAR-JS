@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	$db = new SQLite3('../../../db/users.sql') or die ("cannot open");
+	$dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
 	$user = $_SESSION["user"];
 	$email = strtolower($_POST['email']);
 	if(!$email || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
@@ -10,15 +10,19 @@
 		   	</script>";
 	   	exit();
 	}
-	$result = $db->query("SELECT * FROM users WHERE email = '$email'");
-	if($res = $result->fetchArray()){
+
+    $sth = $dbh->prepare("SELECT * FROM users WHERE email = :email");
+    $sth->execute(array(":email"=>$email));
+    if($res = $sth->fetchAll()){
 		echo "<script type='text/javascript'>
 		alert('That email is already in use by another account!');
 		window.location.href = './edit.php';
 		</script>";
 		exit();
 	}
-	$db->query("UPDATE users SET email = '$email' WHERE username = '$user'");
+
+    $sth = $dbh->prepare("UPDATE users SET email = :email WHERE username = :username");
+    $success = $sth->execute(array(":email"=>$email, ":username"=>$user));
 	header("Location: ./message.html?message=Your email address has been changed!&");
 	exit();
 ?>

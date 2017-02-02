@@ -10,22 +10,23 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['.htaccess', 'resource/*', 'image/*', '*.html','favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'login/*.html', 'login/*.php', 'reader/*.html', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          src: ['.htaccess', 'resource/*', 'image/*', '*.html','favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'login/*.html', 'login/*.php', 'reader/*.html', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*', 'admin/*','admin/.htaccess'],
           dest: 'ipar/',
           filter: 'isFile'
         }]
       }
     },
     watch: {
+        // TODO: reenable this and figure out how to properly fix warnings -ntr
       js: {
         files: [
           ['game/js/**/*.js', 'editor/js/**/*.js', 'reader/js/**/*.js'],
-          'Gruntfile.js'
-        ],
-        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'browserify:reader', 'uglify:reader']
-      },
+         'Gruntfile.js'
+         ],
+       tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'browserify:reader', 'uglify:reader']
+     },
       other: {
-          files: ['.htaccess', 'resource/*', 'image/*', '*.html', 'favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'reader/*.html', 'login/*.html', 'login/*.php', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*'],
+          files: ['.htaccess', 'resource/*', 'image/*', '*.html', 'favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'reader/*.html', 'login/*.html', 'login/*.php', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*', 'admin/*'],
           tasks: ['copy']
       },
       livereload: {
@@ -95,5 +96,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-php');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ["clean", "copy", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader", "php", "watch"]);
+  grunt.registerTask('default', ["clean", "copy:main", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader", "php", "watch"]);
+  grunt.registerTask('dev', ["clean", "copy:dev"]);
 };

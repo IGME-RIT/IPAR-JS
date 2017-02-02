@@ -39,6 +39,12 @@
 				Password: <input type="password" name="password" required />
 				<hr>
 				Confirm Password: <input type="password" name="password2" required />
+                <hr>
+                First Name: <input type="text" name="first-name" required />
+                <hr>
+                Last Name: <input type="text" name="last-name" required />
+                <hr>
+                Organization: <input type="text" name="organization" required />
 				<a href="#" onclick="submit();" class="menuButton">Create Account</a>
 				<a href="./index.php" class="menuButton">Back</a>
 			</form>

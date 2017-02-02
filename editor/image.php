@@ -1,12 +1,14 @@
 <?php
 session_start();
-$db = new SQLite3('../../../db/users.sql');
+$dbh = new SDO('sqlite:../../../db/users.sql');
 $user = $_SESSION["user"];
 
 if($_FILES["image"] && getimagesize($_FILES["image"]["tmp_name"]) !== false){
 
-	$result = $db->query("SELECT active FROM users WHERE username = '$user'");
-	if(($res = $result->fetchArray()) && $res['active']!=0){
+	//$result = $db->query("SELECT active FROM users WHERE username = '$user'");
+    $sth = $dbh->prepare("SELECT active FROM users WHERE useranme = :username");
+    $sth->execute(array(":username"=>$user));
+	if(($res = $sth->fetch()) && $res['active']!=0){
 		$image_folder = "../image/";
 		$characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		$extension = '.' . pathinfo(basename($_FILES["image"]["name"]), PATHINFO_EXTENSION);
@@ -16,7 +18,12 @@ if($_FILES["image"] && getimagesize($_FILES["image"]["tmp_name"]) !== false){
 			    chmod($image_folder . $new_image . $extension, 0644);
 	   		    $fileName = $_FILES["image"]["name"];
 	   		    echo $new_image . $extension;
-	   		    $result = $db->query("INSERT INTO images VALUES ('$new_image$extension','$fileName','$user');");
+	   		    //$result = $db->query("INSERT INTO images VALUES ('$new_image$extension','$fileName','$user');");
+                $sth = $dbh->prepare("INSERT INTO images VALUES (:img, :fileName, :username)");
+                $sth->execute(array(
+                    ":img"=>($new_image.$extension),
+                    ":fileName"=>$fileName,
+                    ":username"=>$user));
 	    	    exit();
 	   		}
 	    }

@@ -116,3 +116,17 @@ form input{
 	top: 0;
 	width: 20vh;
 }
+
+.menu table {
+	background-color: #F8F8FF;
+	color: #15718F;
+	border-collapse: collapse;
+}
+
+.menu tr {
+	border-bottom: 1px solid #555;
+}
+
+.menu td, .menu th{
+	padding: 5px;
+}
