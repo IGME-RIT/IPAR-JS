@@ -37,7 +37,7 @@ m.caseClosed = '\
 	</div>\
 	<div class="windowContent" style="overflow-y:scroll;">\
 		<p class="center">Deliver the submission file to your instructor for evaluation. The quality of your findings will determine the outcome of the cases.</p>\
-	  <button class="answer" onclick="window.location.href=\'../index.html\';">Return to Main Menu</button>\
+	  <button class="answer" onclick="window.location.href=\'../\';">Return to Main Menu</button>\
 	</div>\
 </div>\
 ';

@@ -27,7 +27,7 @@ function TitleMenu(pSection){
 	loadButton.onclick = loadInput.click.bind(loadInput);
 	loadInput.onchange = this.loadFile.bind(this);
 	continueButton.onclick = this.close.bind(this);
-	menuButton.onclick = function(){window.location.href = "../index.html";};
+	menuButton.onclick = function(){window.location.href = "../";};
 }
 
 var p = TitleMenu.prototype;

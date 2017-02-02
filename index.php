@@ -1,9 +1,9 @@
 <?php
 session_start();
+$isadmin = false;
 if($_SESSION && $_SESSION['user']) {
 	// check if user has admin rights
 	// TODO: look into setting a session variable on login
-    $isdamin = false;
 	$user = $_SESSION['user'];
     $dbh = new PDO("sqlite:../../db/users.sql") or die ("Could not establish a database connection.");
     $sth = $dbh->prepare("SELECT roles.name FROM users_roles JOIN roles ON roles.rowid = users_roles.roleid WHERE users_roles.username = :username");

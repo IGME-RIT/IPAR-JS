@@ -39,7 +39,7 @@
 				Confirm Password: <input type="password" name="password2" required />
 				<input type="text" name="key" value="<?php echo $key ?>" style="display:none;" />
 				<a onclick="submit();" href="#" class="menuButton">Reset</a>
-				<a href="./index.html" class="menuButton">Back</a>
+				<a href="./" class="menuButton">Back</a>
 			</form>
 		</div>
 		<img class="logo" src="../img/nsflogo.png" />
