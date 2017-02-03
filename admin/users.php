@@ -103,6 +103,7 @@ $rolesth =  $dbh->prepare("SELECT name, id, (username IS NOT NULL) AS hasrole FR
                                         > 
                                         <?php echo $rolerow['name']; ?>
                                     </label>
+                                    <br/>
                                    <?php 
                                 } 
                                 ?>
