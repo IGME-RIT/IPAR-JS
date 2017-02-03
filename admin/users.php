@@ -90,7 +90,19 @@ $rolesth =  $dbh->prepare("SELECT name, id, (username IS NOT NULL) AS hasrole FR
                                 <?php 
                                 while($rolerow = $rolesth->fetch()) { 
                                    ?>
-                                   <label><input type="checkbox" value="<?php echo $rolerow['name']; ?>" <?php if($rolerow['hasrole'] == 1) {?> checked="checked" <?php } ?> data-user="<?php echo $row['username'];?>" data-roleid="<?php echo $rolerow['id']; ?>" onchange="roleCheckbox(this);"> <?php echo $rolerow['name']; ?></label>
+                                    <label>
+                                        <input 
+                                            type="checkbox"
+                                            value="<?php echo $rolerow['name']; ?>" 
+                                            <?php if($rolerow['hasrole'] == 1) {?> 
+                                            checked="checked" <?php } ?> 
+                                            data-user="<?php echo $row['username'];?>" 
+                                            data-roleid="<?php echo $rolerow['id']; ?>" 
+                                            onchange="roleCheckbox(this);"
+                                            <?php if($rolerow['name'] == "admin" && $row['username'] == $_SESSION['user']) echo "disabled"; ?>
+                                        > 
+                                        <?php echo $rolerow['name']; ?>
+                                    </label>
                                    <?php 
                                 } 
                                 ?>
