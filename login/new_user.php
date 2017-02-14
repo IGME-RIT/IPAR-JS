@@ -132,8 +132,8 @@
         ));
 
         // add default user role (editor)
-        $sth = $db->prepare("INSERT INTO users_roles (username, roleid) SELECT :username as username, roles.rowid as roleid FROM roles WHERE roles.name=:role");
-        $sth->execute(array(":username"=>$user, ":role"=>"editor"));
+        //$sth = $db->prepare("INSERT INTO users_roles (username, roleid) SELECT :username as username, roles.rowid as roleid FROM roles WHERE roles.name=:role");
+        //$sth->execute(array(":username"=>$user, ":role"=>"editor"));
         
         // get appliction URL 
         // TODO: this could probably be stored in a config table -ntr
@@ -145,7 +145,7 @@
 	   	$path = $_SERVER['HTTP_HOST'].$path;
         
         // send account confirmation email to user
-   		$msg = "Thank you for creating an IPAR Editor Account! You can use this account to create IPAR cases and to manage both the images and resources for them! To activate your account please use the following link:\n\nhttp://$path/activate.php?key=$key&";
+   		$msg = "Thank you for creating an IPAR Editor Account! You can use this account to create IPAR cases and to manage both the images and resources for them! To activate your account please use the following link:\n\nhttp://$path/activate.php?key=$key&\n\nPlease note: An IPAR admin must still approve your account before you can begin using the editor.";
    		mail($_POST['email'],'Account Activation',wordwrap($msg,70),"From: IPAR Editor <yin.pan@rit.edu>");
         
         // send new user email to admin

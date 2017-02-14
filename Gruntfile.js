@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['.htaccess', 'resource/*', 'image/*', '*.html','favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'login/*.html', 'login/*.php', 'reader/*.html', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*', 'admin/*','admin/.htaccess'],
+          src: ['.htaccess', 'resource/*', 'image/*', '*.html','favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'editor/.htaccess', 'login/*.html', 'login/*.php', 'reader/*.html', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*', 'admin/*','admin/.htaccess'],
           dest: 'ipar/',
           filter: 'isFile'
         }]

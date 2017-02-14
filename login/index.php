@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	if($_SESSION && $_SESSION["user"]){
-		header("Location: ../editor/");
+		header("Location: ../");
 	}
 ?>
 <!DOCTYPE html>
@@ -15,7 +15,7 @@
 <body>
     <section class="menu">
     	<div>
-    		<h1>IPAR Editor</h1>
+    		<h1>IPAR Login</h1>
 			<a href="./login.php" class="menuButton">Login</a>
 			<a href="./signup.php" class="menuButton">Sign Up</a>
 			<a href="../" class="menuButton">Back to Main Menu</a>
