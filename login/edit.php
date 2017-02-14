@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	if(!$_SESSION || !$_SESSION["user"]){
-		header("Location: ../login/");
+		header("Location: ../");
 	}
 	
 	// get user information (for filling out form)

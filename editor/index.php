@@ -89,7 +89,7 @@
 			<input type="file" id="convert-input" accept=".ipar" />
 		</div>
 		<img class="logo" src="../img/nsflogo.png" />
-    	<a href="./account.php" class="menuButton accountName"><?php echo $_SESSION["user"]; ?></a>
+    	<a href="../login/account.php" class="menuButton accountName"><?php echo $_SESSION["user"]; ?></a>
     </section>
     <section id="createMenu" class="menu" style="display:none;">
     	<div>
