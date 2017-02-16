@@ -8,15 +8,15 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.php">Home</a>
+          <a class="navbar-brand" href="/index.php">Home</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="news.php">News</a></li>
-            <li><a href="project.php">Project</a></li>
-            <li><a href="workshop.php">Workshop</a></li>
-            <li><a href="downloads.php">Downloads</a></li>
-            <li><a href="ipar/">Web Version</a></li>
+            <li><a href="/news.php">News</a></li>
+            <li><a href="/project.php">Project</a></li>
+            <li><a href="/workshop.php">Workshop</a></li>
+            <li><a href="/downloads.php">Downloads</a></li>
+            <li><a href="/ipar/">Web Version</a></li>
           </ul>
         </div>
       </div>
