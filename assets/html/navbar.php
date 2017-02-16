@@ -23,6 +23,9 @@
                     <ul class="nav pull-left navbar-inverse drawer">
                         <li><a href="#" data-toggle="modal" data-target="#loginModal">Log In</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#newAccountModal">Create New</a></li>
+                        <!-- TODO: show these when user is logged in -->
+                        <!--li><a href="/ipar/login/account.php">My Account</a></li>
+                        <li><a href="/ipar/login/logout.php">Log Out</a></li-->
                     </ul>
                 </li>
             </ul>
