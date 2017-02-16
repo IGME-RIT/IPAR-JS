@@ -1,0 +1,110 @@
+.playDiv{
+	width: 100%;
+	padding: 50px;
+	padding-top: 30px;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.playButton{
+	background-color: green;
+	color: white;
+	font-size: 150%;
+	padding: 15px 25vw;
+	text-decoration: none;
+}
+
+.playButton:hover{
+	color: white;
+	text-decoration: none;
+}
+
+.HomepageRightContentPane{
+	position: relative;
+	right: 10%;
+	font-size: 1.3em;
+}
+.PlacesRightContentPane{
+	font-size: 1.3em;
+}
+.moveImgDown{
+	margin-top: 100px;
+
+}
+.downloads{
+	margin-left: -15px;
+}
+.larger{
+	font-size: 1.1em;
+}
+.larger2{
+	font-size: 1.3em;
+
+}
+.moveDown{
+  position: relative;
+  top: 26px;
+}
+
+ol{
+	font-size: 1.3em;
+}
+h3{
+	font-weight: bold;
+}
+h4{
+  font-weight: bold;
+}
+.span8{
+  margin-left: -25%;
+}
+.carousel-control {
+  top:50%;
+  width:auto;
+  height:1em;
+  background:transparent;
+}
+.carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right  {
+  position:static;
+  display:block;
+  width:auto;
+}
+.carousel-control .glyphicon-chevron-left:before {
+  margin-left:0;
+}
+.carousel-control .glyphicon-chevron-right:before {
+    //Reset the icon
+    content: " ";
+    //Give layout
+    display:block;
+    //Your image as background
+    background:url('http://yourarrow.png') no-repeat;
+    //To show full image set the dimensions
+    width:30px;
+	height:30px;
+}
+.label{
+  font-size: 105%;
+}
+.top-buffer { margin-top:20px; }
+#nsf{
+  position: relative;
+  left: 87%;
+  margin-top: -25%;
+}
+#nsf2{
+  position: relative;
+  left: 15%;
+  margin-top: -25%;
+}
+@media screen and (max-width: 800px) {
+#nsf{
+  position: relative;
+  left: 0%;
+  margin-top: -25%;
+}
+
+
+
+}

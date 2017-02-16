@@ -1,0 +1,132 @@
+body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.menu {
+	width: 100vw;
+	height: 100vh;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	text-align:center;
+	color: white;
+	overflow: hidden;
+	background-color: #15718F;
+}
+
+.menuButton {
+	display:flex;
+	background-color: #15718F;
+	color: white;
+	width: 20vw;
+	height: 5vh;
+	margin: 1vh 0;
+	border: 3px outset lightGrey;
+    text-decoration: none;
+	text-align:center;
+	justify-content:center;
+	align-items:center;
+}
+
+.menuLinks{
+	text-align: left;
+	padding: 10px 0;
+}
+
+.menuLinks a{
+	color: white;
+	text-decoration: underline;
+}
+
+.menuLinks a:hover{
+	cursor: pointer;
+	color: grey;
+}
+
+.menuButton:hover{
+	cursor: default;
+	background-color: #3591AF;
+}
+
+.menuButton:disabled {
+	background-color: #F8F8FF;
+	color: #B89880;
+}
+
+.inline {
+	display: inline;
+}
+
+.bottom {
+	position: relative;
+	top: 15vh;
+}
+
+form{
+	text-align: left;
+}
+
+form input{
+	width: 100%;
+}
+
+.logo {
+	position: fixed;
+	top: 75vh;
+	left: 85vw;
+	width: 10vw;
+}
+
+#load-input { display: none; }
+#convert-input { display: none; }
+
+#left-content {
+	float: left;
+	padding: 1vh 1vw;
+	height: 40vh;
+}
+
+#right-content {
+	float: right;
+	padding: 1vh 1vw;
+	height: 40vh;
+}
+
+#description-box {
+	background-color: white;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	color: #2494C5;
+	width: 25vw;
+	height: 33vh;
+	padding: 1vh 1vw;
+	text-align: left;
+}
+
+#description {
+	padding: 0;
+	margin: 0;
+}
+
+.accountName{
+	position: absolute;
+	right: 10px;
+	top: 0;
+	width: 20vh;
+}
+
+.menu table {
+	background-color: #F8F8FF;
+	color: #15718F;
+	border-collapse: collapse;
+}
+
+.menu tr {
+	border-bottom: 1px solid #555;
+}
+
+.menu td, .menu th{
+	padding: 5px;
+}

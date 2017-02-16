@@ -3,15 +3,15 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     clean: {
       build: {
-    	    src: ['ipar', 'temp']
+    	    src: ['build', 'temp']
       }
     },
     copy: {
       main: {
         files: [{
           expand: true,
-          src: ['.htaccess', 'resource/*', 'image/*', '*.html','favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'editor/.htaccess', 'login/*.html', 'login/*.php', 'reader/*.html', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*', 'admin/*','admin/.htaccess'],
-          dest: 'ipar/',
+          src: ['.htaccess', '*.php', '*.html', 'Cases/**/*', 'CasesW/**/*', 'files/**/*', 'js/**/*', 'assets/css/**/*', 'assets/fonts/**/*', 'assets/html/**/*', 'assets/img/**/*', 'assets/js/**/*', 'assets/workshop/**/*', 'ipar/.htaccess', 'ipar/resource/*', 'ipar/image/*', 'ipar/*.html', 'favicon.ico', 'ipar/*.php', 'ipar/*.iparw', 'ipar/game/*.html', 'ipar/game/*.iparw', 'ipar/editor/*.html', 'ipar/editor/*.iparw', 'ipar/editor/*.php', 'ipar/editor/.htaccess', 'ipar/login/*.html', 'ipar/login/*.php', 'ipar/reader/*.html', 'ipar/*.md', 'ipar/css/**/*', 'ipar/img/**/*', 'ipar/lib/**/*', 'ipar/admin/*','ipar/admin/.htaccess'],
+          dest: 'build/',
           filter: 'isFile'
         }]
       }
@@ -20,17 +20,17 @@ module.exports = function(grunt) {
         // TODO: reenable this and figure out how to properly fix warnings -ntr
       js: {
         files: [
-          ['game/js/**/*.js', 'editor/js/**/*.js', 'reader/js/**/*.js'],
+          ['ipar/game/js/**/*.js', 'ipar/editor/js/**/*.js', 'ipar/reader/js/**/*.js'],
          'Gruntfile.js'
          ],
        tasks: ['browserify:game', 'uglify:game', 'browserify:editor', 'uglify:editor', 'browserify:reader', 'uglify:reader']
      },
       other: {
-          files: ['.htaccess', 'resource/*', 'image/*', '*.html', 'favicon.ico', '*.php', '*.iparw', 'game/*.html', 'game/*.iparw', 'editor/*.html', 'editor/*.iparw', 'editor/*.php', 'reader/*.html', 'login/*.html', 'login/*.php', '*.md', 'css/**/*', 'img/**/*', 'lib/**/*', 'admin/*'],
+          files: ['ipar/.htaccess', 'ipar/resource/*', 'ipar/image/*', 'ipar/*.html', 'favicon.ico', 'ipar/*.php', 'ipar/*.iparw', 'ipar/game/*.html', 'ipar/game/*.iparw', 'ipar/editor/*.html', 'ipar/editor/*.iparw', 'ipar/editor/*.php', 'ipar/reader/*.html', 'ipar/login/*.html', 'ipar/login/*.php', '*.md', 'ipar/css/**/*', 'ipar/img/**/*', 'ipar/lib/**/*', 'ipar/admin/*'],
           tasks: ['copy']
       },
       livereload: {
-        files: ['ipar/**/*'],
+        files: ['build/**/*'],
         options: {
           livereload: true
         }
@@ -38,8 +38,8 @@ module.exports = function(grunt) {
     },
     browserify: {
       game: {
-    	  src: ['game/js/**/*.js'],
-          dest: 'temp/game.js',
+    	  src: ['ipar/game/js/**/*.js'],
+          dest: 'temp/ipar/game.js',
           options: {
               browserifyOptions: {
                   debug: true
@@ -47,8 +47,8 @@ module.exports = function(grunt) {
           }
       },
       editor: {
-    	  src: ['editor/js/**/*.js'],
-  	    dest: 'temp/editor.js',
+    	  src: ['ipar/editor/js/**/*.js'],
+  	    dest: 'temp/ipar/editor.js',
   	    options: {
   	        browserifyOptions: {
   	            debug: true
@@ -56,8 +56,8 @@ module.exports = function(grunt) {
   	    }
       },
       reader: {
-    	  src: ['reader/js/**/*.js'],
-  	    dest: 'temp/reader.js',
+    	  src: ['ipar/reader/js/**/*.js'],
+  	    dest: 'temp/ipar/reader.js',
   	    options: {
   	        browserifyOptions: {
   	            debug: true
@@ -67,23 +67,23 @@ module.exports = function(grunt) {
     },
     uglify: {
       game: {
-          src: 'temp/game.js',
-          dest: 'ipar/game/game.min.js'
+          src: 'temp/ipar/game.js',
+          dest: 'build/ipar/game/game.min.js'
       },
       editor: {
-          src: 'temp/editor.js',
-          dest: 'ipar/editor/editor.min.js'
+          src: 'temp/ipar/editor.js',
+          dest: 'build/ipar/editor/editor.min.js'
       },
       reader: {
-          src: 'temp/reader.js',
-          dest: 'ipar/reader/reader.min.js'
+          src: 'temp/ipar/reader.js',
+          dest: 'build/ipar/reader/reader.min.js'
       }
     },
     php: {
     	dist: {
     		options: {
 	          open: true,
-	          base: 'ipar'
+	          base: 'build'
 	        }
         }
     }
