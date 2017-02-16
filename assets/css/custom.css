@@ -98,13 +98,61 @@ h4{
   left: 15%;
   margin-top: -25%;
 }
-@media screen and (max-width: 800px) {
-#nsf{
-  position: relative;
-  left: 0%;
-  margin-top: -25%;
+
+.nav.drawer {
+    position: absolute;
+    top: 100%;
+
+    width: 130px;
+    box-shadow: 0 0 1px black;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
 }
 
+.navbar-right .nav.drawer {
+    right: -9%;
+}
 
+.drawer-handle {
+    position: relative;
+}
+
+.drawer-handle:hover .drawer{
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-header .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+@media screen and (max-width: 800px) {
+    #nsf{
+        position: relative;
+        left: 0%;
+        margin-top: -25%;
+    }
+
+    .nav.drawer {
+        position: inherit;
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+        background-color: inherit;
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0s;
+    }
+    
+    .nav.drawer li{
+        padding-left: 10px;
+    }
+
+    .navbar-right .nav.drawer{
+        right: 0;
+    }
 
 }
