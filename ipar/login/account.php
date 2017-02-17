@@ -16,7 +16,7 @@
 	function logout(){
 		if(confirm("Are you sure you want to logout? If you have an autosave it will be deleted!")){
 			localforage.removeItem('caseName').then(function(){
-				window.location.href = './logout.php';
+				window.location.href = './logout.php?redirect=/ipar/login/';
 			});
 		}
 	}

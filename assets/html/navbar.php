@@ -33,7 +33,7 @@
                         else { // user is authenticated
                         ?>
                         <li><a href="/ipar/login/account.php">My Account</a></li>
-                        <li><a href="/ipar/login/logout.php">Log Out</a></li>
+                        <li><a href="/ipar/login/logout.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>">Log Out</a></li>
                         <?php
                         }
                         ?>
