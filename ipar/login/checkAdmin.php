@@ -2,7 +2,7 @@
 include $_SERVER['DOCUMENT_ROOT']."/assets/php/user_auth.php"; // sets $loggedIn, $dbh and $_SESSION['user_roles']
 
 // direct to login screen if user is not logged in
-if(!loggedIn){
+if(!$_SESSION['user']){
     header("Location: ../login/login.php");
     exit();
 }
