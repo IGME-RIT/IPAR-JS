@@ -1,3 +1,5 @@
+<?php include $_SERVER['DOCUMENT_ROOT']."/assets/php/user_auth.php"; // sets $loggedIn, $dbh and $_SESSION['user_roles'] ?>
+
 <!-- navbar -->
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -21,11 +23,20 @@
                 <li>
                     <a href="#">Account</a>
                     <ul class="nav pull-left navbar-inverse drawer">
+                        <?php
+                        if(!$_SESSION['user']){ // user is not authenticated
+                        ?>
                         <li><a href="#" data-toggle="modal" data-target="#loginModal">Log In</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#newAccountModal">Create New</a></li>
-                        <!-- TODO: show these when user is logged in -->
-                        <!--li><a href="/ipar/login/account.php">My Account</a></li>
-                        <li><a href="/ipar/login/logout.php">Log Out</a></li-->
+                        <?php
+                        }
+                        else { // user is authenticated
+                        ?>
+                        <li><a href="/ipar/login/account.php">My Account</a></li>
+                        <li><a href="/ipar/login/logout.php">Log Out</a></li>
+                        <?php
+                        }
+                        ?>
                     </ul>
                 </li>
             </ul>
