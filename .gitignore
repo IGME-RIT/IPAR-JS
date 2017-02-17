@@ -1,5 +1,6 @@
 build
 temp
+db
 .project
 .tern-project
 .settings/
