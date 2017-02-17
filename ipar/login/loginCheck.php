@@ -10,7 +10,14 @@ if(!$loggedIn && $_POST){
         if($res = $sth->fetch()){
             if(password_verify($_POST['password'] , $res['password'])){
                 $_SESSION["user"] = $user;
-                header("Location: ../editor/");
+                
+                if(isset($_GET['redirect'])){
+                    header("Location: ".$_GET['redirect']);
+                }
+                else {
+                    header("Location: ../editor/");    
+                }
+                
                 exit();
             }
         }
@@ -23,10 +30,18 @@ if(!$loggedIn && $_POST){
 }
 
 if($loggedIn) {
-    echo "<script type='text/javascript'>
+    if(isset($_GET['redirect'])){
+        echo "<script type='text/javascript'>
+            alert('You are already logged in!');
+            window.location.href = '".$_GET['redirect']."';
+            </script>";
+    }
+    else {
+        echo "<script type='text/javascript'>
             alert('You are already logged in!');
             window.location.href = '../';
             </script>";
+    }
     exit();
 }
 else {
