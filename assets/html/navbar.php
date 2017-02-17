@@ -55,36 +55,39 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form name="login" action="/ipar/login/loginCheck.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>" method="POST" onsubmit="return validate();">
                     <div class="row">
                         <div class="col-md-12"><label>Username:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="text" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="text" style="width:100%;" name="username" required ></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><label>Password:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="password" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="password" name="password" style="width:100%;" required></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="#">Forgot Password</a>
+                            <a href="/ipar/login/recoverPass.php">Forgot Password</a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="#">Forgot Username</a>
+                            <a href="/ipar/login/recoverUser.php">Forgot Username</a>
                         </div>
                     </div>
                 </form>
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Log In</button>
+                <button type="button" class="btn btn-primary" onclick="document.forms['login'].submit();">Log In</button>
             </div>
+            <script type='text/javascript'>
+                var username = /username=(.*?)&/g.exec(window.location.search)[1];
+                document.forms['login']['username'].value = decodeURIComponent(username);
+            </script>
         </div>
     </div>
 </div>
