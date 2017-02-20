@@ -9,7 +9,7 @@
 		<div style="height:65px"></div>
 		<div class="container">
 			<div class="playDiv">
-				<a class="playButton" href="ipar/">Play Now</a>	
+				<a class="playButton" href="/ipar/game/">Play Now</a>	
 			</div>
 			<div class="jumbotron">
 				<h2><strong>Gamified Digital Forensics Project</strong></h2>

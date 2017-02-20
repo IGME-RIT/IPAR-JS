@@ -17,7 +17,7 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="/about.php">About</a></li>
                 <li><a href="/ipar/editor/">Editor</a></li>
-                <li><a href="/ipar/">Play Now</a></li>
+                <li><a href="/ipar/game/">Play Now</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right drawer-handle">
                 <li>
