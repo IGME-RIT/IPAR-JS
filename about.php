@@ -48,7 +48,11 @@
 						<span class="label label-primary">Nicholas Fealey (Rochester Institute of Technology)</span>
 					</div>
 				</div>
-				
+				<div class="row top-buffer">
+					<div class="col-xs-12">
+						<span class="label label-primary">Noah Ratcliff (Rochester Institute of Technology)</span>
+					</div>
+				</div>
 				<div class="row top-buffer">
 					<div class="col-xs-12">
 						<span class="label label-primary">Joseph DeLeone (Corning Community College)</span>
