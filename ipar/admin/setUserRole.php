@@ -4,17 +4,17 @@
  * by a user authenticated as an admin.
  */
 
-// check to be sure there is POST data
-if(!$_POST)
+// check to be sure there is POST data & user is authorized to change roles
+if(!$_POST){
+    echo "Failed to update role. Reason: POST data not included with request.";
     exit();
+}
 
 // get POST data
 $username = $_POST['user'];
 $rolename = $_POST['roleid'];
 $value = $_POST['value'];
 
-// establish db connection
-$dbh = new PDO("sqlite:../../../db/users.sql");
 $query = "DELETE FROM users_roles WHERE username=:username And roleid=:roleid";
 
 if($value == 1){
@@ -29,5 +29,5 @@ if($value == 1){
 $sth = $dbh->prepare($query);
 $success = $sth->execute(array(":username"=>$username, ":roleid"=>$rolename));
 
-// TODO: return result?
+echo "Successfully changed user role.";
 ?>
