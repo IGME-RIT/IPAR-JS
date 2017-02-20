@@ -1,4 +1,9 @@
-<?php include $_SERVER['DOCUMENT_ROOT']."/assets/php/user_auth.php"; // sets $loggedIn, $dbh and $_SESSION['user_roles'] ?>
+<?php 
+if(!isset($loggedIn)){ // check if user_auth is already included
+    include $_SERVER['DOCUMENT_ROOT']."/assets/php/user_auth.php"; // sets $loggedIn, $dbh and $_SESSION['user_roles'] 
+}
+
+?>
 
 <!-- navbar -->
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
