@@ -99,6 +99,83 @@ h4{
   margin-top: -25%;
 }
 
+.uline:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: #aaa;
+}
+
+.heavy {
+    font-weight: 600;
+}
+
+.jumbotron {
+    margin-bottom: 0;
+}
+
+.jumbotron.light {
+    background-color: #fafafa; 
+}
+
+.row-centered{
+    text-align: center;
+    margin: 0 auto;
+}
+
+.center-block{
+    float: none;
+}
+
+.panel-buttons {
+    display:block;
+    text-align:center;
+    padding:0;
+}
+
+.panel-buttons li {
+    text-align:center;
+    padding: 14px 4px 10px 4px;
+    width: 94px;
+    height: 102px;
+    background-color: #f6f6f6;
+    display: inline-block;
+    color: #337ab7;
+    transition: background-color 0.2s;
+    margin-bottom: 3px;
+    position: relative;
+}
+
+.panel-buttons li a {
+    position: absolute;
+    padding: 14px 4px 10px 4px;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-buttons li a, .panel-buttons li a:visited, .panel-buttons li a:hover{
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.05s;
+}
+
+.panel-buttons li:hover {
+    background-color: #337ab7;
+    color: #fff;
+    transition: background-color 0.1s;
+}
+
+.btn-tile .glyphicon {
+    display: block;
+    width: 100%;
+    font-size: 4em;
+    text-align:center;
+}
+
 .nav.drawer {
     position: absolute;
     top: 100%;
