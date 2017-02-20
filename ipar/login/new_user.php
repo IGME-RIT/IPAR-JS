@@ -9,8 +9,7 @@
        !$_POST['organization'])
 		exit();
 
-    // open database with PDO
-    $db = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
+    include $_SERVER['DOCUMENT_ROOT']."/assets/php/users_db.php"; //sets $dbh
 
     // make username and email all lowercase (case insensitive)
     $user = strtolower($_POST['username']);
@@ -55,7 +54,7 @@
     }
     
     // check if user already exists
-    $userStatement = $db->prepare("SELECT * FROM users WHERE username = :username");
+    $userStatement = $dbh->prepare("SELECT * FROM users WHERE username = :username");
 
     $success = $userStatement->execute(array(":username" => $user));
 
@@ -73,7 +72,7 @@
     }
     else{
         // check if email is already in use
-        $emailStatement = $db->prepare("SELECT * FROM users WHERE email = :email");
+        $emailStatement = $dbh->prepare("SELECT * FROM users WHERE email = :email");
         $emailStatement->execute(array(":email" => $email));
 
         if(!$success){
@@ -98,7 +97,7 @@
    		$hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
         
         // create user record in users
-        $sth = $db->prepare("INSERT INTO users VALUES (:username, :email, :password, :curKey, 0, :firstname, :lastname, :organization)");
+        $sth = $dbh->prepare("INSERT INTO users VALUES (:username, :email, :password, :curKey, 0, :firstname, :lastname, :organization)");
         
         // prepare parameters set
         $params = array(":username" => $user, 
@@ -111,7 +110,7 @@
         
         $success = $sth->execute($params);
         if(!$success){
-            // print_r($db->errorInfo());
+            // print_r($dbh->errorInfo());
             
             // TODO: put some error logging here -ntr
             die("<br><br>Failed to create account. Please contact the site administrator.");
@@ -123,7 +122,7 @@
         $useragent = $_SERVER['HTTP_USER_AGENT'];
 
         // insert user metadata 
-        $sth = $db->prepare("INSERT INTO usermetadata VALUES (:username, :ip, :useragent, :date)");
+        $sth = $dbh->prepare("INSERT INTO usermetadata VALUES (:username, :ip, :useragent, :date)");
         $sth->execute(array(
             ":username"=>$user,
             ":ip"=>ip2long($ip),
@@ -132,7 +131,7 @@
         ));
 
         // add default user role (editor)
-        //$sth = $db->prepare("INSERT INTO users_roles (username, roleid) SELECT :username as username, roles.rowid as roleid FROM roles WHERE roles.name=:role");
+        //$sth = $dbhh->prepare("INSERT INTO users_roles (username, roleid) SELECT :username as username, roles.rowid as roleid FROM roles WHERE roles.name=:role");
         //$sth->execute(array(":username"=>$user, ":role"=>"editor"));
         
         // get appliction URL 
@@ -154,9 +153,14 @@
         // TODO: send to all admin users?
         mail('yin.pan@rit.edu', 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>");
         mail('ntr5008@rit.edu', 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>"); //debug email, uncomment above for prod.
+        
+        $redirect = '/ipar/'; // default redirect is to IPAR home for now
+        if(isset($_GET['redirect'])){
+            $redirect = $_GET['redirect'];
+        }
 
         // redirect to message screen
-   		header("Location: ./message.html?message=Your account has been created! You will be been emailed a confirmation email shortly. Please use it to confirm your email and unlock your account for use.&");
+   		header("Location: ./message.html?message=Your account has been created! You will be been emailed a confirmation email shortly. Please use it to confirm your email and unlock your account for use.&redirect=$redirect");
    	}
    }
 ?>

@@ -84,10 +84,6 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="document.forms['login'].submit();">Log In</button>
             </div>
-            <script type='text/javascript'>
-                var username = /username=(.*?)&/g.exec(window.location.search)[1];
-                document.forms['login']['username'].value = decodeURIComponent(username);
-            </script>
         </div>
     </div>
 </div>
@@ -103,55 +99,54 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form name="signup" action="/ipar/login/new_user.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
                     <div class="row">
                         <div class="col-md-12"><label>Username:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="text" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="text" name="username" required style="width:100%;"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><label>Email:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="text" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="text" name="email" required style="width:100%;"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><label>Password:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="password" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="password" name="password" required style="width:100%;"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><label>Confirm Password:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="password" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="password" name="password2" required style="width:100%;"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><label>First Name:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="text" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="text" name="first-name" required style="width:100%;"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><label>Last Name:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="text" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="text" name="last-name" required style="width:100%;"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-12"><label>Organization:</label></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12"><input type="text" style="width:100%;"></div>
+                        <div class="col-md-12"><input type="text" name="organization" required style="width:100%;"></div>
                     </div>
                 </form>
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Create Account</button>
+                <button type="button" class="btn btn-primary" onclick="document.forms['signup'].submit();">Create Account</button>
             </div>
         </div>
     </div>

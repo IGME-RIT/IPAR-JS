@@ -10,13 +10,39 @@
     <section class="menu">
     	<div>
     		<p id="message"></p>
-			<a href="./index.php" class="menuButton">Back</a>
+			<a id="back" href="/ipar/" class="menuButton">Back</a>
 		</div>
 		<img class="logo" src="../img/nsflogo.png" />
     </section>
 	<script type='text/javascript'>
-		var message = /(?:&|\?)message=(.*?)&/g.exec(window.location.search);
-		document.getElementById("message").innerHTML = decodeURIComponent(message[1]);
+        function parseURLParams(url) {
+            var queryStart = url.indexOf("?") + 1,
+                queryEnd   = url.indexOf("#") + 1 || url.length + 1,
+                query = url.slice(queryStart, queryEnd - 1),
+                pairs = query.replace(/\+/g, " ").split("&"),
+                parms = {}, i, n, v, nv;
+            
+            if (query === url || query === "") return;
+            
+            for (i = 0; i < pairs.length; i++) {
+                nv = pairs[i].split("=", 2);
+                n = decodeURIComponent(nv[0]);
+                v = decodeURIComponent(nv[1]);
+                
+                if (!parms.hasOwnProperty(n)) parms[n] = [];
+                parms[n].push(nv.length === 2 ? v : null);
+            }
+            return parms;
+        }
+        var get = parseURLParams(window.location.search);
+        
+        var message = get["message"];
+		document.getElementById("message").innerHTML = decodeURIComponent(message);
+        
+        // get redirect location if set
+        if("redirect" in get && get["redirect"] != "") {
+            document.getElementById("back").href = get["redirect"];
+        }
 	</script>
 </body>
 </html>
