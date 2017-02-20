@@ -39,6 +39,7 @@ if($_SESSION && $_SESSION['user']) {
 			<?php if($isadmin){ ?>
 			<button class="menuButton" onclick="window.location.href = './admin/';">Admin</button>
 			<?php } ?>
+            <button class="menuButton" onclick="window.location.href = '/';">Home</button>
 		</div>
 		<img class="logo" src="img/nsflogo.png" />
     </section>
