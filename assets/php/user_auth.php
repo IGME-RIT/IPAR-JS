@@ -11,8 +11,9 @@ function role_name($row){
     return $row["name"];
 }
 
-
-if($loggedIn) { // set user roles (updating every page load because they could change)
+// set user roles (updating every page load because they could change)
+// TODO: might want to look into setting a flag in the user session when roles change, so we don't have to query the db every page load
+if($loggedIn) { 
     // get user roles from db
     $sth = $dbh->prepare("SELECT roles.name FROM users_roles JOIN roles ON roles.rowid = users_roles.roleid WHERE users_roles.username = :username");
     
