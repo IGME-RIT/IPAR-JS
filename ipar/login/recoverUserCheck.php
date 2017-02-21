@@ -20,6 +20,6 @@
 	   }
 	   
    }
-   header("Location: ./message.html?message=A recovery email was sent to the email address if their is an account connected to it. Follow the instructions in the email to recover your account.&");
+   header("Location: /message.php?message=A recovery email was sent to the email address if their is an account connected to it. Follow the instructions in the email to recover your account.&");
    exit();
 ?>

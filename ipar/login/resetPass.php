@@ -2,11 +2,11 @@
 	$dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
 	$key = $_GET['key'];
 	if(!$key)
-		header("Location: ./message.html?message=That recovery link is expired!&");
+		header("Location: /message.php?message=That recovery link is expired!&");
 	$sth = $dbh->prepare("SELECT username FROM users WHERE curKey = :curKey");
     $sth->execute(array(":curKey"=>$key));
 	if(!$sth->fetch())
-		header("Location: ./message.html?message=That recovery link is expired!&");
+		header("Location: /message.php?message=That recovery link is expired!&");
 ?>
 <!DOCTYPE html>
 <html lang="en">

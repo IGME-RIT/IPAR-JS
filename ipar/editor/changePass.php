@@ -23,7 +23,7 @@
 			//$db->query("UPDATE users SET password = '$pass' WHERE username = '$user'");
             $sth = $dbh->prepare("UPDATE users SET password = :password WHERE username = :username");
             $sth->execute(array(":username"=>$user, ":password"=>$pass));
-			header("Location: ./message.html?message=Your password has been changed!&");
+			header("Location: /message.php?message=Your password has been changed!&");
 			exit();
 		}
 	}

@@ -26,6 +26,6 @@
 	   
 	   
    }
-   header("Location: ./message.html?message=A recovery email was sent to the email address for the account with the given username if the account exists. Follow the instructions in the email to change your passsword.&");
+   header("Location: /message.php?message=A recovery email was sent to the email address for the account with the given username if the account exists. Follow the instructions in the email to change your passsword.&");
    exit();
 ?>

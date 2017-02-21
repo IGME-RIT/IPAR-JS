@@ -160,7 +160,7 @@
         }
 
         // redirect to message screen
-   		header("Location: ./message.html?message=Your account has been created! You will be been emailed a confirmation email shortly. Please use it to confirm your email and unlock your account for use.&redirect=$redirect");
+   		header("Location: /message.php?message=Your account has been created! You will be been emailed a confirmation email shortly. Please use it to confirm your email and unlock your account for use.&redirect=$redirect");
    	}
    }
 ?>
