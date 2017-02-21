@@ -99,6 +99,69 @@ h4{
   margin-top: -25%;
 }
 
+.nav.drawer {
+    position: absolute;
+    top: 100%;
+
+    width: 130px;
+    box-shadow: 0 0 1px black;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.navbar-right .nav.drawer {
+    right: -9%;
+}
+
+.drawer-handle {
+    position: relative;
+}
+
+.drawer-handle:hover .drawer{
+    visibility: visible;
+    opacity: 1;
+}
+
+.btn-play-big {
+    font-size: 22pt;
+    width: 100%;
+}
+
+.col-vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+#footer-logos {
+    float: right;
+}
+
+.yt-embed {
+    display: inline-block;
+    position:relative;
+    width: 100%;
+}
+
+/* clearfix */
+.yt-embed:before {
+    content: "";
+    display:block;
+    width: 100%;
+    margin-top: 56.25%; /* maintain 16:9 aspect ratio */
+}
+
+.yt-embed .yt-player {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;  
+}
+
 .uline:after {
     content: "";
     display: block;
@@ -176,28 +239,47 @@ h4{
     text-align:center;
 }
 
-.nav.drawer {
-    position: absolute;
-    top: 100%;
-
-    width: 130px;
-    box-shadow: 0 0 1px black;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.2s;
+.jumbotron table td, .jumbotron table th{
+    padding-left: 6px;
+    white-space: nowrap;
+    max-width: 300px;
+    vertical-align: top;
 }
 
-.navbar-right .nav.drawer {
-    right: -9%;
+/*
+.jumboton table td:not(:last-child),
+.jumbotron table th:not(:last-child) {
+    border-right: 1px #aaa solid;
+}
+*/
+
+.jumbotron table {
+    border-collapse: collapse;
+    border: 1px solid #aaa;
 }
 
-.drawer-handle {
-    position: relative;
+.jumbotron table td.of-scroll {
+    white-space:nowrap;
+    overflow-x:scroll;
 }
 
-.drawer-handle:hover .drawer{
-    visibility: visible;
-    opacity: 1;
+.jumbotron table td.wrap {
+    white-space:normal;
+}
+
+.jumbotron table th {
+    padding: 4px 10px;
+    text-align:center;
+    background-color: #555;
+    color: #fff;
+}
+
+.jumbotron table td {
+    padding: 0 0.6em;
+}
+
+.jumbotron table tr:nth-child(even) {
+    background-color: #fefefe;
 }
 
 .modal-header .close {
@@ -206,11 +288,17 @@ h4{
     right: 15px;
 }
 
-.hidden {
-    display: none;
+hr {
+    border-top-color: #aaa;
 }
 
-@media screen and (max-width: 800px) {
+label {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    font-weight: normal;
+}
+
+@media screen and (max-width: 767px) {
     #nsf{
         position: relative;
         left: 0%;
@@ -235,5 +323,12 @@ h4{
     .navbar-right .nav.drawer{
         right: 0;
     }
-
+    
+    .btn-play-big {
+        font-size: 18pt;
+    }
+    
+    #footer-logos {
+        float: none;
+    }
 }
