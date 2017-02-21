@@ -10,3 +10,4 @@ node_modules
 pid
 *.swo
 *.swp
+.vscode/
