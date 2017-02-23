@@ -44,7 +44,6 @@
                             <a href="/ipar/login/recoverUser.php">Forgot Username</a>
                         </div>
                         <div class="col-md-8 col-xs-8" style="text-align: right; display: flex; align-items: center; justify-content: flex-end;">
-                            <a class="btn btn-default" href="#">Back</a>
                             <a class="btn btn-primary" onclick="document.forms['login'].submit();">Log In</a>
                         </div>
                     </div>
