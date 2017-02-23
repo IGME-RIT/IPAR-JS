@@ -32,7 +32,7 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                     <a href="#">Account</a>
                     <ul class="nav pull-left navbar-inverse drawer">
                         <?php
-                        if(!$_SESSION['user']){ // user is not authenticated
+                        if(!isset($_SESSION['user'])){ // user is not authenticated
                         ?>
                         <li><a href="#" data-toggle="modal" data-target="#loginModal">Log In</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#newAccountModal">Create New</a></li>
@@ -63,7 +63,7 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                 </button>
             </div>
             <div class="modal-body">
-                <form name="login" action="/ipar/login/loginCheck.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>" method="POST" onsubmit="return validate();">
+                <form name="login-page" action="/ipar/login/loginCheck.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>" method="POST" onsubmit="return validate();">
                     <div class="row">
                         <div class="col-md-12"><label>Username:</label></div>
                     </div>
@@ -90,7 +90,7 @@ if(!isset($loggedIn)){ // check if user_auth is already included
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="document.forms['login'].submit();">Log In</button>
+                <button type="button" class="btn btn-primary" onclick="document.forms['login-page'].submit();">Log In</button>
             </div>
         </div>
     </div>

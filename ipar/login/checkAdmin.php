@@ -3,7 +3,7 @@ include $_SERVER['DOCUMENT_ROOT']."/assets/php/user_auth.php"; // sets $loggedIn
 
 // direct to login screen if user is not logged in
 if(!$_SESSION['user']){
-    header("Location: ../login/login.php");
+    header("Location: ../login/login.php?redirect=".$_SERVER['PHP_SELF']);
     exit();
 }
 

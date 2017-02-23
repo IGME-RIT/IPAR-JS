@@ -1,5 +1,4 @@
-<?php
-include $_SERVER['DOCUMENT_ROOT']. "/assets/php/user_auth.php"; // sets $dbh, $loggedIn
+<?php include $_SERVER['DOCUMENT_ROOT']. "/assets/php/user_auth.php"; // sets $dbh, $loggedIn
 
 if(!$loggedIn && $_POST){
     $user = strtolower($_POST['username']);
@@ -15,16 +14,21 @@ if(!$loggedIn && $_POST){
                     header("Location: ".$_GET['redirect']);
                 }
                 else {
-                    header("Location: ../editor/");    
+                    header("Location: /");    
                 }
                 
                 exit();
             }
         }
     }
+    $loc = "./login.php?username=$user&";
+    if(isset($_GET['redirect'])) {
+        $loc."redirect=".$_GET['redirect']."&";
+    }
+
     echo "<script type='text/javascript'>
     alert('Invaild username or password!');
-    window.location.href = './login.php?username=$user&';
+    window.location.href = '$loc';
     </script>";
     exit();
 }
