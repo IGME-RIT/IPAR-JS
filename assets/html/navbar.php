@@ -22,6 +22,7 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                 <li><a href="/">Home</a></li>
                 <li><a href="/about.php">About</a></li>
                 <li><a href="/ipar/editor/">Editor</a></li>
+                <li><a href="/ipar/reader/">Reader</a></li>
                 <?php if(isset($_SESSION['user']) && isset($_SESSION['user_roles']) && in_array('admin', $_SESSION['user_roles'])) { ?>
                 <li><a href="/ipar/admin/">Admin</a></li>
                 <?php } ?>
