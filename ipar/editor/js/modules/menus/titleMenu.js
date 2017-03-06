@@ -31,7 +31,7 @@ function TitleMenu(pSection){
 	convertButton.onclick = convertInput.click.bind(convertInput);
 	convertInput.onchange = this.convertFile.bind(this);
 	continueButton.onclick = this.close.bind(this);
-	menuButton.onclick = function(){window.location.href = "../";};
+	menuButton.onclick = function(){window.location.href = "/";};
 }
 
 var p = TitleMenu.prototype;

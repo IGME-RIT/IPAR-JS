@@ -18,7 +18,7 @@ function TitleMenu(pSection){
 	// Setup the buttons
 	loadButton.onclick = loadInput.click.bind(loadInput);
 	loadInput.addEventListener('change', this.loadFile.bind(this), false);
-	menuButton.onclick = function(){window.location.href = "../";};
+	menuButton.onclick = function(){window.location.href = "/";};
 	
 	// Display the section holding the menu
 	section.style.display = '';
