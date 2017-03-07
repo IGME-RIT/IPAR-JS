@@ -138,6 +138,11 @@ h4{
     float: right;
 }
 
+.footer {
+    position: relative;
+    z-index: -1;
+}
+
 .yt-embed {
     display: inline-block;
     position:relative;
@@ -199,7 +204,6 @@ h4{
 
 .panel-buttons li {
     text-align:center;
-    padding: 14px 4px 10px 4px;
     width: 94px;
     height: 102px;
     background-color: #f6f6f6;
@@ -208,9 +212,10 @@ h4{
     transition: background-color 0.2s;
     margin-bottom: 3px;
     position: relative;
+    vertical-align: top;
 }
 
-.panel-buttons li a {
+.panel-buttons li a, .panel-buttons li button {
     position: absolute;
     padding: 14px 4px 10px 4px;
     box-sizing: border-box;
@@ -220,7 +225,7 @@ h4{
     height: 100%;
 }
 
-.panel-buttons li a, .panel-buttons li a:visited, .panel-buttons li a:hover{
+.panel-buttons li button, .panel-buttons li a, .panel-buttons li a:visited, .panel-buttons li a:hover{
     text-decoration: none;
     color: inherit;
     transition: color 0.05s;
@@ -230,6 +235,19 @@ h4{
     background-color: #337ab7;
     color: #fff;
     transition: background-color 0.1s;
+}
+
+button.btn-tile {
+    background: none;
+    border: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+
+}
+
+button.btn-tile:focus {
+    outline: none;
 }
 
 .btn-tile .glyphicon {
@@ -296,6 +314,15 @@ label {
     margin-top: 5px;
     margin-bottom: 0px;
     font-weight: normal;
+}
+
+.navbar {
+    height: 51px;
+}
+
+.clearfix {
+    display: block;
+
 }
 
 @media screen and (max-width: 767px) {
