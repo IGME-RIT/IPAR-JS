@@ -1,12 +1,10 @@
 <?php
-session_start();
-$dbh = new SDO('sqlite:../../../db/users.sql');
 $user = $_SESSION["user"];
 
 if($_FILES["image"] && getimagesize($_FILES["image"]["tmp_name"]) !== false){
 
 	//$result = $db->query("SELECT active FROM users WHERE username = '$user'");
-    $sth = $dbh->prepare("SELECT active FROM users WHERE useranme = :username");
+    $sth = $dbh->prepare("SELECT active FROM users WHERE username = :username");
     $sth->execute(array(":username"=>$user));
 	if(($res = $sth->fetch()) && $res['active']!=0){
 		$image_folder = "../image/";
@@ -18,7 +16,6 @@ if($_FILES["image"] && getimagesize($_FILES["image"]["tmp_name"]) !== false){
 			    chmod($image_folder . $new_image . $extension, 0644);
 	   		    $fileName = $_FILES["image"]["name"];
 	   		    echo $new_image . $extension;
-	   		    //$result = $db->query("INSERT INTO images VALUES ('$new_image$extension','$fileName','$user');");
                 $sth = $dbh->prepare("INSERT INTO images VALUES (:img, :fileName, :username)");
                 $sth->execute(array(
                     ":img"=>($new_image.$extension),
