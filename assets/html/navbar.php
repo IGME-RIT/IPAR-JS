@@ -26,6 +26,7 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                 <?php if(isset($_SESSION['user']) && isset($_SESSION['user_roles']) && in_array('admin', $_SESSION['user_roles'])) { ?>
                 <li><a href="/ipar/admin/">Admin</a></li>
                 <?php } ?>
+                <li><a href="/downloads.php">Downloads</a></li>
                 <li><a href="/ipar/game/">Play Now</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right drawer-handle">
