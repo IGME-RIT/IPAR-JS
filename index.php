@@ -25,7 +25,7 @@
 						<img id="nsf" src="assets/img/NSF.png"/>
 						<p class="larger moveDown">
 							IPAR (Imaging, Preserving, analyzing and reporting) is a narrative-based detective-themed
-							adventure <a href="files/IPAR Game.zip">game</a>, which has two versions. One runs on Windows 7 or newer with the .NET framework installed, and the other can be run in most modern browsers. Through the
+							adventure <a href="files/IPAR Game 1.01.zip">game</a>, which has two versions. One runs on Windows 7 or newer with the .NET framework installed, and the other can be run in most modern browsers. Through the
 							game, the player assumes the role of an
 							investigator and collects evidence, answers questions, and draws conclusions as part
 							of a simulated investigation. Players are guided through a series of scripted steps,
@@ -45,7 +45,7 @@
 					
 					<div class="col-xs-5 col-md-5">
 						<p class="larger moveDown">
-							Developed alongside the <a href="files/IPAR Game.zip">game</a> is an <a href="files/IPAR Editor.zip">editor</a>
+							Developed alongside the <a href="files/IPAR Game 1.01.zip">game</a> is an <a href="files/IPAR Editor.zip">editor</a>
 							that can be used to generate new cases. Everything from subject matter to graphical
 							elements to story can be set by the user to create an entertaining educational experience, and an <a href="files/IPAR Reader.zip">reader</a> that
 							allows instructors to view the reports submitted by students for grading.
