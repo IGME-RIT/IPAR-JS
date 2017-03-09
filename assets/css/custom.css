@@ -254,6 +254,12 @@ button.btn-tile[disabled] {
     color: #aaa;
 }
 
+.modal-dialog {
+    background-color: #fefefe;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
 input {
     color: black;
 }

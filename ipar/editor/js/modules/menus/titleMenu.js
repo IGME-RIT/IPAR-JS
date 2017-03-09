@@ -63,12 +63,12 @@ p.open = function(){
 p.create = function(){
 
 	var page = this;
-	localforage.getItem('caseName').then(function(caseName){
-		if(!caseName || confirm("Are you sure you want to start a new case? Your autosave data will be lost!")){
-			page.next = NEXT.CREATE;
-			page.close();
-		}
-	});
+//	localforage.getItem('caseName').then(function(caseName){
+//		if(!caseName || confirm("Are you sure you want to start a new case? Your autosave data will be lost!")){
+//			// show modal
+			$("#createMenu").modal();
+//		}
+//	});
 	
 }
 

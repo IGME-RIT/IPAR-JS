@@ -34,40 +34,46 @@ function CreateMenu(pSection){
     };
 	var page = this;
     create.onclick = function(){
-    	
-    	page.next = NEXT.BOARD;
-    	create.disabled = true;
-    	back.disabled = true;
-    	var request = new XMLHttpRequest();
-    	request.responseType = "arraybuffer";
-    	request.onreadystatechange = function() {
-    	  if (request.readyState == 4 && request.status == 200) {
-    		  
-    		Utilities.loadCaseData(nameInput.value+".iparw", request.response, function(){
-    			localforage.getItem('caseFile').then(function(caseFile){
-    				caseFile = Utilities.getXml(caseFile);
-
-    				// Set the inputs to the current case
-    		    	var curCase = caseFile.getElementsByTagName("case")[0];
-    		    	curCase.setAttribute('caseName', nameInput.value);
-    		    	curCase.setAttribute('description', descriptionInput.innerHTML);
-    		    	curCase.setAttribute('conclusion', conclusionInput.innerHTML);
-    		    	var catList = curCase.getElementsByTagName('categoryList')[0];
-    		    	catList.setAttribute('categoryCount', '1');
-    		    	catList.innerXML('<element>'+cat1Input.value+'</element>');
-    		    	var cat1 = caseFile.createElement('category');
-    		    	cat1.setAttribute('categoryDesignation', '0');
-    		    	cat1.setAttribute('questionCount', '0');
-    		    	curCase.appendChild(cat1);
-    		    	
-    		    	// Save the changes to local storage
-    		    	localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile), page.close.bind(page));
-    			});
-    		});
-    	  }
-    	};
-    	request.open("GET", "base.iparw", true);
-    	request.send();
+		localforage.getItem('caseName').then(function(caseName){
+    		if(!caseName || confirm("Are you sure you want to start a new case? Your autosave data will be lost!")){
+        		// hide modal
+        		$("#createMenu").modal('toggle');
+        
+            	page.next = NEXT.BOARD;
+            	create.disabled = true;
+            	back.disabled = true;
+            	var request = new XMLHttpRequest();
+            	request.responseType = "arraybuffer";
+            	request.onreadystatechange = function() {
+            	  if (request.readyState == 4 && request.status == 200) {
+            		  
+            		Utilities.loadCaseData(nameInput.value+".iparw", request.response, function(){
+            			localforage.getItem('caseFile').then(function(caseFile){
+            				caseFile = Utilities.getXml(caseFile);
+        
+            				// Set the inputs to the current case
+            		    	var curCase = caseFile.getElementsByTagName("case")[0];
+            		    	curCase.setAttribute('caseName', nameInput.value);
+            		    	curCase.setAttribute('description', descriptionInput.innerHTML);
+            		    	curCase.setAttribute('conclusion', conclusionInput.innerHTML);
+            		    	var catList = curCase.getElementsByTagName('categoryList')[0];
+            		    	catList.setAttribute('categoryCount', '1');
+            		    	catList.innerXML('<element>'+cat1Input.value+'</element>');
+            		    	var cat1 = caseFile.createElement('category');
+            		    	cat1.setAttribute('categoryDesignation', '0');
+            		    	cat1.setAttribute('questionCount', '0');
+            		    	curCase.appendChild(cat1);
+            		    	
+            		    	// Save the changes to local storage
+            		    	localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile), page.close.bind(page));
+            			});
+            		});
+            	  }
+            	};
+            	request.open("GET", "base.iparw", true);
+            	request.send();
+    		}
+    	});
     };
 }
 

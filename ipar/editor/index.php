@@ -16,7 +16,6 @@
     <!-- TODO: clean up head -->
 </head>
 <body>
-	</div>
     <?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/navbar.php"; ?>
 	<!-- div for console for mobile testing -->
 	<!--<div id="console" style="position:fixed;background-color:black;color:white;top:0;left:0;z-index:999;width:100vw;">This is the console</div>  -->
@@ -122,22 +121,30 @@
     	<a href="../login/account.php" class="menuButton accountName" style="display: none;"><?php echo $_SESSION["user"]; ?></a>
 
     </div>
-    <section id="createMenu" class="menu" style="display:none;">
-    	<div>
-			<h1>Create Case</h1>
-			<form>
-				Name: <input name="name" id="input-name" />
-				<hr>
-				Description: <p><div class="text-box large" id="input-description" contenteditable></div></p>
-				<hr>
-				Conclusion: <p><div class="text-box large" id="input-conclusion" contenteditable></div></p>
-				<hr> 
-				First Category Name: <input name="cat1" id="input-cat1" /></span>
-			</form>
-			<button id="back-button" class="menuButton inline">Back</button>
-			<button id="create-button" class="menuButton inline">Create</button>
+    <section id="createMenu" class="modal fade" role="modal">
+    	<div class="modal-dialog" role="document">
+			<div class="modal-header">
+				<h3>New Case</h3>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+		    	<form>
+		    		Name: <input name="name" id="input-name" />
+		    		<hr>
+		    		Description: <p><div class="text-box large" id="input-description" contenteditable></div></p>
+		    		<hr>
+		    		Conclusion: <p><div class="text-box large" id="input-conclusion" contenteditable></div></p>
+		    		<hr> 
+		    		First Category Name: <input name="cat1" id="input-cat1" /></span>
+		    	</form>
+			</div>
+			<div class="modal-footer">
+		    	<button id="back-button" type="button" class="btn btn-seconday" data-dismiss="modal">Close</button>
+		    	<button id="create-button" type="button" class="btn btn-primary">Create case</button>
+			</div>
 		</div>
-		<img class="logo" src="../img/nsflogo.png" />
     </section>
 	<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/footer.php";?>
 </body>
