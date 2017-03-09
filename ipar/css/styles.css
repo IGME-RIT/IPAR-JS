@@ -79,6 +79,7 @@ header {
 	height: 5vh;
 	bottom: 0px;
 	left: 0px;
+	margin-bottom: 16px;
 }
 
 #bottomBar button {
@@ -150,6 +151,8 @@ header {
 
 .topBtns {
 	left: 1vw;
+	display: inline;
+	float: left;
 }
 
 .topBtns button{

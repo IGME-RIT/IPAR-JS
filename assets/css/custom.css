@@ -250,6 +250,10 @@ button.btn-tile {
 
 }
 
+input {
+    color: black;
+}
+
 button.btn-tile:focus {
     outline: none;
 }

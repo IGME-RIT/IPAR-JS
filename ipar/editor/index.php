@@ -21,7 +21,7 @@
 	<!-- div for console for mobile testing -->
 	<!--<div id="console" style="position:fixed;background-color:black;color:white;top:0;left:0;z-index:999;width:100vw;">This is the console</div>  -->
 	<!-- Section for the board -->
-	<section id="board" style="display:none; margin-top: 51px;">
+	<section id="board" style="display:none; padding-top: 51px;">
 		<div style="position:relative">
 		<div id="controlBar" class="buttonBar">
 			<button id="zoom-in">+</button>
