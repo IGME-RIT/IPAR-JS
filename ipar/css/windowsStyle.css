@@ -404,6 +404,7 @@
 	margin:10px 0;
 	text-align:left;
 	min-width:25vw;
+	min-height: 1.5em; /* fix for height not being set in Firefox */
 	white-space:nowrap;
 	overflow:hidden;
 	border:1px solid #15718F;
