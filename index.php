@@ -50,6 +50,9 @@
 							elements to story can be set by the user to create an entertaining educational experience, and an <a href="files/IPAR Reader.zip">reader</a> that
 							allows instructors to view the reports submitted by students for grading.
 						</p>
+						<p class="larger moveDown">
+							An account is not required to play the web-based game. However, an account is required to use the online editor features. Once your account is created, an administrator will need to approve your access to the editor before you can begin using it.
+						</p>
 					</div>
 				</div>
 			</div>

@@ -107,6 +107,7 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
+                <p style="font-size: 12px; color: #bbb; font-style: italic;">An account is required to use the IPAR editor, but not to play the game</p>
             </div>
             <div class="modal-body">
                 <form name="signup" action="/ipar/login/new_user.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
