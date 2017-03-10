@@ -225,7 +225,7 @@ p.act = function(dt){
 				if(this.activeBoardIndex+1<this.categories.length)
 					windowDiv.innerHTML = '<div class="windowPrompt"><div><h1>The "'+this.categories[this.activeBoardIndex+1].name+'" category is now available!</h1></div></div>';
 				else
-					windowDiv.innerHTML = '<div class="windowPrompt"><div><h1>The investigation has been completed! YOu can now conclude the investigation.</h1></div></div>';
+					windowDiv.innerHTML = '<div class="windowPrompt"><div><h1>The investigation has been completed! You can now conclude the investigation.</h1></div></div>';
 				var windowPrompt = windowDiv.getElementsByClassName("windowPrompt")[0];
 		    	var zoomin = function(){
 		    		windowPrompt.removeEventListener('animationend', zoomin);
