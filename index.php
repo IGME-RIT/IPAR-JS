@@ -53,6 +53,9 @@
 						<p class="larger moveDown">
 							An account is not required to play the web-based game. However, an account is required to use the online editor features. Once your account is created, an administrator will need to approve your access to the editor before you can begin using it.
 						</p>
+						<p class="larger moveDown">
+							Sample case files for the game can be downloaded on the <a href="/downloads.php">downloads</a> page. These files may be downloaded and played in the web or Windows game.
+						</p>
 					</div>
 				</div>
 			</div>
