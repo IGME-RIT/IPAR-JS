@@ -32,14 +32,29 @@
 		</div>
     </section>
     <!-- Section For Menus -->
-    <section id="titleMenu" class="menu" style="display:none;">
-    	<div>
-			<h1>IPAR</h1>
-			<button id="load-button" class="menuButton">Load Submission</button>
-			<button id="menu-button" class="menuButton">Back to Main Menu</button>
+    <section id="titleMenu" class="jumbotron" style="display:none;">
+    	<div class="container">
+            <div class="row">
+                <div class="col-md-12 col-vcenter">
+			    <h1 class="uline">Reader</h1>
+                </div>
+            </div>
+            <ul class="panel-buttons">
+                <li>
+			<button id="load-button" class="btn-tile">
+                <span class="glyphicon glyphicon-folder-open" aria-hidden="true" style="font-size:3.5em;"></span>
+                <span>Load Submission</span>
+            </button>
+                </li>
+                <li>
+			<button id="menu-button" class="btn-tile">
+                <span class="glyphicon glyphicon-home" aria-hidden="true" style="font-size:3.5em;"></span>
+                <span class="name">Home</span>
+            </button>
+                </li>
+            </ul>
 			<input type="file" id="load-input"  accept=".iparsubmit, .iparwsubmit"/>
 		</div>
-		<img class="logo" src="../img/nsflogo.png"/>
     </section>
 
     <?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
