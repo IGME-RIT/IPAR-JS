@@ -98,4 +98,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ["clean", "copy:main", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader", "php", "watch"]);
   grunt.registerTask('dev', ["clean", "copy:dev"]);
+  grunt.registerTask('deploy', ["clean", "copy:main", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader"]);
 };
