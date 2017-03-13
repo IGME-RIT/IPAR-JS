@@ -101,12 +101,14 @@ function Reader(section, startData){
 	// Setup the multi choice button
 	multiChoice = true;
 	document.querySelector("#"+section.id+" #multiple-choice").onclick = function(){
+		var text = this.getElementsByClassName("name")[0];	
 		if((multiChoice = !multiChoice))
-			this.src = "../img/iconToolboxBlue.png";
+			text.innerHTML = "Hide Multiple Choice";
 		else
-			this.src = "../img/iconToolboxRed.png";
+			text.innerHTML = "Show Multiple Choice";
 		reader.update();
 	}
+
 	
 	// Get all the categories' data
 	var cat = caseData.getElementsByTagName("category");
