@@ -14,10 +14,10 @@
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
 
-	<section id="case" style="display:none;">
+	<section id="case" style="display:none; margin-top: 51px;">
 		<div class="buttonCol">
 			<h2>Submissions</h2>
-			<div></div>
+			<ul class="panel-buttons col border"></ul>
 			<input type="file" id="file-submission" style="display:none;" accept=".iparsubmit, .iparwsubmit"/>
 		</div>
 		<div class="buttonCol">

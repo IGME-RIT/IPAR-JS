@@ -219,14 +219,25 @@ h4{
     vertical-align: top;
 }
 
+.panel-buttons.col li {
+    width: 100%;
+    height: auto;
+}
+
+.panel-buttons.border li {
+    border: 1px solid #aaa;
+}
+
 .panel-buttons li a, .panel-buttons li button {
-    position: absolute;
     padding: 14px 4px 10px 4px;
     box-sizing: border-box;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
+}
+
+.panel-buttons.col li a, .panel-buttons.col li button {
+    padding: 4px;
+    height: auto;
 }
 
 .panel-buttons li button, .panel-buttons li a, .panel-buttons li a:visited, .panel-buttons li a:hover{
@@ -250,7 +261,7 @@ button.btn-tile {
 
 }
 
-button.btn-tile[disabled] {
+.btn-tile[disabled] {
     color: #aaa;
 }
 

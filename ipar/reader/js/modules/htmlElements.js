@@ -2,10 +2,12 @@
 var m = module.exports;
 
 m.button = '\
-<button class="readerButton">\
-	<b>%title%</b><br>\
-	%text%\
-</button>\
+<li>\
+	<button class="btn-tile">\
+		<b>%title%</b><br>\
+		%text%\
+	</button>\
+</li>\
 ';
 
 m.questionStart = '\

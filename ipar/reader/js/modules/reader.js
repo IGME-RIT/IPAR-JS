@@ -12,7 +12,7 @@ function Reader(section, startData){
 	
 	// Get the parts of the reader
 	var butCols = section.getElementsByClassName("buttonCol");
-	submissionCol = butCols[0].getElementsByTagName("div")[0];
+	submissionCol = butCols[0].getElementsByTagName("ul")[0];
 	categoryCol = butCols[1].getElementsByTagName("div")[0];
 	categoryContent = section.getElementsByClassName("categoryContent")[0].getElementsByTagName("div")[0];
 	curSub = startData;
