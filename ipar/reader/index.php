@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<title>IPAR - Reader</title>
-	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/nav.php';
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/head.php'; ?>
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="../css/readerStyle.css">
 	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
@@ -12,6 +12,8 @@
     <script src="reader.min.js"></script>
 </head>
 <body>
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
+
 	<section id="case" style="display:none;">
 		<div class="buttonCol">
 			<h2>Submissions</h2>
@@ -39,5 +41,7 @@
 		</div>
 		<img class="logo" src="../img/nsflogo.png"/>
     </section>
+
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
 </body>
 </html>
