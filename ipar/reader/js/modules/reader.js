@@ -12,22 +12,23 @@ function Reader(section, startData){
 	
 	// Get the parts of the reader
 	var butCols = section.getElementsByClassName("buttonCol");
-	submissionCol = butCols[0].getElementsByTagName("ul")[0];
-	categoryCol = butCols[1].getElementsByTagName("div")[0];
+	submissionCol = document.getElementById("submission-col");
+	categoryCol = document.getElementById("category-col");
 	categoryContent = section.getElementsByClassName("categoryContent")[0].getElementsByTagName("div")[0];
 	curSub = startData;
 	curCat = 0;
 	
 	// Setup add submission button
 	var reader = this;
+	var addSubLi = document.createElement("li");
 	var addSubButton = document.createElement("button");
 	var addSubFile = document.querySelector("#"+section.id+" #file-submission");
 	addSubButton.onclick = addSubFile.click.bind(addSubFile);
-	addSubButton.className = "readerButton";
+	addSubButton.className = "btn-tile";
 	addSubButton.innerHTML = "Add Submission";
-	butCols[0].appendChild(addSubButton);
+	addSubLi.appendChild(addSubButton)
+	document.getElementById("addsub-col").appendChild(addSubLi);
 	addSubFile.onchange = function(){
-		
 		// Make sure a iparsubmit file was choosen
 		if(!addSubFile.value.match(/.*iparwsubmit$/)){
 			if(addSubFile.value.match(/.*iparsubmit$/)){
@@ -79,8 +80,9 @@ function Reader(section, startData){
 	var reader = this;
 	for(var i=0;i<cats.length;i++){
 		(function(i){
-			var button = document.createElement("button");
-			button.innerHTML = cats[i].innerXML();
+			var buttonElement = HtmlElements.makeElement(HtmlElements.buttonNoTitle, 
+			{"%text%": cats[i].innerXML()});
+			var button = buttonElement.getElementsByTagName("button")[0];
 			button.onclick = function(){
 		    	curCat = i;
 		    	reader.update();
@@ -88,8 +90,7 @@ function Reader(section, startData){
 		    	lastCatBut = this;
 		    	lastCatBut.disabled = true;
 			};
-			button.className = "readerButton";
-			categoryCol.appendChild(button);
+			categoryCol.appendChild(buttonElement);
 			if(i==0){
 				lastCatBut = button;
 				lastCatBut.disabled = true;

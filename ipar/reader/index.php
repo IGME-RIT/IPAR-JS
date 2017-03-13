@@ -17,12 +17,14 @@
 	<section id="case" style="display:none; margin-top: 51px;">
 		<div class="buttonCol">
 			<h2>Submissions</h2>
-			<ul class="panel-buttons col border"></ul>
-			<input type="file" id="file-submission" style="display:none;" accept=".iparsubmit, .iparwsubmit"/>
+			<ul class="panel-buttons col border" id="submission-col"></ul>
+			<ul class="panel-buttons col border" id="addsub-col">
+				<input type="file" id="file-submission" style="display:none;" accept=".iparsubmit, .iparwsubmit"/>
+			</ul>
 		</div>
 		<div class="buttonCol">
 			<h2>Categories</h2>
-			<div></div>
+			<ul class="panel-buttons col border" id="category-col"></ul>
 		</div>
 		<div class="categoryContent">
 			<img id="multiple-choice" title="Hide/Show Multiple Choice Questions" src="../img/iconToolboxBlue.png" />
