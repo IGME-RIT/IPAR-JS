@@ -27,17 +27,19 @@
 			<ul class="panel-buttons col border" id="category-col"></ul>
 		</div>
 		<div class="categoryContent">
-			<ul class="panel-buttons col border" style="width: auto; float: left;">
-				<li>
-			<button id="multiple-choice" class="btn-tile horiz" title="Hide/Show Multiple Choice Questions">
-				<span class="glyphicon glyphicon-search"></span>
-				<span class="name">Hide Multiple Choice</span>
-			</button>
-			</li>
-			</ul>
-			<img id="exit" onclick='window.location.reload();' title="Exit to Menu" src="../img/iconExit.png" />
-			<h2>Questions</h2>
-			<div></div>
+	    	<div style="position: relative;">
+	    		<ul class="panel-buttons col border" style="width: auto; position: absolute;">
+	    			<li>
+	    		<button id="multiple-choice" class="btn-tile horiz" title="Hide/Show Multiple Choice Questions">
+	    			<span class="glyphicon glyphicon-search"></span>
+	    			<span class="name">Hide Multiple Choice</span>
+	    		</button>
+	    		</li>
+	    		</ul>
+	    		<img id="exit" onclick='window.location.reload();' title="Exit to Menu" src="../img/iconExit.png" />
+	    		<h2>Questions</h2>
+			</div>
+			<div id="questions"></div>
 		</div>
     </section>
     <!-- Section For Menus -->

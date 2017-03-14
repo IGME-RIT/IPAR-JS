@@ -14,7 +14,7 @@ function Reader(section, startData){
 	var butCols = section.getElementsByClassName("buttonCol");
 	submissionCol = document.getElementById("submission-col");
 	categoryCol = document.getElementById("category-col");
-	categoryContent = section.getElementsByClassName("categoryContent")[0].getElementsByTagName("div")[0];
+	categoryContent = document.getElementById("questions");
 	curSub = startData;
 	curCat = 0;
 	
