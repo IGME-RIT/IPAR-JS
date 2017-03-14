@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>IPAR - DOCUMENT TITLE</title>
+		<title>IPAR - Login</title>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/head.php"; ?>
 	</head>
 	<body>
