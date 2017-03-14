@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           dest: 'build/',
           filter: 'isFile'
         }]
-      }
+      },
     },
     watch: {
         // TODO: reenable this and figure out how to properly fix warnings -ntr
@@ -46,6 +46,15 @@ module.exports = function(grunt) {
               }
           }
       },
+      devgame: {
+    	  src: ['ipar/game/js/**/*.js'],
+          dest: 'build/ipar/game/game.min.js',
+          options: {
+              browserifyOptions: {
+                  debug: true
+              }
+          }
+      },
       editor: {
     	  src: ['ipar/editor/js/**/*.js'],
   	    dest: 'temp/ipar/editor.js',
@@ -55,9 +64,27 @@ module.exports = function(grunt) {
   	        }
   	    }
       },
+      deveditor: {
+    	  src: ['ipar/editor/js/**/*.js'],
+  	    dest: 'build/ipar/editor/editor.min.js',
+  	    options: {
+  	        browserifyOptions: {
+  	            debug: true
+  	        }
+  	    }
+      },
       reader: {
     	  src: ['ipar/reader/js/**/*.js'],
   	    dest: 'temp/ipar/reader.js',
+  	    options: {
+  	        browserifyOptions: {
+  	            debug: true
+  	        }
+  	    }
+      },
+      devreader: {
+    	  src: ['ipar/reader/js/**/*.js'],
+  	    dest: 'build/ipar/reader/reader.min.js',
   	    options: {
   	        browserifyOptions: {
   	            debug: true
@@ -97,6 +124,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ["clean", "copy:main", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader", "php", "watch"]);
-  grunt.registerTask('dev', ["clean", "copy:dev"]);
+  grunt.registerTask('dev-deploy', ["clean", "copy:main", "browserify:devgame", "browserify:deveditor", "browserify:devreader"]);
   grunt.registerTask('deploy', ["clean", "copy:main", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader"]);
 };
