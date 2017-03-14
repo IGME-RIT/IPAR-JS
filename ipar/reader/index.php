@@ -36,7 +36,14 @@
 	    		</button>
 	    		</li>
 	    		</ul>
-	    		<img id="exit" onclick='window.location.reload();' title="Exit to Menu" src="../img/iconExit.png" />
+				<ul class="panel-buttons col border" style="width: auto;" id="exit">
+					<li>
+						<button class="btn-tile horiz" title="Exit to Menu" onclick="window.location.reload();">
+							<span class="glyphicon glyphicon-remove"></span>
+							<span class="name">Exit to Menu</span>
+						</button>
+					</li>
+				</ul>
 	    		<h2>Questions</h2>
 			</div>
 			<div id="questions"></div>
