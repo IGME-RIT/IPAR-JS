@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['.htaccess', '*.php', '*.html', 'Cases/**/*', 'CasesW/**/*', 'files/**/*', 'js/**/*', 'assets/php/**/*', 'assets/css/**/*', 'assets/fonts/**/*', 'assets/html/**/*', 'assets/img/**/*', 'assets/js/**/*', 'assets/workshop/**/*', 'ipar/.htaccess', 'ipar/resource/*', 'ipar/image/*', 'ipar/*.html', 'favicon.ico', 'ipar/*.php', 'ipar/*.iparw', 'ipar/game/*.html', 'ipar/game/*.iparw', 'ipar/editor/*.html', 'ipar/editor/*.iparw', 'ipar/editor/*.php', 'ipar/editor/.htaccess', 'ipar/login/*.html', 'ipar/login/*.php', 'ipar/reader/*.html', 'ipar/reader/*.php', 'ipar/*.md', 'ipar/css/**/*', 'ipar/img/**/*', 'ipar/lib/**/*', 'ipar/admin/*','ipar/admin/.htaccess'],
+          src: ['.htaccess', '*.php', '*.html', 'Cases/**/*', 'CasesW/**/*', 'files/**/*', 'js/**/*', 'assets/php/**/*', 'assets/css/**/*', 'assets/fonts/**/*', 'assets/html/**/*', 'assets/img/**/*', 'assets/js/**/*', 'assets/workshop/**/*', 'ipar/.htaccess', 'ipar/resource/*', 'ipar/image/*', 'ipar/*.html', 'favicon.ico', 'ipar/*.php', 'ipar/*.iparw', 'ipar/game/*.html', 'ipar/game/*.php', 'ipar/game/*.iparw', 'ipar/editor/*.html', 'ipar/editor/*.iparw', 'ipar/editor/*.php', 'ipar/editor/.htaccess', 'ipar/login/*.html', 'ipar/login/*.php', 'ipar/reader/*.html', 'ipar/reader/*.php', 'ipar/*.md', 'ipar/css/**/*', 'ipar/img/**/*', 'ipar/lib/**/*', 'ipar/admin/*','ipar/admin/.htaccess'],
           dest: 'build/',
           filter: 'isFile'
         }]

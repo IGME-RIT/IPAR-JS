@@ -25,7 +25,7 @@ function ProfileMenu(pSection){
 	next = NEXT.NONE;
 	
 	// Get the html elements
-	title = document.querySelector('#'+section.id+' #title');
+	title = document.getElementById('profile-title');
 	firstName = document.querySelector('#'+section.id+' #first-name');
 	lastName = document.querySelector('#'+section.id+' #last-name');
 	email = document.querySelector('#'+section.id+' #email');

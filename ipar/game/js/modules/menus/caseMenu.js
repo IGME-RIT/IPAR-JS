@@ -17,11 +17,11 @@ function CaseMenu(pSection){
 	next = NEXT.NONE;
 	
 	// Get the html elements
-	title = document.querySelector('#'+section.id+' #title');
-	description = document.querySelector('#'+section.id+' #description');
-	resume = document.querySelector('#'+section.id+' #resume-button');
-	start = document.querySelector('#'+section.id+' #start-button');
-	back = document.querySelector('#'+section.id+' #back-button');
+	title = document.getElementById('case-title');
+	description = document.getElementById('case-description');
+	resume = document.getElementById('resume-button');
+	start = document.getElementById('start-button');
+	back = document.getElementById('back-button');
 	
 	// Setup the buttons
     var page = this;

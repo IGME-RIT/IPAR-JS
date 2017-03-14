@@ -238,6 +238,19 @@ h4{
 .panel-buttons.col li a, .panel-buttons.col li button {
     padding: 4px;
     height: auto;
+    width: 100%;
+}
+
+.panel-buttons.inline li {
+    height: auto;
+    width: auto;
+}
+
+.panel-buttons.inline li a, .panel-buttons.inline li button {
+    padding: 4px 20px 4px 20px;
+    height: 2.4em;
+    width: 100%;
+    text-align:center;
 }
 
 .panel-buttons li button, .panel-buttons li a, .panel-buttons li a:visited, .panel-buttons li a:hover{
@@ -264,10 +277,9 @@ button.btn-tile {
 .btn-tile.horiz {
     width: auto;
     height: auto;
-    
 }
 
-.btn-tile.horiz .glyphicon {
+.btn-tile.horiz .glyphicon, .panel-buttons.inline li button .glyphicon {
     font-size: 1.3em;
     display: inline;
 }
