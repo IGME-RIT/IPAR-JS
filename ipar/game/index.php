@@ -129,18 +129,24 @@
     	<div class="container">
 			<div class="row">
 				<div class="col-md-12 col-vcenter">
-					<h1 id="profile-title"></h1>
+					<h1 id="profile-title" class="uline"></h1>
 				</div>
 			</div>
 			<div class="row">
 		    	<form>
-		    		First Name: <span id="first-name"></span><input name="first" id="input-first-name" />
-		    		<hr>
-		    		Last Name: <span id="last-name"></span><input name="last" id="input-last-name" />
-		    		<span id="email"><hr> Email: <input name="email" id="input-email" /></span>
+					<div class="col-sm-6 col-xs-12">
+		    			First Name: <span id="first-name"></span><input name="first" id="input-first-name" />
+					</div>
+					<div class="col-sm-6 col-xs-12">	
+		    			Last Name: <span id="last-name"></span><input name="last" id="input-last-name" />
+					</div>
+					<div class="col-xs-12">
+		    			<span id="email">Email: <input name="email" id="input-email" /></span>
+					</div>
 		    	</form>
 			</div>
 			<div class="row" style="margin-top: 6px">
+				<div class="col-xs-12">
 				<ul class="panel-buttons inline" style="float: right;">
 		    	    <li>
 						<button id="back-button" class="btn-tile">
@@ -155,6 +161,7 @@
 						</button>
 					</li>
 				</ul>
+				</div>
 			</div>
 		</div>
 		<img class="logo" src="../img/nsflogo.png" />
