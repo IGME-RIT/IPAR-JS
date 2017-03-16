@@ -7,7 +7,7 @@
 	// get user information (for filling out form)
 	$user = $_SESSION["user"];
 	$dbh = new PDO("sqlite:../../../db/users.sql") or die("Could not establish a database connection.");
-	$sth = $dbh->prepare("SELECT email, firstname, lastname, organization FROM users WHERE username = :username");
+	$sth = $dbh->prepare("SELECT email, firstname, lastname, organization, curKey FROM users WHERE username = :username");
     $sth->execute(array(":username"=>$user));
 	if(!$res = $sth->fetch())
 		die("Failed to load user information");
@@ -77,7 +77,8 @@
 	            			<input type="password" name="password" required />
 	            			Confirm:
 	            			<input type="password" name="password2" required />
-	            			<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;"><li><a href="#" onclick="submitPass();" class="btn-tile ">Change Password</a></li></ul>
+							<input type="hidden" name="key" value="<?php echo $res["curKey"]; ?>">
+							<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;"><li><a href="#" onclick="submitPass();" class="btn-tile ">Change Password</a></li></ul>
 						</div>
 	        		</fieldset>
         		</form>
