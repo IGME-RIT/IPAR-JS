@@ -17,7 +17,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>IPAR</title>
+	<title>IPAR - Edit Account</title>
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/head.php'; ?>
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
 	<script type='text/javascript'>
@@ -51,48 +52,65 @@
 		}
 	</script>
 </head>
-<body>
-    <section class="menu">
-    	<div>
-    		<h1><?php echo $_SESSION["user"]; ?></h1>
-    		<form name="email" action="changeEmail.php" method="POST" style="padding-bottom:25px;">
-    			<fieldset>
-    				<legend>Email</legend>
-	    			Current:
-	    			<?php echo $res["email"]; ?>
+<body style="overflow: scroll;">
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
+    <div class="jumbotron">
+    	<div class="container">
+		    <div class="row">
+        		<h1 class="uline">Edit Account: <?php echo $_SESSION['user']; ?></h1>
+        		<form name="email" action="changeEmail.php" method="POST" style="padding-bottom:25px;">
+        			<fieldset>
+						<div class="col-xs-12">
+        					<legend>Email</legend>
+	        			<input type="email" name="email" required value="<?php echo $res["email"]; ?>" >
+	        			<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;"><li><a href="#" onclick="submitEmail();" class="btn-tile ">Update Email</a></li></ul>
+						</div>
+        			</fieldset>
+        		</form>
+        		<form name="password" action="changePass.php" method="POST" style="padding-bottom:25px;">
+        			<fieldset>
+						<div class="col-xs-12">
+        					<legend>Password</legend>
+	            			Old:
+	            			<input type="password" name="oldPassword" required />
+	            			New:
+	            			<input type="password" name="password" required />
+	            			Confirm:
+	            			<input type="password" name="password2" required />
+							
+	            			<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;"><li><a href="#" onclick="submitPass();" class="btn-tile ">Change Password</a></li></ul>
+						</div>
+	        		</fieldset>
+        		</form>
+		    	<form name="info" action="changeInfo.php" method="POST">
+		    		<fieldset>
+						<div class="col-xs-12">
+		    			    <legend>Information</legend>
+		    			    First Name:
+		    			    <input type="text" name="firstname" value="<?php echo $res["firstname"]; ?>" required >
+		    			    Last Name:
+		    			    <input type="text" name="lastname" value="<?php echo $res["lastname"]; ?>" required >
+		    			    Organization:
+		    			    <input type="text" name="organization" value="<?php echo $res["organization"]; ?>" required >
+		    			    <ul class="panel-buttons col border" style="margin:10px 0 10px 0;"><li><a href="#" onclick="submitInfo();" class="btn-tile">Update</a></li></ul>
+						</div>
+		    		</fieldset>
+		    	</form>
+				<div class="col-xs-12">
 					<hr>
-	    			New:
-	    			<input type="email" name="email" required />
-	    			<a href="#" onclick="submitEmail();" class="menuButton">Change Email</a>
-    			</fieldset>
-    		</form>
-    		<form name="password" action="changePass.php" method="POST" style="padding-bottom:25px;">
-    			<fieldset>
-    				<legend>Password</legend>
-	    			Old:
-	    			<input type="password" name="oldPassword" required />
-	    			New:
-	    			<input type="password" name="password" required />
-	    			Confirm:
-	    			<input type="password" name="password2" required />
-	    			<a href="#" onclick="submitPass();" class="menuButton">Change Password</a>
-	    		</fieldset>
-    		</form>
-			<form name="info" action="changeInfo.php" method="POST">
-				<fieldset>
-					<legend>Information</legend>
-					First Name:
-					<input type="text" name="firstname" value="<?php echo $res["firstname"]; ?>" required >
-					Last Name:
-					<input type="text" name="lastname" value="<?php echo $res["lastname"]; ?>" required >
-					Organization:
-					<input type="text" name="organization" value="<?php echo $res["organization"]; ?>" required >
-					<a href="#" onclick="submitInfo();" class="menuButton">Update</a>
-				</fieldset>
-			</form>
-			<a href="./account.php" class="menuButton">Back</a>
+		        	<ul class="panel-buttons col border">
+		    			<li>
+		    				<a href="./account.php" class="btn-tile horiz">
+		    					<span class="glyphicon glyphicon-arrow-left"></span>
+		    					<span class="name">Back</span>
+		    				</a>
+		    			</li>
+		    		</ul>
+				</div>
+			</div>
 		</div>
-		<img class="logo" src="../img/nsflogo.png" />
-    </section>
+    </div>
+
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
 </body>
 </html>
