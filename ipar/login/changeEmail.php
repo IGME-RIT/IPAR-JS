@@ -23,6 +23,6 @@
 
     $sth = $dbh->prepare("UPDATE users SET email = :email WHERE username = :username");
     $success = $sth->execute(array(":email"=>$email, ":username"=>$user));
-	header("Location: /message.php?message=Your email address has been changed!&");
+	header("Location: /message.php?message=Your email address has been changed!&redirect=/ipar/login/edit.php");
 	exit();
 ?>

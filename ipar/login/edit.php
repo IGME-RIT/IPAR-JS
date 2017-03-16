@@ -77,7 +77,6 @@
 	            			<input type="password" name="password" required />
 	            			Confirm:
 	            			<input type="password" name="password2" required />
-							
 	            			<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;"><li><a href="#" onclick="submitPass();" class="btn-tile ">Change Password</a></li></ul>
 						</div>
 	        		</fieldset>

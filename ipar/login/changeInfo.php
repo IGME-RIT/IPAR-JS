@@ -24,7 +24,7 @@ $args = array(
     );
 
 if($sth->execute($args)){
-    header("Location: /message.php?message=Your information has been updated!&");
+    header("Location: /message.php?message=Your information has been updated!&redirect=/ipar/login/edit.php");
     exit();
 }
 
