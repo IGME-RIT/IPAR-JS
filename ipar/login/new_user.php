@@ -150,11 +150,10 @@
         // send new user email to admin
         $msg = "A new IPAR account has just been created:\nUsername: ".$user."\nEmail: ".$email."\nName: ".$firstname." ".$lastname."\nOrganization: ".$organization."\nIP: ".$ip."\nUseragent: ".$useragent;
 
-        // TODO: send to all admin users
+        // email all admins
         $sth = $dbh->prepare("SELECT email FROM users JOIN users_roles ON users.username = users_roles.username WHERE users_roles.roleid = 2");
         $success = $sth->execute(); 
 
-        // email all admins
         while($row = $sth->fetch()){
             mail($row['email'], 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>");
         }
