@@ -28,8 +28,15 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <a id="back" href="./" class="btn btn-primary" style="display: block; width: 100% max-width: 500px; font-size:14pt; margin: 0 auto;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back</a>
                 </div>
+		        	<ul class="panel-buttons col border">
+		    			<li>
+		    				<a id="back" href="./" class="btn-tile horiz">
+		    					<span class="glyphicon glyphicon-arrow-left"></span>
+		    					<span class="name">Back</span>
+		    				</a>
+		    			</li>
+		    		</ul>
             </div>
         </div>
     </div>
