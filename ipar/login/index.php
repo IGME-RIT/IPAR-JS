@@ -9,18 +9,41 @@
 <head>
 	<meta charset="utf-8" />
 	<title>IPAR</title>
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/head.php'; ?>
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
 </head>
 <body>
-    <section class="menu">
-    	<div>
-    		<h1>IPAR Login</h1>
-			<a href="./login.php" class="menuButton">Login</a>
-			<a href="./signup.php" class="menuButton">Sign Up</a>
-			<a href="../" class="menuButton">Back to Main Menu</a>
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
+    <div class="jumbotron">
+		<div class="container">
+        	<div class="row">
+				<div class="col-xs-12">
+            		<h1 class="uline">IPAR Login</h1>
+					<ul class="panel-buttons col">
+    			    	<li>
+							<a href="./login.php" class="btn-tile horiz">
+								<span class="glyphicon glyphicon-%gly%"></span>
+								<span class="name">Login</span>
+							</a>
+						</li>
+    			    	<li>
+							<a href="./signup.php" class="btn-tile horiz">
+								<span class="glyphicon glyphicon-%gly%"></span>
+								<span class="name">Sign Up</span>
+							</a>
+						</li>
+    			    	<li>
+							<a href="../" class="btn-tile horiz">
+								<span class="glyphicon glyphicon-%gly%"></span>
+								<span class="name">Back to Main Menu</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+    		</div>
 		</div>
-		<img class="logo" src="../img/nsflogo.png" />
-    </section>
+    </div>
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
 </body>
 </html>
