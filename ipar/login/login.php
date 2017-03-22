@@ -43,13 +43,16 @@
                     <div class="row">
                         <div class="col-md-12"><input type="password" name="password" style="width:100%;" required></div>
                     </div>
-                    <div class="row" style="display: flex; flex-direction: row;">
+                    <div class="row" style="display: flex; flex-direction: row; margin-top: 10px">
                         <div class="col-md-4 col-xs-4">
                             <a href="/ipar/login/recoverPass.php">Forgot Password</a><br>
-                            <a href="/ipar/login/recoverUser.php">Forgot Username</a>
+                            <a href="/ipar/login/recoverUser.php">Forgot Username</a><br>
+                            <a href="/ipar/login/signup.php">Create Account</a>
                         </div>
-                        <div class="col-md-8 col-xs-8" style="text-align: right; display: flex; align-items: center; justify-content: flex-end;">
-                            <a class="btn btn-primary" onclick="document.forms['login'].submit();">Log In</a>
+                        <div class="col-md-8 col-xs-8" style="text-align: right; display: flex; align-items: top; justify-content: flex-end;">
+							<ul class="panel-buttons col border" style="width: 100%">
+                        	    <li><a class="btn-tile horiz" onclick="document.forms['login'].submit();">Log In</a></li>
+							</ul>
                         </div>
                     </div>
                 </form>
