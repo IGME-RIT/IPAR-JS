@@ -31,10 +31,10 @@
 <body style="overflow: scroll;">
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php' ?>
     <div class="jumbotron">
-    	<div class="container">
+    	<div class="container" style="max-width:430px;">
 			<div class="row">
 				<div class="col-xs-12">
-    				<h1>IPAR Editor Create Account</h1>
+    				<h1 class="uline med">IPAR Editor Create Account</h1>
 				</div>
 			</div>
     		<form name="signup" action="new_user.php" method="POST">

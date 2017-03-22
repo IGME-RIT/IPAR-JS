@@ -16,10 +16,10 @@
 <body>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php' ?>
     <div class="jumbotron">
-    	<div class="container">
+    	<div class="container" style="max-width:430px;">
 			<div class="row">
 				<div class="col-xs-12">
-    				<h1 class="uline">Lost Username</h1>
+    				<h1 class="uline med">Lost Username</h1>
 				</div>
 			</div>
     		<form name="recoverUser" action="recoverUserCheck.php" method="POST">

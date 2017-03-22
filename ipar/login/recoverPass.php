@@ -16,9 +16,9 @@
 <body>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
     <div class="jumbotron">
-    	<div class="container">
+    	<div class="container" style="max-width:430px;">
 			<div class="row">
-    			<div class="col-xs-12"><h1 class="uline">Lost Password</h1></div>
+    			<div class="col-xs-12"><h1 class="uline med">Lost Password</h1></div>
 			</div>
     		<form name="recoverPass" action="recoverPassCheck.php" method="POST">
     			<div class="row"><div class="col-xs-12">Enter the username of the account:</div></div>

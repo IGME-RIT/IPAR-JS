@@ -21,7 +21,7 @@
 			<div class="container" style="max-width:430px;">
 				<div class="row">
 					<div class="col-xs-12">
-						<h1 class="uline">Login</h1>
+						<h1 class="uline med">Login</h1>
 					</div>
 				</div>
 			<?php
