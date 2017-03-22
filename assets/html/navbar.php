@@ -88,6 +88,11 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                             <a href="/ipar/login/recoverUser.php">Forgot Username</a>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="/ipar/login/signup.php">Create Account</a>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
