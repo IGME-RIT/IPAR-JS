@@ -47,7 +47,7 @@
     	        <div class="row"><div class="col-xs-12">Organization: <input type="text" name="organization" required /></div></div>
 				<div class="row">
 					<ul class="panel-buttons col border" style="margin-top: 10px">
-						<div class="col-md-4">
+						<div class="col-md-4 col-xs-12">
 							<li>
 								<a href="./index.php" class="btn-tile horiz">
 									<span class="glyphicon glyphicon-arrow-left"></span>
@@ -55,7 +55,7 @@
 								</a>
 							</li>
 						</div>
-						<div class="col-md-8">
+						<div class="col-md-8 col-xs-12">
 							<li>
 								<a href="#" onclick="submit();" class="btn-tile horiz">
 									<span class="glyphicon glyphicon-plus"></span>
