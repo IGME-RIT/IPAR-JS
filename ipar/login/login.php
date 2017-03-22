@@ -19,6 +19,11 @@
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/navbar.php"; ?>
 		<div class="jumbotron">
 			<div class="container" style="max-width:430px;">
+				<div class="row">
+					<div class="col-xs-12">
+						<h1 class="uline">Login</h1>
+					</div>
+				</div>
 			<?php
 			$redir = $_SERVER['PHP_SELF'];
 			if(isset($_GET['redirect'])){
