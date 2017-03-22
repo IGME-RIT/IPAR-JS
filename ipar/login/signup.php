@@ -34,7 +34,10 @@
     	<div class="container" style="max-width:430px;">
 			<div class="row">
 				<div class="col-xs-12">
-    				<h1 class="uline med">IPAR Editor Create Account</h1>
+    				<h1 class="med">
+						New Account
+					</h1>
+					<p class="subtitle uline">A new account is required to use the IPAR editor, but not to play the game</p>
 				</div>
 			</div>
     		<form name="signup" action="new_user.php" method="POST">

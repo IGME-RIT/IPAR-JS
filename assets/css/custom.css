@@ -176,6 +176,12 @@ h4{
     background-color: #aaa;
 }
 
+.subtitle {
+	font-size: 12px !important;
+	color: #bbb;
+	font-style: italic;
+}
+
 h1.med {
 	font-size: 42px
 }
