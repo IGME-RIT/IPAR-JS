@@ -53,7 +53,8 @@
 </head>
 <body style="overflow: scroll;">
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
-    <div class="jumbotron">
+
+	<div class="jumbotron">
     	<div class="container">
 		    <div class="row">
         		<h1 class="uline">Edit Account: <?php echo $_SESSION['user']; ?></h1>
@@ -111,7 +112,13 @@
 					<hr>
 		        	<ul class="panel-buttons col border">
 		    			<li>
-		    				<a href="../" class="btn-tile horiz">
+							<?php
+								$back = "../";
+								if(isset($_GET['redirect'])) {
+									$back = $_GET['redirect'];
+								}
+							?>
+		    				<a href="<?php echo $back; ?>" class="btn-tile horiz">
 		    					<span class="glyphicon glyphicon-arrow-left"></span>
 		    					<span class="name">Back</span>
 		    				</a>
@@ -123,5 +130,9 @@
     </div>
 
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
+	<script>
+		// remove additional redirect in "My Account" button in nav
+		$('#nav-account-link').attr("href", "<?php echo $_SERVER['REQUEST_URI']; ?>");
+	</script>
 </body>
 </html>
