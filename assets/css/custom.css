@@ -401,6 +401,10 @@ label {
 
 }
 
+.unconfirmed-email {
+	color: rgba(244, 56, 56, 1);
+}
+
 @media screen and (max-width: 767px) {
     #nsf{
         position: relative;
