@@ -46,13 +46,13 @@
 					</li>
 			        <?php 
                         $db = new PDO('sqlite:../../../db/users.sql') or die("cannot open");
-                        $sth = $db->prepare("SELECT active FROM users WHERE username = :username");
+                        $sth = $db->prepare("SELECT active, curKey FROM users WHERE username = :username");
 			        	if($sth -> execute(array(":username" => $_SESSION["user"]))
 			        	&& $res = $sth->fetch()) {
 			        		if($res['active'] == 0){
 			        			?>
 								<li>
-									<a href="./activeEmail.php" class="btn-tile">
+									<a href="./resendEmail.php?key=<?php echo $res['curKey']; ?>&redirect=<?php echo $_SERVER['REQUEST_URI']; ?>" class="btn-tile">
 										<span class="glyphicon glyphicon-envelope"></span>
 										<span class="name">Resend Activation Email</span>
 									</a>
