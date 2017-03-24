@@ -133,14 +133,10 @@
         // add default user role (editor)
         //$sth = $dbhh->prepare("INSERT INTO users_roles (username, roleid) SELECT :username as username, roles.rowid as roleid FROM roles WHERE roles.name=:role");
         //$sth->execute(array(":username"=>$user, ":role"=>"editor"));
-        
-        // get appliction URL 
-		// TODO: do this properly -ntr
-	   	$path = "forensic-games.csec.rit.edu/ipar/login";
-        
-        // send account confirmation email to user
-   		$msg = "Thank you for creating an IPAR Editor Account! You can use this account to create IPAR cases and to manage both the images and resources for them! To activate your account please use the following link:\n\nhttp://$path/activate.php?key=$key&\n\nPlease note: An IPAR admin must still approve your account before you can begin using the editor.";
-   		mail($_POST['email'],'Account Activation',wordwrap($msg,70),"From: IPAR Editor <yin.pan@rit.edu>");
+       	
+		// send activation email to user
+		include 'send_activation_email.php';
+		sendActivationEmail($user, $email, $dbh);
         
         // send new user email to admin
         $msg = "A new IPAR account has just been created:\nUsername: ".$user."\nEmail: ".$email."\nName: ".$firstname." ".$lastname."\nOrganization: ".$organization."\nIP: ".$ip."\nUseragent: ".$useragent;
