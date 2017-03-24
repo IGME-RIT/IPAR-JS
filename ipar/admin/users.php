@@ -85,7 +85,14 @@ $rolesth =  $dbh->prepare("SELECT name, id, (username IS NOT NULL) AS hasrole FR
                             ?>
                                 <tr>
                                     <td><?php echo $row['username']; ?></td>
-                                    <td><?php echo "<a href='mailto:".$row['email']."'>".$row['email']."</a>"; ?></td>
+                                    <td>
+									<?php 
+										if($row['active'] == 0) { ?>
+											<a href="mailto:<?php echo $row['email']; ?>" class="unconfirmed-email"><?php echo $row['email']; ?></a><br><span class="unconfirmed-email">(unconfirmed)</a>
+									<?php } else { ?>
+											<a href="mailto:<?php echo $row['email']; ?>"><?php echo $row['email']; ?></a>
+									<?php } ?>
+									</td>
                                     <td><?php echo $row['firstname']; ?></td>
                                     <td><?php echo $row['lastname']; ?></td>
                                     <td class="wrap"><?php echo $row['organization'] ?></td>
@@ -103,6 +110,7 @@ $rolesth =  $dbh->prepare("SELECT name, id, (username IS NOT NULL) AS hasrole FR
                                                     data-roleid="<?php echo $rolerow['id']; ?>" 
                                                     onchange="roleCheckbox(this);"
                                                     <?php if($rolerow['name'] == "admin" && $row['username'] == $_SESSION['user']) echo "disabled"; ?>
+                                                    <?php if($rolerow['name'] == "admin" && $row['active'] == 0) echo "disabled"; // prevent users without active emails from being set as admin ?>
                                                 > 
                                                 <?php echo $rolerow['name']; ?>
                                             </label>
