@@ -133,26 +133,21 @@
         // add default user role (editor)
         //$sth = $dbhh->prepare("INSERT INTO users_roles (username, roleid) SELECT :username as username, roles.rowid as roleid FROM roles WHERE roles.name=:role");
         //$sth->execute(array(":username"=>$user, ":role"=>"editor"));
-        
-        // get appliction URL 
-        // TODO: this could probably be stored in a config table -ntr
-   		$parts = explode('/',$_SERVER['REQUEST_URI']);
-   		$path = '';
-   		for($i = 0;$i<count($parts)-2;$i++)
-   			$path .= $parts[$i] . "/";
-   		$path .= $parts[count($parts)-2];
-	   	$path = $_SERVER['HTTP_HOST'].$path;
-        
-        // send account confirmation email to user
-   		$msg = "Thank you for creating an IPAR Editor Account! You can use this account to create IPAR cases and to manage both the images and resources for them! To activate your account please use the following link:\n\nhttp://$path/activate.php?key=$key&\n\nPlease note: An IPAR admin must still approve your account before you can begin using the editor.";
-   		mail($_POST['email'],'Account Activation',wordwrap($msg,70),"From: IPAR Editor <yin.pan@rit.edu>");
+       	
+		// send activation email to user
+		include 'send_activation_email.php';
+		sendActivationEmail($user, $email, $dbh);
         
         // send new user email to admin
         $msg = "A new IPAR account has just been created:\nUsername: ".$user."\nEmail: ".$email."\nName: ".$firstname." ".$lastname."\nOrganization: ".$organization."\nIP: ".$ip."\nUseragent: ".$useragent;
 
-        // TODO: send to all admin users?
-        mail('yin.pan@rit.edu', 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>");
-        mail('ntr5008@rit.edu', 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>"); //debug email, uncomment above for prod.
+        // email all admins
+        $sth = $dbh->prepare("SELECT email FROM users JOIN users_roles ON users.username = users_roles.username WHERE users_roles.roleid = 2");
+        $success = $sth->execute(); 
+
+        while($row = $sth->fetch()){
+            mail($row['email'], 'New IPAR Account', $msg, "From: IPAR (Noreply) <no-reply@rit.edu>");
+        }
         
         $redirect = '/ipar/'; // default redirect is to IPAR home for now
         if(isset($_GET['redirect'])){

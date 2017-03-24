@@ -1,7 +1,9 @@
 <?php
 // establish db connection and get handler
 include "users_db.php"; // sets $dbh
-session_start();
+if(!isset($_SESSION)) {
+	session_start();
+}
 
 // check if user is logged in
 $loggedIn = !(!$_SESSION || !$_SESSION["user"]);

@@ -7,11 +7,10 @@
 	// get user information (for filling out form)
 	$user = $_SESSION["user"];
 	$dbh = new PDO("sqlite:../../../db/users.sql") or die("Could not establish a database connection.");
-	$sth = $dbh->prepare("SELECT email, firstname, lastname, organization, curKey FROM users WHERE username = :username");
+	$sth = $dbh->prepare("SELECT email, firstname, lastname, organization, active, curKey FROM users WHERE username = :username");
     $sth->execute(array(":username"=>$user));
 	if(!$res = $sth->fetch())
 		die("Failed to load user information");
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,16 +53,29 @@
 </head>
 <body style="overflow: scroll;">
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
-    <div class="jumbotron">
+
+	<div class="jumbotron">
     	<div class="container">
 		    <div class="row">
         		<h1 class="uline">Edit Account: <?php echo $_SESSION['user']; ?></h1>
         		<form name="email" action="changeEmail.php" method="POST" style="padding-bottom:25px;">
         			<fieldset>
 						<div class="col-xs-12">
-        					<legend>Email</legend>
+        					<legend>
+								Email
+								<?php if($res['active'] == 0) { ?>
+									<span class="unconfirmed-email"> (Unconfirmed)</span>
+								<?php } ?>
+							</legend>
 	        			<input type="email" name="email" required value="<?php echo $res["email"]; ?>" >
-	        			<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;"><li><a href="#" onclick="submitEmail();" class="btn-tile ">Update Email</a></li></ul>
+	        			<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;">
+							<li><a href="#" onclick="submitEmail();" class="btn-tile ">Update Email</a></li>
+			       		 	<?php if($res['active'] == 0) { ?>
+				   		 		<li>
+									<a href="./resendEmail.php?key=<?php echo $res['curKey']; ?>&redirect=<?php echo $_SERVER['REQUEST_URI']; ?>" class="btn-tile">Resend Activation Email</a>
+				   		 		</li>
+				   		 	<?php } ?>
+						</ul>
 						</div>
         			</fieldset>
         		</form>
@@ -100,7 +112,13 @@
 					<hr>
 		        	<ul class="panel-buttons col border">
 		    			<li>
-		    				<a href="./account.php" class="btn-tile horiz">
+							<?php
+								$back = "../";
+								if(isset($_GET['redirect'])) {
+									$back = $_GET['redirect'];
+								}
+							?>
+		    				<a href="<?php echo $back; ?>" class="btn-tile horiz">
 		    					<span class="glyphicon glyphicon-arrow-left"></span>
 		    					<span class="name">Back</span>
 		    				</a>
@@ -112,5 +130,9 @@
     </div>
 
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
+	<script>
+		// remove additional redirect in "My Account" button in nav
+		$('#nav-account-link').attr("href", "<?php echo $_SERVER['REQUEST_URI']; ?>");
+	</script>
 </body>
 </html>

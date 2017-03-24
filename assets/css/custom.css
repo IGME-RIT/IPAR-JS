@@ -50,6 +50,7 @@
 ol{
 	font-size: 1.3em;
 }
+
 h3{
 	font-weight: bold;
 }
@@ -173,6 +174,16 @@ h4{
     width: 100%;
     height: 1px;
     background-color: #aaa;
+}
+
+.subtitle {
+	font-size: 12px !important;
+	color: #bbb;
+	font-style: italic;
+}
+
+h1.med {
+	font-size: 42px
 }
 
 .heavy {
@@ -388,6 +399,10 @@ label {
 .clearfix {
     display: block;
 
+}
+
+.unconfirmed-email {
+	color: rgba(244, 56, 56, 1);
 }
 
 @media screen and (max-width: 767px) {

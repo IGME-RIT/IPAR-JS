@@ -119,10 +119,17 @@ $rolesth =  $dbh->prepare("SELECT name, id, (username IS NOT NULL) AS hasrole FR
                             }
                             ?>
                         </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <a href="./" class="btn btn-primary" style="width: 100%; margin-top: 0.3em; font-size: 16pt;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" ></span> Back</a>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="panel-buttons col" style="margin-top: 10px;">
+                                    <li>
+                                        <a href="./" class="btn-tile horiz">
+                                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true" ></span>
+                                            <span class="name">Back</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -21,8 +21,13 @@
 		exit();
 	}
 
-    $sth = $dbh->prepare("UPDATE users SET email = :email WHERE username = :username");
+    $sth = $dbh->prepare("UPDATE users SET email = :email, active = 0 WHERE username = :username");
     $success = $sth->execute(array(":email"=>$email, ":username"=>$user));
-	header("Location: /message.php?message=Your email address has been changed!&redirect=/ipar/login/edit.php");
+
+	// resend validation email
+	include 'send_activation_email.php';
+	sendActivationEmail($user, $email, $dbh);
+
+	header("Location: /message.php?message=Your email address has been changed! An email has been sent to you, as you will need to confirm your new email address.&redirect=/ipar/login/edit.php");
 	exit();
 ?>

@@ -42,8 +42,8 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                         }
                         else { // user is authenticated
                         ?>
-                        <li><a href="/ipar/login/account.php">My Account</a></li>
-                        <li><a href="/ipar/login/logout.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>">Log Out</a></li>
+                        <li><a href="/ipar/login/edit.php?redirect=<?php echo $_SERVER['REQUEST_URI']; ?>" id="nav-account-link">My Account</a></li>
+                        <li><a href="/ipar/login/logout.php?redirect=<?php echo $_SERVER['REQUEST_URI'];?>">Log Out</a></li>
                         <?php
                         }
                         ?>
@@ -88,6 +88,11 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                             <a href="/ipar/login/recoverUser.php">Forgot Username</a>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="/ipar/login/signup.php">Create Account</a>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -110,7 +115,7 @@ if(!isset($loggedIn)){ // check if user_auth is already included
                 <p style="font-size: 12px; color: #bbb; font-style: italic;">An account is required to use the IPAR editor, but not to play the game</p>
             </div>
             <div class="modal-body">
-                <form name="signup" action="/ipar/login/new_user.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
+                <form name="signup-modal" action="/ipar/login/new_user.php?redirect=<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
                     <div class="row">
                         <div class="col-md-12"><label>Username:</label></div>
                     </div>
@@ -157,7 +162,7 @@ if(!isset($loggedIn)){ // check if user_auth is already included
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="document.forms['signup'].submit();">Create Account</button>
+                <button type="button" class="btn btn-primary" onclick="document.forms['signup-modal'].submit();">Create Account</button>
             </div>
         </div>
     </div>
