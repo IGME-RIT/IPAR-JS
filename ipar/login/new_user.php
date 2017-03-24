@@ -135,13 +135,8 @@
         //$sth->execute(array(":username"=>$user, ":role"=>"editor"));
         
         // get appliction URL 
-        // TODO: this could probably be stored in a config table -ntr
-   		$parts = explode('/',$_SERVER['REQUEST_URI']);
-   		$path = '';
-   		for($i = 0;$i<count($parts)-2;$i++)
-   			$path .= $parts[$i] . "/";
-   		$path .= $parts[count($parts)-2];
-	   	$path = $_SERVER['HTTP_HOST'].$path;
+		// TODO: do this properly -ntr
+	   	$path = "forensic-games.csec.rit.edu/ipar/login";
         
         // send account confirmation email to user
    		$msg = "Thank you for creating an IPAR Editor Account! You can use this account to create IPAR cases and to manage both the images and resources for them! To activate your account please use the following link:\n\nhttp://$path/activate.php?key=$key&\n\nPlease note: An IPAR admin must still approve your account before you can begin using the editor.";
