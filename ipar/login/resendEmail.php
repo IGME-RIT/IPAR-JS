@@ -28,7 +28,7 @@
 	   	$path = "forensic-games.csec.rit.edu/ipar/login";
         
         // send account confirmation email to user
-   		$msg = "Thank you for creating an IPAR Editor Account! You can use this account to create IPAR cases and to manage both the images and resources for them! To activate your account please use the following link:\n\nhttp://$path/activate.php?key=$key&\n\nPlease note: An IPAR admin must still approve your account before you can begin using the editor.";
+   		$msg = "Thank you for creating an IPAR Editor Account! You can use this account to create IPAR cases and to manage both the images and resources for them! To activate your account please use the following link:\n\nhttp://$path/activate.php?key=$newKey&\n\nPlease note: An IPAR admin must still approve your account before you can begin using the editor.";
    		mail($res['email'],'Account Activation',wordwrap($msg,70),"From: IPAR Editor <yin.pan@rit.edu>");
 	
 		// redirect to success message
