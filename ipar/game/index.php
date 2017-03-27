@@ -66,7 +66,7 @@
 					</li>
 					<li>
 			        	<button id="demo-button" class="btn-tile">
-							<span class="glyphicon glyphicon-info-sign"></span>
+							<span class="glyphicon glyphicon-file"></span>
 							<span class="name">Demo</span>
 						</button>
 					</li>
@@ -164,8 +164,7 @@
 				</div>
 			</div>
 		</div>
-		<img class="logo" src="../img/nsflogo.png" />
-    </section>
+    </div>
 
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
 </body>
