@@ -18,6 +18,8 @@
 <body>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
 
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/help_modal.php'; ?>
+	
 	<!-- div for console for mobile testing -->
 	<!--<div id="console" style="position:fixed;background-color:black;color:white;top:0;left:0;z-index:999;width:100vw;">This is the console</div>  -->
 	<!-- Section for the board -->
@@ -80,6 +82,12 @@
 			        	<button id="menu-button" class="btn-tile">
 							<span class="glyphicon glyphicon-home"></span>
 							<span class="name">Home</span>
+						</button>
+					</li>
+					<li>
+			        	<button id="menu-button" class="btn-tile" onclick="loadHelpOnce('/assets/json/help/game.json');">
+							<span class="glyphicon glyphicon-question-sign"></span>
+							<span class="name">Help</span>
 						</button>
 					</li>
 				</ul>
@@ -165,7 +173,6 @@
 			</div>
 		</div>
     </div>
-
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
 </body>
 </html>
