@@ -54,9 +54,26 @@
 		setHelpModalContent(--helpPage);
 	}
 
+	function getHtml(markdown) {
+	}
+
 	function setHelpModalContent(page) {
+		// make request to markdown parser and set body text
+		// TODO: cancel active request if user hits next before body is parsed
+		var req = new XMLHttpRequest();
+		req.onload = function() {
+			if(req.status === 200) {
+				document.getElementById("help-modal-body").innerHTML = req.responseText;
+			}
+			else {
+				alert(req.status + ": " + req.statusText + "\n" + req.responseText);
+			}
+		}
+		req.open('POST', "/assets/php/markdown-helper.php");
+		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		req.send("md="+helpData[page]["description"]);
+		
 		document.getElementById("help-modal-title").innerHTML = helpData[page]["title"];
-		document.getElementById("help-modal-body").innerHTML = helpData[page]["description"];
 
 		// disable next button if we need to
 		document.getElementById("help-next-button").disabled = page + 1 == helpData.length;
