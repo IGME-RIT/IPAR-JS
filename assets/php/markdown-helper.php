@@ -11,13 +11,10 @@
 	else {
 		$text = $_GET["md"];
 	}
-
-	spl_autoload_register(function($class){
-		require preg_replace('{\\\\|_(?!.*\\\\)}', DIRECTORY_SEPARATOR, ltrim($class, '\\')).'.php';
-	});
-
-	// get markdown class
-	use \Michelf\Markdown;
-
-	// parse markdown and return html
-	echo Markdown::defaultTransform($text);
+	
+	// set up parsedown
+	include 'parsedown/Parsedown.php';
+	$Parsedown = new Parsedown();
+	
+	// echo html
+	echo $Parsedown->text($text);
