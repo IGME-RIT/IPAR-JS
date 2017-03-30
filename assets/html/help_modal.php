@@ -54,6 +54,16 @@
 		setHelpModalContent(--helpPage);
 	}
 
+	function setHelpPage(title) {
+		// search for title in pages
+		for(i = 0; i < helpData.length; i++) {
+			if(helpData[i]["title"] === title) {
+				helpPage = i;
+				setHelpModalContent(i);
+			}
+		}
+	}
+
 	function getHtml(markdown) {
 	}
 

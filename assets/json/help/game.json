@@ -1,7 +1,8 @@
 [
 	{
-		"title": "Test title 1",
-		"description": "*Test description 1*"
+		"title": "Help",
+		"description": 
+		"#### What do you need help with?\n\n[Starting a new game][0]\n\n[Saving my current game](#)\n\n[0]:javascript:alert('Test title 2')"
 	},
 	{
 		"title": "Test title 2",
