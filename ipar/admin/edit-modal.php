@@ -56,6 +56,64 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			document.getElementById("modal-select").onchange = updateTextAreas();
+			document.getElementById("page-select").onchange = updateTextAreas();
+
+			function updateTextAreas() {
+				var name = document.getElementById("modal-select").value;
+				var pageTitle = document.getElementById("page-select").value;
+
+				// get page info in markdown
+				getModal(name, 'md', function(modal) {
+					// set input values
+					var nameInput = document.getElementById('modal-name');
+					nameInput.value = pageTitle;
+					nameInput.disabled = false;
+
+					var bodyInput = document.getElementById('modal-body');
+					bodyInput.value = modal[pageTitle]['body'];
+					bodyInput.disabled = false;
+					
+					updatePreview();
+				});
+			}
+
+			function updatePreview() {
+				// get html from markdown
+				var body = document.getElementById('modal-body').value;
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					if(req.status === 200) {
+						document.getElementById('help-modal-body').innerHTML = req.responseText;
+					}
+					else {
+						alert("Failed to update preveiw!");
+					}
+				}
+				req.open('GET', '/assets/php/markdown_helper.php?md=' + body);
+				req.send();
+				
+				// set title
+				var title = document.getElementById('modal-name').value;
+				document.getElementById('help-modal-title').innerHTML = title;
+			}
+
+			function getModal(name, format = 'html', callback) {
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					if(req.status === 200) {
+						var modal = JSON.parse(req.responseText);
+						callback(modal);
+					}
+					else {
+						alert("Failed to get modal information!\n" + req.status + ": " + req.responseCode);
+					}
+				}
+				req.open('GET', '/assets/php/get_modal.php?name=' + name + '&format=' + format);
+				req.send();
+			}
+		</script>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/footer.php"; ?>
 	</body>
 </html>
