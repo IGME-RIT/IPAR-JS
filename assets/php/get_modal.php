@@ -30,9 +30,8 @@ header('Content-Type: application/json');
 
 // return json
 $modal = array();
-$ind = 0;
 while($row = $sth->fetch()) {
-	$modal[$ind] = array('title' => $row['title'], 'body' => $row['body']);
+	$modal[$row['title']] = array('title' => $row['title'], 'body' => $row['body']);
 	$ind++;
 }
 echo json_encode($modal);
