@@ -85,7 +85,7 @@
 						</button>
 					</li>
 					<li>
-			        	<button id="menu-button" class="btn-tile" onclick="loadHelpOnce('/assets/json/help/game.json');">
+			        	<button id="menu-button" class="btn-tile" onclick="loadHelpOnce('/assets/php/get_modal.php?name=Test');">
 							<span class="glyphicon glyphicon-question-sign"></span>
 							<span class="name">Help</span>
 						</button>

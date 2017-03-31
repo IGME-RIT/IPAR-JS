@@ -81,7 +81,7 @@
 		}
 		req.open('POST', "/assets/php/markdown-helper.php");
 		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		req.send("md="+helpData[page]["description"]);
+		req.send("md="+helpData[page]["body"]);
 		
 		document.getElementById("help-modal-title").innerHTML = helpData[page]["title"];
 
