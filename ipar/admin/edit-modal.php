@@ -62,8 +62,8 @@
 			document.getElementById("modal-select").addEventListener('change', updateTextAreas);
 			document.getElementById("page-select").addEventListener('change', updateTextAreas);
 			
-			document.getElementById("modal-name").addEventListener('keyup', updatePreview);
-			document.getElementById("modal-name").addEventListener('input', updatePreview);
+			document.getElementById("modal-name").addEventListener('keyup', updatePreviewTitle);
+			document.getElementById("modal-name").addEventListener('input', updatePreviewTitle);
 
 			document.getElementById("modal-body").addEventListener('keyup', updatePreview);
 			document.getElementById("modal-body").addEventListener('input', updatePreview);
@@ -84,6 +84,7 @@
 					bodyInput.disabled = false;
 					
 					updatePreview();
+					updatePreviewTitle();
 				});
 			}
 
@@ -111,10 +112,11 @@
 						alert("Failed to update preveiw!");
 					}
 				}
-				previewRequest.open('GET', '/assets/php/markdown_helper.php?md=' + encodeURI(body));
+				previewRequest.open('GET', '/assets/php/markdown_helper.php?md=' + encodeURIComponent(body));
 				previewRequest.send();
-				
-				// set title
+			}
+
+			function updatePreviewTitle() {
 				var title = document.getElementById('modal-name').value;
 				document.getElementById('help-modal-title').innerHTML = title;
 			}
