@@ -24,6 +24,7 @@
 						<label for="page-select" style="width: 9%">Page: </label>
 						<select name="page-select" id="page-select" style="width: 90%">
 							<option value="Page 1">Page 1</option>
+							<option value="Page 2">Page 2</option>
 						</select>
 					</div>
 					<div class="row" style="padding-bottom: 5px">
@@ -57,8 +58,15 @@
 			</div>
 		</div>
 		<script>
-			document.getElementById("modal-select").onchange = updateTextAreas();
-			document.getElementById("page-select").onchange = updateTextAreas();
+			updateTextAreas();
+			document.getElementById("modal-select").addEventListener('change', updateTextAreas);
+			document.getElementById("page-select").addEventListener('change', updateTextAreas);
+			
+			document.getElementById("modal-name").addEventListener('keyup', updatePreview);
+			document.getElementById("modal-name").addEventListener('input', updatePreview);
+
+			document.getElementById("modal-body").addEventListener('keyup', updatePreview);
+			document.getElementById("modal-body").addEventListener('input', updatePreview);
 
 			function updateTextAreas() {
 				var name = document.getElementById("modal-select").value;
@@ -79,20 +87,32 @@
 				});
 			}
 
+			var previewRequest;
+			var lastBody;
+
 			function updatePreview() {
 				// get html from markdown
 				var body = document.getElementById('modal-body').value;
-				var req = new XMLHttpRequest();
-				req.onload = function() {
-					if(req.status === 200) {
-						document.getElementById('help-modal-body').innerHTML = req.responseText;
+			
+				// don't make a request if there are no changes
+				if(body === lastBody) return;
+				lastBody = body;
+
+				// abort the last request if it is still running
+				if(previewRequest != null) { previewRequest.abort(); }
+				
+				previewRequest = new XMLHttpRequest();
+				previewRequest.onload = function() {
+					if(previewRequest.status === 200) {
+						document.getElementById('help-modal-body').innerHTML = previewRequest.responseText;
+						previewRequest = null;
 					}
 					else {
 						alert("Failed to update preveiw!");
 					}
 				}
-				req.open('GET', '/assets/php/markdown_helper.php?md=' + body);
-				req.send();
+				previewRequest.open('GET', '/assets/php/markdown_helper.php?md=' + encodeURI(body));
+				previewRequest.send();
 				
 				// set title
 				var title = document.getElementById('modal-name').value;
