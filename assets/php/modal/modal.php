@@ -59,11 +59,11 @@ function processGETRequest() {
 	echo json_encode($modal);
 }
 
-function processPOSTRequest() {
+function processPOSTRequest() { // TODO: add modal
 	respondBadRequest();
 }
 
-function processPUTRequest() {
+function processPUTRequest() { // TODO: change modal name
 	respondBadRequest();
 }
 

@@ -52,7 +52,7 @@ function processGETRequest() {
 	die(json_encode($page));
 }
 
-function processPOSTRequest() {
+function processPOSTRequest() { // TODO: add new page
 	respondBadRequest();
 }
 
