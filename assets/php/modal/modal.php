@@ -46,14 +46,14 @@ function processGETRequest() {
 	header('Content-Type: application/json');
 	
 	// return json
-	$modal = array();
+	$modal = array('name'=>$name, 'pages'=>array());
 	while($row = $sth->fetch()) {
 		$body = $row['body'];
 		if($format == 'html'){
 			// get html with parsedown
 			$body = $Parsedown->text($body);
 		}
-		$modal[$row['title']] = array('id' => intval($row['id']), 'title' => $row['title'], 'body' => $body);
+		$modal['pages'][] = array('id' => intval($row['id']), 'title' => $row['title'], 'body' => $body);
 		$ind++;
 	}
 	echo json_encode($modal);

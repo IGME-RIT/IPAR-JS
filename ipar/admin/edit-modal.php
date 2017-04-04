@@ -23,8 +23,8 @@
 					<div class="row" style="padding-bottom: 10px">
 						<label for="page-select" style="width: 9%">Page: </label>
 						<select name="page-select" id="page-select" style="width: 90%">
-							<option value="Page 1">Page 1</option>
-							<option value="Page 2">Page 2</option>
+							<option value="1">Page 1</option>
+							<option value="2">Page 2</option>
 						</select>
 					</div>
 					<div class="row" style="padding-bottom: 5px">
@@ -32,6 +32,9 @@
 					</div>
 					<div class="row">
 						<textarea name="modal-body" id="modal-body" rows="15" style="width: 100%" disabled></textarea>
+					</div>
+					<div class="row">
+						<button type="button" class="btn btn-primary" id="save-button">Save</button>
 					</div>
 				</div>
 				<div class="col-md-6 col-xs-12">
@@ -68,19 +71,20 @@
 			document.getElementById("modal-body").addEventListener('keyup', updatePreview);
 			document.getElementById("modal-body").addEventListener('input', updatePreview);
 
+			document.getElementById("save-button").addEventListener('click', saveModal);
+
 			function updateTextAreas() {
-				var name = document.getElementById("modal-select").value;
-				var pageTitle = document.getElementById("page-select").value;
+				var pageId = document.getElementById("page-select").value;
 
 				// get page info in markdown
-				getModal(name, 'md', function(modal) {
+				getPage(pageId, 'md', function(page) {
 					// set input values
 					var nameInput = document.getElementById('modal-name');
-					nameInput.value = pageTitle;
+					nameInput.value = page['title'];
 					nameInput.disabled = false;
 
 					var bodyInput = document.getElementById('modal-body');
-					bodyInput.value = modal[pageTitle]['body'];
+					bodyInput.value = page['body'];
 					bodyInput.disabled = false;
 					
 					updatePreview();
@@ -134,6 +138,41 @@
 				}
 				req.open('GET', '/assets/php/modal/modal.php?name=' + name + '&format=' + format);
 				req.send();
+			}
+
+			function getPage(id, format = 'html', callback) {
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					if(req.status === 200) {
+						var page = JSON.parse(req.responseText);
+						callback(page);
+					}
+					else {
+						alert("Failed to get page information!\n" + req.status + ": " + req.responseCode);
+					}
+				}
+				req.open('GET', '/assets/php/modal/page.php?id=' + id + '&format=' + format);
+				req.send();
+			}
+
+			function saveModal() {
+				var id = document.getElementById('page-select').value;
+				var title = document.getElementById('modal-name').value;
+				var body = document.getElementById('modal-body').value;
+
+				var data = "id="+id+"&title="+title+"&body="+body; //TODO: json
+
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					this.disabled = false;
+					if(req.status === 200) {
+					}
+					else {
+						alert("Save failed!\n" + req.status + ": " + req.responseCode);
+					}
+				}
+				req.open('PUT', '/assets/php/modal/page.php');
+				req.send(data);
 			}
 		</script>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/footer.php"; ?>

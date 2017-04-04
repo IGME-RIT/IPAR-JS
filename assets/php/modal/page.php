@@ -58,7 +58,7 @@ function processPOSTRequest() { // TODO: add new page
 
 function processPUTRequest() {
 	// parse the post variables
-	parse_str(file_get_contents("php://input"), $put);
+	parse_str(file_get_contents("php://input"), $put); // TODO: get json
 	if(!isset($put['id'])) {
 		respondBadRequest();
 	}
