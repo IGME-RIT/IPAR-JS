@@ -26,7 +26,7 @@ function processGETRequest() {
 	}
 
 	$mdbh = getDbh();
-	$sth = $mdbh->prepare("SELECT rowid AS id, modalid, title, body FROM pages WHERE rowid = :id LIMIT 1");
+	$sth = $mdbh->prepare("SELECT pages.rowid AS id, modals.name as modalname, title, body FROM pages JOIN modals ON modals.rowid = modalid WHERE pages.rowid = :id LIMIT 1");
 	
 	if(!$sth->execute(array("id"=>$_GET['id']))) {
 		respondBadRequest();
@@ -34,8 +34,8 @@ function processGETRequest() {
 
 	$row = $sth->fetch();
 	$page = array(
-		'id'=>$row['id'],
-		'modalid'=>$row['modalid'],
+		'id'=>intval($row['id']),
+		'modalname'=>$row['modalname'],
 		'title'=>$row['title'],
 		'body'=>$row['body']
 	);
