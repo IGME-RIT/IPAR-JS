@@ -132,7 +132,7 @@
 						alert("Failed to get modal information!\n" + req.status + ": " + req.responseCode);
 					}
 				}
-				req.open('GET', '/assets/php/get_modal.php?name=' + name + '&format=' + format);
+				req.open('GET', '/assets/php/modal/modal.php?name=' + name + '&format=' + format);
 				req.send();
 			}
 		</script>
