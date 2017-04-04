@@ -53,7 +53,7 @@ function processGETRequest() {
 			// get html with parsedown
 			$body = $Parsedown->text($body);
 		}
-		$modal[$row['title']] = array('title' => $row['title'], 'body' => $body);
+		$modal[$row['title']] = array('id' => intval($row['id']), 'title' => $row['title'], 'body' => $body);
 		$ind++;
 	}
 	echo json_encode($modal);
