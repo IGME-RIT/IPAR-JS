@@ -52,7 +52,7 @@ function processGETRequest() {
 	die(json_encode($page));
 }
 
-function processPOSTRequest() { // TODO: add new page
+function processPOSTRequest() {
 	// get json payload
 	$page = json_decode(file_get_contents('php://input'), true);
 	// validate request

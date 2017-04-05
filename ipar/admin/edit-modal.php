@@ -33,7 +33,8 @@
 					<div class="row">
 						<textarea name="modal-body" id="modal-body" rows="15" style="width: 100%" disabled></textarea>
 					</div>
-					<div class="row">
+					<div class="row" style="text-align: right;">
+						<button type="button" class="btn btn-default" id="new-page-button">Save as New Page</button>
 						<button type="button" class="btn btn-primary" id="save-button">Save</button>
 					</div>
 				</div>
@@ -72,6 +73,7 @@
 			document.getElementById("modal-body").addEventListener('input', updatePreview);
 
 			document.getElementById("save-button").addEventListener('click', saveModal);
+			document.getElementById("new-page-button").addEventListener('click', newPage);
 
 			function updateTextAreas() {
 				var pageId = document.getElementById("page-select").value;
@@ -156,6 +158,7 @@
 			}
 
 			function saveModal() {
+				this.disabled = true;
 				var id = document.getElementById('page-select').value;
 				var title = document.getElementById('modal-name').value;
 				var body = document.getElementById('modal-body').value;
@@ -173,6 +176,32 @@
 				}
 				req.open('PUT', '/assets/php/modal/page.php');
 				req.send(data);
+			}
+			
+			function newPage() {
+				this.disabled = true;
+				var btn = this;
+				// create json payload
+				var data = {
+					"modalname": document.getElementById('modal-select').value,
+					"title": document.getElementById('modal-name').value,
+					"body": document.getElementById('modal-body').value
+				}
+
+				// make request
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					btn.disabled = false;
+					if(req.status === 200) {
+						// TODO: refresh page lists
+
+					}
+					else {
+						alert("Save failed!\n" + req.status + ": " + req.responseText);
+					}
+				}
+				req.open('POST', '/assets/php/modal/page.php');
+				req.send(JSON.stringify(data));
 			}
 		</script>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/footer.php"; ?>
