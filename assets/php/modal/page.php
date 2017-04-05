@@ -10,7 +10,7 @@ if(!$loggedIn || !in_array('admin', $_SESSION['user_roles'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	processGETRequest();
 }
-elseif ($_SERVER['REUQEST_METHOD'] == 'POST') {
+elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	processPOSTRequest();
 }
 elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -53,7 +53,35 @@ function processGETRequest() {
 }
 
 function processPOSTRequest() { // TODO: add new page
-	respondBadRequest();
+	// get json payload
+	$page = json_decode(file_get_contents('php://input'), true);
+	// validate request
+	if(!isset($page['modalname'])
+	|| !isset($page['title'])
+	|| !isset($page['body'])) {
+		respondBadRequest();
+	}
+
+	// get modal id
+	$mdbh = getDbh();
+	$sth = $mdbh->prepare("SELECT rowid AS id FROM modals WHERE name = :modalname");
+	
+	if(!$sth->execute(array('modalname'=>$page['modalname']))) {
+		respondBadRequest();
+	}
+
+	$modalrow = $sth->fetch();
+
+	if(!$modalrow) {
+		respondBadRequest();
+	}
+
+	$modalid = $modalrow['id'];
+
+	// insert page
+	$sth = $mdbh->prepare("INSERT INTO pages VALUES (:modalid, :title, :body)");
+
+	$sth->execute(array('modalid'=>$modalid, 'title'=>$page['title'], 'body'=>$page['body']));
 }
 
 function processPUTRequest() {
