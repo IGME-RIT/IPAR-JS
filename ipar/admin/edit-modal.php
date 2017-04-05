@@ -159,6 +159,7 @@
 
 			function saveModal() {
 				this.disabled = true;
+				var btn = this;
 				var id = document.getElementById('page-select').value;
 				var title = document.getElementById('modal-name').value;
 				var body = document.getElementById('modal-body').value;
@@ -167,7 +168,7 @@
 
 				var req = new XMLHttpRequest();
 				req.onload = function() {
-					this.disabled = false;
+					btn.disabled = false;
 					if(req.status === 200) {
 					}
 					else {
