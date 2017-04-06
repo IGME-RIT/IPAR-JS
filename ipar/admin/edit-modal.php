@@ -164,14 +164,13 @@
 							option.value = pages[i]['id'];
 							pageSelect.add(option);
 							
-							// reselect old option if it exists
-							if(pages[i]['id'] == lastVal){
-								pageSelect.value = pages[i]['id'];
-							}
 						}
 
 						// add new page option back to options
 						pageSelect.add(newPageElement);
+
+						// reselect old option if it exists
+						pageSelect.value = lastVal;
 
 						// update text areas
 						updateTextAreas();
@@ -304,7 +303,10 @@
 				var req = new XMLHttpRequest();
 				req.onload = function() {
 					if(req.status === 200) {
-						updatePageList(document.getElementById('page-select').options.length);
+						// get page from response
+						var page = JSON.parse(req.responseText);
+
+						updatePageList(page['id']);
 					}
 					else {
 						alert("Save failed!\n" + req.status + ": " + req.responseText);

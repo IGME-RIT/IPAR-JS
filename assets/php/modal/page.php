@@ -1,11 +1,4 @@
 <?php
-// require authentication
-require_once "../user_auth.php"; // sets $dbh, $loggedIn, $_SESSION['user_roles']
-
-if(!$loggedIn || !in_array('admin', $_SESSION['user_roles'])) {
-	respondUnauthorized();
-}
-
 // processes GET, POST, and PUT requests for pages
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	processGETRequest();
@@ -53,6 +46,7 @@ function processGETRequest() {
 }
 
 function processPOSTRequest() {
+	requireAuth();
 	// get json payload
 	$page = json_decode(file_get_contents('php://input'), true);
 	// validate request
@@ -82,9 +76,28 @@ function processPOSTRequest() {
 	$sth = $mdbh->prepare("INSERT INTO pages VALUES (:modalid, :title, :body)");
 
 	$sth->execute(array('modalid'=>$modalid, 'title'=>$page['title'], 'body'=>$page['body']));
+
+	// return newly created page
+	$sth = $mdbh->prepare("SELECT pages.rowid AS id, modals.name AS modalname, title, body FROM pages JOIN modals ON modals.rowid = pages.modalid WHERE pages.rowid = last_insert_rowid()");
+
+	$sth->execute();
+
+	$row=$sth->fetch();
+
+	$page = array(
+		'id'=>$row['id'],
+		'modalname'=>$row['modalname'],
+		'title'=>$row['title'],
+		'body'=>$row['body']
+	);
+
+	// set response header
+	header('Content-Type: application/json');
+	die(json_encode($page));
 }
 
 function processPUTRequest() {
+	requireAuth();
 	// parse the post variables
 	parse_str(file_get_contents("php://input"), $put); // TODO: get json
 	if(!isset($put['id'])) {
@@ -113,6 +126,16 @@ function processPUTRequest() {
 	else {
 		respondBadRequest();	
 	}
+}
+
+function requireAuth() {
+	// require authentication
+	require_once "../user_auth.php"; // sets $dbh, $loggedIn, $_SESSION['user_roles']
+	
+	if(!$loggedIn || !in_array('admin', $_SESSION['user_roles'])) {
+		respondUnauthorized();
+	}
+
 }
 
 function getDbh() {
