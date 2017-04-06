@@ -67,6 +67,8 @@
 
 			updateTextAreas();
 			document.getElementById("modal-select").addEventListener('change', updateTextAreas);
+			document.getElementById("modal-select").addEventListener('change', updatePageList);
+
 			document.getElementById("page-select").addEventListener('change', updateTextAreas);
 			
 			document.getElementById("modal-name").addEventListener('keyup', updatePreviewTitle);
