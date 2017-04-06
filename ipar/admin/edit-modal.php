@@ -62,6 +62,9 @@
 			</div>
 		</div>
 		<script>
+			//TODO: move to node module(s)
+			updateModalsList();
+
 			updateTextAreas();
 			document.getElementById("modal-select").addEventListener('change', updateTextAreas);
 			document.getElementById("page-select").addEventListener('change', updateTextAreas);
@@ -74,6 +77,97 @@
 
 			document.getElementById("save-button").addEventListener('click', saveModal);
 			document.getElementById("new-page-button").addEventListener('click', newPage);
+
+			function updateModalsList() {
+				var modalSelect = document.getElementById("modal-select");
+				modalSelect.disabled = true;
+
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					if(req.status === 200) {
+						// get response object
+						var modals = JSON.parse(req.responseText);
+
+						// get current select value
+						var lastVal = modalSelect.value;
+
+						// clear select options
+						modalSelect.innerHTML = "";
+
+						// set select options
+						for(var i = 0; i < modals.length; i++) {
+							var option = document.createElement("option");
+							option.text = modals[i]['name'];
+							option.value = modals[i]['name'];
+							modalSelect.add(option);
+							
+							// reselect old option if it exists
+							if(option['name'] == lastVal){
+								modalSelect.value = option['name'];
+							}
+						}
+
+						// update page list
+						updatePageList();
+					}
+					else {
+						alert("Failed to update modals list!");
+					}
+
+					// enable the select
+					modalSelect.disabled = false;
+				}
+				req.open("GET", "/assets/php/modal/modals.php");
+				req.send();
+			}
+
+			function updatePageList(selectedValue) {
+				var modalSelect = document.getElementById("modal-select");
+				var pageSelect = document.getElementById("page-select");
+				pageSelect.disabled = true;
+
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					if(req.status === 200) {
+						// get response object
+						var modal = JSON.parse(req.responseText);
+						var pages = modal['pages'];
+
+						// get current select value
+						var lastVal = selectedValue;
+						if(selectedValue === undefined){
+							lastVal = pageSelect.value;
+						}
+
+						// clear select options
+						pageSelect.innerHTML = "";
+
+						// set select options
+						for(var i = 0; i < pages.length; i++) {
+							var option = document.createElement("option");
+							option.text = pages[i]['title'];
+							option.value = pages[i]['id'];
+							pageSelect.add(option);
+							
+							// reselect old option if it exists
+							if(pages[i]['id'] == lastVal){
+								pageSelect.value = pages[i]['id'];
+							}
+						}
+
+						// update text areas
+						updateTextAreas();
+					}
+					else {
+						alert("Failed to update pages list!");
+					}
+
+					// enable the select
+					pageSelect.disabled = false;
+				}
+				req.open("GET", "/assets/php/modal/modal.php?name="+modalSelect.value);
+				req.send();
+			}
 
 			function updateTextAreas() {
 				var pageId = document.getElementById("page-select").value;
@@ -115,7 +209,7 @@
 						previewRequest = null;
 					}
 					else {
-						alert("Failed to update preveiw!");
+						alert("Failed to update preview!");
 					}
 				}
 				previewRequest.open('GET', '/assets/php/markdown_helper.php?md=' + encodeURIComponent(body));
@@ -170,6 +264,8 @@
 				req.onload = function() {
 					btn.disabled = false;
 					if(req.status === 200) {
+						// update page list
+						updatePageList();
 					}
 					else {
 						alert("Save failed!\n" + req.status + ": " + req.responseCode);
@@ -194,8 +290,7 @@
 				req.onload = function() {
 					btn.disabled = false;
 					if(req.status === 200) {
-						// TODO: refresh page lists
-
+						updatePageList(document.getElementById('page-select').options.length + 1);
 					}
 					else {
 						alert("Save failed!\n" + req.status + ": " + req.responseText);
