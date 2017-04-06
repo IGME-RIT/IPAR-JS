@@ -25,6 +25,7 @@
 						<select name="page-select" id="page-select" style="width: 90%">
 							<option value="1">Page 1</option>
 							<option value="2">Page 2</option>
+							<option value="new" id="new-page-option">&lt;New Page&gt;</option>
 						</select>
 					</div>
 					<div class="row" style="padding-bottom: 5px">
@@ -34,7 +35,6 @@
 						<textarea name="modal-body" id="modal-body" rows="15" style="width: 100%" disabled></textarea>
 					</div>
 					<div class="row" style="text-align: right;">
-						<button type="button" class="btn btn-default" id="new-page-button">Save as New Page</button>
 						<button type="button" class="btn btn-primary" id="save-button">Save</button>
 					</div>
 				</div>
@@ -69,7 +69,7 @@
 			document.getElementById("modal-select").addEventListener('change', updateTextAreas);
 			document.getElementById("modal-select").addEventListener('change', updatePageList);
 
-			document.getElementById("page-select").addEventListener('change', updateTextAreas);
+			document.getElementById("page-select").addEventListener('change', onPageSelectChange);
 			
 			document.getElementById("modal-name").addEventListener('keyup', updatePreviewTitle);
 			document.getElementById("modal-name").addEventListener('input', updatePreviewTitle);
@@ -78,7 +78,6 @@
 			document.getElementById("modal-body").addEventListener('input', updatePreview);
 
 			document.getElementById("save-button").addEventListener('click', saveModal);
-			document.getElementById("new-page-button").addEventListener('click', newPage);
 
 			function updateModalsList() {
 				var modalSelect = document.getElementById("modal-select");
@@ -123,6 +122,17 @@
 				req.send();
 			}
 
+			function onPageSelectChange() {
+				var modalSelect = document.getElementById("modal-select");
+				var pageSelect = document.getElementById("page-select");
+				if(pageSelect.value === "new") { // new page selected
+					newPage(modalSelect.value, "New Page", "");
+				}
+				else {
+					updateTextAreas();
+				}
+			}
+
 			function updatePageList(selectedValue) {
 				var modalSelect = document.getElementById("modal-select");
 				var pageSelect = document.getElementById("page-select");
@@ -141,6 +151,9 @@
 							lastVal = pageSelect.value;
 						}
 
+						// get new page option element
+						var newPageElement = document.getElementById("new-page-option");
+
 						// clear select options
 						pageSelect.innerHTML = "";
 
@@ -156,6 +169,9 @@
 								pageSelect.value = pages[i]['id'];
 							}
 						}
+
+						// add new page option back to options
+						pageSelect.add(newPageElement);
 
 						// update text areas
 						updateTextAreas();
@@ -277,22 +293,18 @@
 				req.send(data);
 			}
 			
-			function newPage() {
-				this.disabled = true;
-				var btn = this;
-				// create json payload
+			function newPage(modalname, title, body) {
 				var data = {
-					"modalname": document.getElementById('modal-select').value,
-					"title": document.getElementById('modal-name').value,
-					"body": document.getElementById('modal-body').value
-				}
+					'modalname': modalname,
+					'title': title,
+					'body': body
+				};
 
 				// make request
 				var req = new XMLHttpRequest();
 				req.onload = function() {
-					btn.disabled = false;
 					if(req.status === 200) {
-						updatePageList(document.getElementById('page-select').options.length + 1);
+						updatePageList(document.getElementById('page-select').options.length);
 					}
 					else {
 						alert("Save failed!\n" + req.status + ": " + req.responseText);
