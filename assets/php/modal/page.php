@@ -9,6 +9,9 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
 elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 	processPUTRequest();
 }
+elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+	processDELETERequest();
+}
 else {
 	respondBadRequest();
 }
@@ -128,6 +131,27 @@ function processPUTRequest() {
 	}
 }
 
+function processDELETERequest(){
+	requireAuth();
+
+	// get json payload
+	$page = json_decode(file_get_contents('php://input'), true);
+	// validate request
+	if(!isset($page['id'])) {
+		respondBadRequest();
+	}
+
+	// connect to database
+	$mdbh = getDbh();
+	
+	// make delete request
+	$sth = $mdbh->prepare("DELETE FROM pages WHERE rowid = :id");
+	if(!$sth->execute(array('id'=>$page['id'])) || $sth -> rowCount() == 0) {
+		// no rows affected, return 404 (not found)
+		respondNotFound();
+	}
+}
+
 function requireAuth() {
 	// require authentication
 	require_once "../user_auth.php"; // sets $dbh, $loggedIn, $_SESSION['user_roles']
@@ -150,6 +174,11 @@ function respondBadRequest() {
 function respondUnauthorized() {
 	http_response_code(401);
 	die('Unauthorized request.');
+}
+
+function respondNotFound() {
+	http_response_code(404);
+	die('Not found.');
 }
 
 function respondOK($msg = "") {

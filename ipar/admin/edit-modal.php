@@ -35,6 +35,7 @@
 						<textarea name="modal-body" id="modal-body" rows="15" style="width: 100%" disabled></textarea>
 					</div>
 					<div class="row" style="text-align: right;">
+						<button type="button" class="btn btn-default" id="delete-page-button">Delete Page</button>
 						<button type="button" class="btn btn-primary" id="save-button">Save</button>
 					</div>
 				</div>
@@ -78,6 +79,7 @@
 			document.getElementById("modal-body").addEventListener('input', updatePreview);
 
 			document.getElementById("save-button").addEventListener('click', saveModal);
+			document.getElementById("delete-page-button").addEventListener('click', function(){deletePage()});
 
 			function updateModalsList() {
 				var modalSelect = document.getElementById("modal-select");
@@ -314,6 +316,39 @@
 				}
 				req.open('POST', '/assets/php/modal/page.php');
 				req.send(JSON.stringify(data));
+			}
+
+			function deletePage(id) {
+				if(id === undefined) {
+					// get current page id
+					id = document.getElementById('page-select').value;
+				}
+
+				// confirm
+				if(confirm("Are you sure you want to delete this page?")) {
+					// disable button
+					var btn = document.getElementById('delete-page-button');
+					btn.disabled = true;
+					
+					// prepare json payload
+					var data = {"id":id};
+
+					// send request
+					var req = new XMLHttpRequest();
+					req.onload = function() {
+						if(req.status === 200) {
+							var pages = document.getElementById('page-select');
+							updatePageList(pages.options[0].value);
+						}
+						else {
+							alert("Failed to delete page!\nError " + req.status + ": "+req.responseText);
+						}
+
+						btn.disabled = false;
+					}
+					req.open("DELETE", "/assets/php/modal/page.php");
+					req.send(JSON.stringify(data));
+				}
 			}
 		</script>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/footer.php"; ?>
