@@ -63,8 +63,39 @@ function processPOSTRequest() { // TODO: add modal
 	respondBadRequest();
 }
 
-function processPUTRequest() { // TODO: change modal name
+function processPUTRequest() { // TODO: update modal
+//	requireAuth();
+//
+//	// parse the json payload
+//	$modal = json_decode(file_get_contents("php://input"), true);
+//
+//	// validate request
+//	if(!isset($modal['id']) || !isset($modal['pages'])){
+//		respondBadRequest();
+//	}
+//
+//	// connect to db
+//	$mdbh = getDbh();
+//	
+//	// update pages
+//	$sel_sth = $mdbh->prepare("SELECT rowid FROM pages WHERE rowid = :id"); // checks if page exists
+//	$ins_sth = $mdbh->prepare("INSERT INTO pages VALUES (:modalid, :title, :body)"); // inserts a new page
+//	$upd_sth = $mdbh->prepare("UPDATE pages VALUES (:modalid, :title, :body) WHERE rowid = 1");
 	respondBadRequest();
+}
+
+function getDbh() {
+	return new PDO('sqlite:../../../../db/modals.sql');
+}
+
+function requireAuth() {
+	// require authentication
+	require_once "../user_auth.php"; // sets $dbh, $loggedIn, $_SESSION['user_roles']
+	
+	if(!$loggedIn || !in_array('admin', $_SESSION['user_roles'])) {
+		respondUnauthorized();
+	}
+
 }
 
 function respondBadRequest() {

@@ -67,8 +67,7 @@
 			updateModalsList();
 
 			updateTextAreas();
-			document.getElementById("modal-select").addEventListener('change', updateTextAreas);
-			document.getElementById("modal-select").addEventListener('change', updatePageList);
+			document.getElementById("modal-select").addEventListener('change', onModalSelectChange);
 
 			document.getElementById("page-select").addEventListener('change', onPageSelectChange);
 			
@@ -80,6 +79,31 @@
 
 			document.getElementById("save-button").addEventListener('click', saveModal);
 			document.getElementById("delete-page-button").addEventListener('click', function(){deletePage()});
+
+			var currentModal; //json representation of the current modal
+
+			function onModalSelectChange() {
+				if(confirm("Are you sure you'd like to change modals? Any unsaved changes will be lost.")) {
+					// get updated modal info
+					updateCurrentModal(this.value);
+				}
+			}
+
+			function updateCurrentModal(name=currentModal['name']) {
+				// get updated modal info
+				var req = new XMLHttpRequest();
+				req.onload = function() {
+					if(req.status === 200) {
+						currentModal = JSON.parse(req.responseText);
+						updatePageList(currentModal['pages'][0]['id']);
+					}
+					else {
+						alert("Failed to load modal!\nError " + req.status + ": " + req.responseText);
+					}
+				}
+				req.open("GET", "/assets/php/modal/modal.php?name="+name); // TODO: send name as json
+				req.send();
+			}
 
 			function updateModalsList() {
 				var modalSelect = document.getElementById("modal-select");
@@ -104,10 +128,6 @@
 							option.value = modals[i]['name'];
 							modalSelect.add(option);
 							
-							// reselect old option if it exists
-							if(option['name'] == lastVal){
-								modalSelect.value = option['name'];
-							}
 						}
 
 						// update page list
@@ -136,56 +156,38 @@
 			}
 
 			function updatePageList(selectedValue) {
-				var modalSelect = document.getElementById("modal-select");
-				var pageSelect = document.getElementById("page-select");
-				pageSelect.disabled = true;
+				var pages = currentModal['pages'];
 
-				var req = new XMLHttpRequest();
-				req.onload = function() {
-					if(req.status === 200) {
-						// get response object
-						var modal = JSON.parse(req.responseText);
-						var pages = modal['pages'];
-
-						// get current select value
-						var lastVal = selectedValue;
-						if(selectedValue === undefined){
-							lastVal = pageSelect.value;
-						}
-
-						// get new page option element
-						var newPageElement = document.getElementById("new-page-option");
-
-						// clear select options
-						pageSelect.innerHTML = "";
-
-						// set select options
-						for(var i = 0; i < pages.length; i++) {
-							var option = document.createElement("option");
-							option.text = pages[i]['title'];
-							option.value = pages[i]['id'];
-							pageSelect.add(option);
-							
-						}
-
-						// add new page option back to options
-						pageSelect.add(newPageElement);
-
-						// reselect old option if it exists
-						pageSelect.value = lastVal;
-
-						// update text areas
-						updateTextAreas();
-					}
-					else {
-						alert("Failed to update pages list!");
-					}
-
-					// enable the select
-					pageSelect.disabled = false;
+				// get current select value
+				var lastVal = selectedValue;
+				if(selectedValue === undefined){
+					lastVal = pageSelect.value;
 				}
-				req.open("GET", "/assets/php/modal/modal.php?name="+modalSelect.value);
-				req.send();
+
+				// get new page option element
+				var newPageElement = document.getElementById("new-page-option");
+
+				// clear select options
+				pageSelect.innerHTML = "";
+
+				// set select options
+				for(var i = 0; i < pages.length; i++) {
+					var option = document.createElement("option");
+					option.text = pages[i]['title'];
+					option.value = pages[i]['id'];
+					pageSelect.add(option);
+					
+				}
+
+				// add new page option back to options
+				pageSelect.add(newPageElement);
+
+				// reselect old option if it exists
+				pageSelect.value = lastVal;
+
+				// update text areas
+				updateTextAreas();
+
 			}
 
 			function updateTextAreas() {
@@ -240,21 +242,6 @@
 				document.getElementById('help-modal-title').innerHTML = title;
 			}
 
-			function getModal(name, format = 'html', callback) {
-				var req = new XMLHttpRequest();
-				req.onload = function() {
-					if(req.status === 200) {
-						var modal = JSON.parse(req.responseText);
-						callback(modal);
-					}
-					else {
-						alert("Failed to get modal information!\n" + req.status + ": " + req.responseCode);
-					}
-				}
-				req.open('GET', '/assets/php/modal/modal.php?name=' + name + '&format=' + format);
-				req.send();
-			}
-
 			function getPage(id, format = 'html', callback) {
 				var req = new XMLHttpRequest();
 				req.onload = function() {
@@ -270,7 +257,7 @@
 				req.send();
 			}
 
-			function saveModal() {
+			function saveModal() { //TODO: save modal object, not current page
 				this.disabled = true;
 				var btn = this;
 				var id = document.getElementById('page-select').value;
