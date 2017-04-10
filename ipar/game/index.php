@@ -84,12 +84,12 @@
 							<span class="name">Home</span>
 						</button>
 					</li>
-					<li>
+					<!--li>
 			        	<button id="menu-button" class="btn-tile" onclick="loadHelpOnce('/assets/php/get_modal.php?name=Test');">
 							<span class="glyphicon glyphicon-question-sign"></span>
 							<span class="name">Help</span>
 						</button>
-					</li>
+					</li-->
 				</ul>
 			</div>
 			<input type="file" id="load-input" accept=".ipar, .iparw" />
