@@ -6,6 +6,7 @@
 	</head>
 	<body>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/navbar.php"; ?>
+		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/help_modal.php"; ?>
 		<div class="jumbotron">
 			<div class="container">
                 <div class="row">
@@ -34,9 +35,14 @@
 					<div class="row">
 						<textarea name="modal-body" id="modal-body" rows="15" style="width: 100%" disabled></textarea>
 					</div>
-					<div class="row" style="text-align: right;">
-						<button type="button" class="btn btn-default" id="delete-page-button">Delete Page</button>
-						<button type="button" class="btn btn-primary" id="save-button">Save</button>
+					<div class="row">
+						<div class="col-xs-3" style="padding: 0; text-align:left;">
+							<a href="" onclick="loadHelpOnce('/assets/php/get-modal.php?name=Modal%20Editor');">Modal Editor Help</a>
+						</div>
+						<div class="col-xs-9" style="padding: 0; text-align:right;">
+							<button type="button" class="btn btn-default" id="delete-page-button">Delete Page</button>
+							<button type="button" class="btn btn-primary" id="save-button">Save</button>
+						</div>
 					</div>
 				</div>
 				<div class="col-md-6 col-xs-12">
@@ -96,7 +102,12 @@
 					if(req.status === 200) {
 						console.log(req.responseText);
 						currentModal = JSON.parse(req.responseText);
-						updatePageList(currentModal['pages'][0]['id']);
+						if(currentModal['pages'].length > 0) {
+							updatePageList(currentModal['pages'][0]['id']);
+						}
+						else {
+							updatePageList("new");
+						}
 					}
 					else {
 						alert("Failed to load modal!\nError " + req.status + ": " + req.responseText);
