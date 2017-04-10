@@ -21,6 +21,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="edit-modal.php" class="btn-tile">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            <span class="name">Edit Help Modals</span>
+                        </a>
+                    </li>
+					<li>
                         <a href="/" class="btn-tile">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                             <span class="name">Home</span>
