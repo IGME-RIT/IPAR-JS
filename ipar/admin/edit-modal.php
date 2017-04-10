@@ -37,7 +37,7 @@
 					</div>
 					<div class="row">
 						<div class="col-xs-3" style="padding: 0; text-align:left;">
-							<a href="" onclick="loadHelpOnce('/assets/php/get-modal.php?name=Modal%20Editor');">Modal Editor Help</a>
+							<a href="" onclick="loadHelpOnce('/assets/php/modal/modal.php?name=Modal%20Editor&format=html');">Modal Editor Help</a>
 						</div>
 						<div class="col-xs-9" style="padding: 0; text-align:right;">
 							<button type="button" class="btn btn-default" id="delete-page-button">Delete Page</button>
@@ -75,7 +75,7 @@
 			updateTextAreas();
 			document.getElementById("modal-select").addEventListener('change', onModalSelectChange);
 
-			document.getElementById("page-select").addEventListener('change', onPageSelectChange);
+			document.getElementById("page-select").addEventListener('change', updateTextAreas);
 			
 			document.getElementById("modal-name").addEventListener('keyup', updatePreviewTitle);
 			document.getElementById("modal-name").addEventListener('input', updatePreviewTitle);
@@ -95,15 +95,18 @@
 				}
 			}
 
-			function updateCurrentModal(name=currentModal['name']) {
+			function updateCurrentModal(name=currentModal['name'], page=null) {
 				// get updated modal info
 				var req = new XMLHttpRequest();
 				req.onload = function() {
 					if(req.status === 200) {
 						console.log(req.responseText);
 						currentModal = JSON.parse(req.responseText);
-						if(currentModal['pages'].length > 0) {
+						if(currentModal['pages'].length > 0 && page == null) {
 							updatePageList(currentModal['pages'][0]['id']);
+						}
+						else if(page != null) {
+							updatePageList(page);
 						}
 						else {
 							updatePageList("new");
@@ -155,17 +158,6 @@
 				req.send();
 			}
 
-			function onPageSelectChange() {
-				var modalSelect = document.getElementById("modal-select");
-				var pageSelect = document.getElementById("page-select");
-				if(pageSelect.value === "new") { // new page selected
-					newPage(modalSelect.value, "New Page", "");
-				}
-				else {
-					updateTextAreas();
-				}
-			}
-
 			function updatePageList(selectedValue) {
 				var pages = currentModal['pages'];
 				var pageSelect = document.getElementById("page-select");
@@ -202,17 +194,27 @@
 
 			}
 
-			function updateTextAreas() {
+			function updateTextAreas() {	
 				var pageId = document.getElementById("page-select").value;
+				var nameInput = document.getElementById('modal-name');
+				var bodyInput = document.getElementById('modal-body');
+
+				// clear text areas if selected page is 'new'
+				if(pageId === "new") {
+					nameInput.value = "";
+					bodyInput.value = "";
+
+					updatePreview();
+					updatePreviewTitle();
+					return;
+				}
 
 				// get page info in markdown
 				getPage(pageId, 'md', function(page) {
 					// set input values
-					var nameInput = document.getElementById('modal-name');
 					nameInput.value = page['title'];
 					nameInput.disabled = false;
-
-					var bodyInput = document.getElementById('modal-body');
+			
 					bodyInput.value = page['body'];
 					bodyInput.disabled = false;
 					
@@ -276,6 +278,13 @@
 				var title = document.getElementById('modal-name').value;
 				var body = document.getElementById('modal-body').value;
 
+				if(id === 'new') {
+					// make new page
+					var modalName = document.getElementById('modal-select').value;
+					newPage(modalName, title, body);
+					return;
+				}
+
 				var data = "id="+id+"&title="+title+"&body="+body; //TODO: json
 
 				var req = new XMLHttpRequest();
@@ -306,8 +315,8 @@
 					if(req.status === 200) {
 						// get page from response
 						var page = JSON.parse(req.responseText);
-
-						updatePageList(page['id']);
+						// update modal
+						updateCurrentModal(modalname, page['id']);
 					}
 					else {
 						alert("Save failed!\n" + req.status + ": " + req.responseText);
@@ -337,7 +346,7 @@
 					req.onload = function() {
 						if(req.status === 200) {
 							var pages = document.getElementById('page-select');
-							updatePageList(pages.options[0].value);
+							updateCurrentModal();
 						}
 						else {
 							alert("Failed to delete page!\nError " + req.status + ": "+req.responseText);
