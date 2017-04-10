@@ -94,6 +94,7 @@
 				var req = new XMLHttpRequest();
 				req.onload = function() {
 					if(req.status === 200) {
+						console.log(req.responseText);
 						currentModal = JSON.parse(req.responseText);
 						updatePageList(currentModal['pages'][0]['id']);
 					}
@@ -129,9 +130,8 @@
 							modalSelect.add(option);
 							
 						}
-
-						// update page list
-						updatePageList();
+						// update current modal
+						updateCurrentModal(modalSelect.value);
 					}
 					else {
 						alert("Failed to update modals list!");
@@ -157,6 +157,7 @@
 
 			function updatePageList(selectedValue) {
 				var pages = currentModal['pages'];
+				var pageSelect = document.getElementById("page-select");
 
 				// get current select value
 				var lastVal = selectedValue;
