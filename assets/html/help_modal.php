@@ -56,8 +56,8 @@
 
 	function setHelpPage(title) {
 		// search for title in pages
-		for(i = 0; i < helpData.length; i++) {
-			if(helpData[i]["title"] === title) {
+		for(i = 0; i < helpData['pages'].length; i++) {
+			if(helpData['pages'][i]['title'] === title) {
 				helpPage = i;
 				setHelpModalContent(i);
 			}
@@ -79,14 +79,14 @@
 				alert(req.status + ": " + req.statusText + "\n" + req.responseText);
 			}
 		}
-		req.open('POST', "/assets/php/markdown-helper.php");
+		req.open('POST', "/assets/php/markdown_helper.php");
 		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		req.send("md="+helpData[page]["body"]);
+		req.send("md="+helpData['pages'][page]['body']);
 		
-		document.getElementById("help-modal-title").innerHTML = helpData[page]["title"];
+		document.getElementById('help-modal-title').innerHTML = helpData['pages'][page]['title'];
 
 		// disable next button if we need to
-		document.getElementById("help-next-button").disabled = page + 1 == helpData.length;
+		document.getElementById("help-next-button").disabled = page + 1 == helpData['pages'].length;
 
 		// disable previous button if we need to
 		document.getElementById("help-prev-button").disabled = page == 0;
