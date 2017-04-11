@@ -37,7 +37,7 @@
 					</div>
 					<div class="row">
 						<div class="col-xs-3" style="padding: 0; text-align:left;">
-							<a href="#" onclick="loadHelpOnce('/assets/php/modal/modal.php?name=Modal%20Editor&format=html');">Modal Editor Help</a>
+							<a href="#" onclick="loadHelp('/assets/php/modal/modal.php?name=Modal%20Editor&format=html');">Modal Editor Help</a>
 						</div>
 						<div class="col-xs-9" style="padding: 0; text-align:right;">
 							<button type="button" class="btn btn-default" id="delete-page-button">Delete Page</button>
