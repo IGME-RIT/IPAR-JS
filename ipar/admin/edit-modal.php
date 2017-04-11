@@ -52,15 +52,15 @@
 							<div class="modal-content">
 								<div class="modal-header">
 									<button type="button" class="close" data-dismiss="modal" disabled>&times;</button>
-									<h4 class="modal-title" id="help-modal-title"></h4>
+									<h4 class="modal-title" id="preview-modal-title"></h4>
 								</div>
 								<div class="modal-body">
-									<p id="help-modal-body"></p>
+									<p id="preview-modal-body"></p>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default" data-dismiss="modal" disabled>Close</button>
-									<button type="button" class="btn btn-primary" id="help-prev-button" disabled>Previous</button>
-									<button type="button" class="btn btn-primary" id="help-next-button" disabled>Next</button>
+									<button type="button" class="btn btn-primary" id="preview-prev-button" disabled>Previous</button>
+									<button type="button" class="btn btn-primary" id="preview-next-button" disabled>Next</button>
 								</div>
 							</div>
 						</div>
@@ -249,7 +249,7 @@
 				previewRequest = new XMLHttpRequest();
 				previewRequest.onload = function() {
 					if(previewRequest.status === 200) {
-						document.getElementById('help-modal-body').innerHTML = previewRequest.responseText;
+						document.getElementById('preview-modal-body').innerHTML = previewRequest.responseText;
 						previewRequest = null;
 					}
 					else {
@@ -262,7 +262,7 @@
 
 			function updatePreviewTitle() {
 				var title = document.getElementById('modal-name').value;
-				document.getElementById('help-modal-title').innerHTML = title;
+				document.getElementById('preview-modal-title').innerHTML = title;
 			}
 
 			function getPage(id, format = 'html', callback) {
