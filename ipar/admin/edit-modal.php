@@ -105,7 +105,6 @@
 				var req = new XMLHttpRequest();
 				req.onload = function() {
 					if(req.status === 200) {
-						console.log(req.responseText);
 						currentModal = JSON.parse(req.responseText);
 						if(currentModal['pages'].length > 0 && page == null) {
 							updatePageList(currentModal['pages'][0]['id']);
