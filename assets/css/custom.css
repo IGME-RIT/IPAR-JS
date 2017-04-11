@@ -405,6 +405,10 @@ label {
 	color: rgba(244, 56, 56, 1);
 }
 
+#preview-modal-body p {
+	font-size: 14px;
+}
+
 @media screen and (max-width: 767px) {
     #nsf{
         position: relative;
