@@ -37,7 +37,7 @@
 					</div>
 					<div class="row">
 						<div class="col-xs-3" style="padding: 0; text-align:left;">
-							<a href="" onclick="loadHelpOnce('/assets/php/modal/modal.php?name=Modal%20Editor&format=html');">Modal Editor Help</a>
+							<a href="#" onclick="loadHelpOnce('/assets/php/modal/modal.php?name=Modal%20Editor&format=html');">Modal Editor Help</a>
 						</div>
 						<div class="col-xs-9" style="padding: 0; text-align:right;">
 							<button type="button" class="btn btn-default" id="delete-page-button">Delete Page</button>
@@ -75,7 +75,7 @@
 			updateTextAreas();
 			document.getElementById("modal-select").addEventListener('change', onModalSelectChange);
 
-			document.getElementById("page-select").addEventListener('change', updateTextAreas);
+			document.getElementById("page-select").addEventListener('change', onPageSelectChange);
 			
 			document.getElementById("modal-name").addEventListener('keyup', updatePreviewTitle);
 			document.getElementById("modal-name").addEventListener('input', updatePreviewTitle);
@@ -93,6 +93,11 @@
 					// get updated modal info
 					updateCurrentModal(this.value);
 				}
+			}
+
+			function onPageSelectChange() {
+				updateTextAreas();
+				
 			}
 
 			function updateCurrentModal(name=currentModal['name'], page=null) {
@@ -206,8 +211,12 @@
 
 					updatePreview();
 					updatePreviewTitle();
+
 					return;
 				}
+					
+				var button = document.getElementById("delete-page-button");
+				button.disabled = (document.getElementById("page-select").value === "new")
 
 				// get page info in markdown
 				getPage(pageId, 'md', function(page) {
@@ -272,8 +281,8 @@
 			}
 
 			function saveModal() { //TODO: save modal object, not current page
-				this.disabled = true;
-				var btn = this;
+				var btn = document.getElementById('save-button');
+				btn.disabled = true;
 				var id = document.getElementById('page-select').value;
 				var title = document.getElementById('modal-name').value;
 				var body = document.getElementById('modal-body').value;
@@ -282,6 +291,7 @@
 					// make new page
 					var modalName = document.getElementById('modal-select').value;
 					newPage(modalName, title, body);
+					btn.disabled = false;
 					return;
 				}
 
