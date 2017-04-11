@@ -72,7 +72,6 @@
 			//TODO: move to node module(s)
 			updateModalsList();
 
-			updateTextAreas();
 			document.getElementById("modal-select").addEventListener('change', onModalSelectChange);
 
 			document.getElementById("page-select").addEventListener('change', onPageSelectChange);
@@ -87,17 +86,34 @@
 			document.getElementById("delete-page-button").addEventListener('click', function(){deletePage()});
 
 			var currentModal; //json representation of the current modal
+			var pageInd;
+
+			var lastModalSelectVal, lastPageSelectVal;
+			var unsavedChanges = false;
 
 			function onModalSelectChange() {
-				if(confirm("Are you sure you'd like to change modals? Any unsaved changes will be lost.")) {
+				var select = document.getElementById("modal-select");
+
+				if(unsavedChanges || confirm("Are you sure you'd like to change modals? Any unsaved changes will be lost.")) {
 					// get updated modal info
-					updateCurrentModal(this.value);
+					updateCurrentModal(select.value);
+					lastModalSelectVal = select.value;
+				}
+				else {
+					select.value = lastModalSelectVal;
 				}
 			}
 
 			function onPageSelectChange() {
-				updateTextAreas();
-				
+				var select = document.getElementById("page-select");
+
+				if(!unsavedChanges || confirm("Are you sure you'd like to change pages? Any unsaved changes will be lost.")) {
+					updateTextAreas();
+					lastPageSelectVal = select.value;
+				}
+				else {
+					select.value = lastPageSelectVal;
+				}
 			}
 
 			function updateCurrentModal(name=currentModal['name'], page=null) {
@@ -135,7 +151,7 @@
 						var modals = JSON.parse(req.responseText);
 
 						// get current select value
-						var lastVal = modalSelect.value;
+						lastModalSelectVal = modalSelect.value;
 
 						// clear select options
 						modalSelect.innerHTML = "";
@@ -167,9 +183,9 @@
 				var pageSelect = document.getElementById("page-select");
 
 				// get current select value
-				var lastVal = selectedValue;
+				lastPageSelectVal = selectedValue;
 				if(selectedValue === undefined){
-					lastVal = pageSelect.value;
+					lastPageSelectVal = pageSelect.value;
 				}
 
 				// get new page option element
@@ -191,7 +207,7 @@
 				pageSelect.add(newPageElement);
 
 				// reselect old option if it exists
-				pageSelect.value = lastVal;
+				pageSelect.value = lastPageSelectVal;
 
 				// update text areas
 				updateTextAreas();
@@ -203,15 +219,25 @@
 				var nameInput = document.getElementById('modal-name');
 				var bodyInput = document.getElementById('modal-body');
 
+				// reset unsaved changes flag
+				unsavedChanges = false;
+
 				// clear text areas if selected page is 'new'
 				if(pageId === "new") {
 					nameInput.value = "";
 					bodyInput.value = "";
 
-					updatePreview();
+					updatePreview(true);
 					updatePreviewTitle();
 
 					return;
+				}
+
+				// update current page index
+				for(var i = 0; i < currentModal['pages'].length; i++) {
+					if(currentModal['pages'][i]['id'] == pageId) {
+						pageInd = i;
+					}
 				}
 					
 				var button = document.getElementById("delete-page-button");
@@ -226,21 +252,20 @@
 					bodyInput.value = page['body'];
 					bodyInput.disabled = false;
 					
-					updatePreview();
+					updatePreview(true);
 					updatePreviewTitle();
 				});
 			}
 
 			var previewRequest;
-			var lastBody;
 
-			function updatePreview() {
+			function updatePreview(force = false) {
 				// get html from markdown
 				var body = document.getElementById('modal-body').value;
 			
 				// don't make a request if there are no changes
-				if(body === lastBody) return;
-				lastBody = body;
+				checkUnsavedChanges();
+				if(!force && !unsavedChanges) return;
 
 				// abort the last request if it is still running
 				if(previewRequest != null) { previewRequest.abort(); }
@@ -262,6 +287,17 @@
 			function updatePreviewTitle() {
 				var title = document.getElementById('modal-name').value;
 				document.getElementById('preview-modal-title').innerHTML = title;
+			}
+
+			function checkUnsavedChanges() {
+				var title = document.getElementById('modal-name').value;
+				var body = document.getElementById('modal-body').value;
+				var selectedId = document.getElementById('page-select').value;
+				var button = document.getElementById('save-button');
+				var currPage = currentModal['pages'][pageInd];
+
+				unsavedChanges = (selectedId === "new" || currPage['title'] != title || currPage['body'] != body);
+				button.disabled = !unsavedChanges
 			}
 
 			function getPage(id, format = 'html', callback) {
