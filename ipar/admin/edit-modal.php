@@ -302,7 +302,7 @@
 					btn.disabled = false;
 					if(req.status === 200) {
 						// update page list
-						updatePageList();
+						updateCurrentModal(currentModal['name'], id);
 					}
 					else {
 						alert("Save failed!\n" + req.status + ": " + req.responseCode);
