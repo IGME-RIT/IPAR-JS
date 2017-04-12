@@ -13,8 +13,8 @@
 	}
 	
 	// set up parsedown
-	include 'parsedown/Parsedown.php';
-	$Parsedown = new Parsedown();
+	include 'parsedown/IPARParsedown.php';
+	$Parsedown = new IPARParsedown();
 	
 	// echo html
 	echo $Parsedown->text($text);

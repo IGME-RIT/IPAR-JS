@@ -27,8 +27,8 @@ function processGETRequest() {
 
 	// don't include parsedown unless we need to
 	if($format == 'html') {
-		include '../parsedown/Parsedown.php';	
-		$Parsedown = new Parsedown();
+		include '../parsedown/IPARParsedown.php';	
+		$Parsedown = new IPARParsedown();
 	}
 	
 	// get modal name

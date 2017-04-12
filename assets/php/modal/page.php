@@ -38,8 +38,8 @@ function processGETRequest() {
 
 	// convert body to html if we need to
 	if(isset($_GET['format']) && $_GET['format'] == 'html') {
-		require_once '../parsedown/Parsedown.php';
-		$Parsedown = new Parsedown();
+		require_once '../parsedown/IPARParsedown.php';
+		$Parsedown = new IPARParsedown();
 		$page['body'] = $Parsedown->text($page['body']);
 	}
 
