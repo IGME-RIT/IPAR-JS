@@ -6,7 +6,7 @@ class IPARParsedown extends Parsedown
 	# Adds an inline element for linking to pages within a help modal
 	protected function inlineLink($excerpt)
 	{
-		if(preg_match('/^\[\[(.*?)\]\](?=$)/', $excerpt['text'], $matches))
+		if(preg_match('/^\[\[(.*?)\]\](?!])/', $excerpt['text'], $matches))
 		{
 			return array(
 				'extent' => strlen($matches[0]),
