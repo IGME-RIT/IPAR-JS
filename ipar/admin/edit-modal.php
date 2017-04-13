@@ -18,14 +18,11 @@
 					<div class="row">
 						<label for="modal-select" style="width: 9%">Modal: </label>
 						<select name="modal-select" id="modal-select" style="width: 90%">
-							<option value="Test">Test</option>
 						</select>
 					</div>
 					<div class="row" style="padding-bottom: 10px">
 						<label for="page-select" style="width: 9%">Page: </label>
 						<select name="page-select" id="page-select" style="width: 90%">
-							<option value="1">Page 1</option>
-							<option value="2">Page 2</option>
 							<option value="new" id="new-page-option">&lt;New Page&gt;</option>
 						</select>
 					</div>
@@ -68,7 +65,9 @@
 				</div>
 			</div>
 		</div>
+		<script src="/js/autosize.min.js"></script>	
 		<script>
+			autosize(document.getElementById("modal-body"));
 			//TODO: move to node module(s)
 			updateModalsList();
 
@@ -251,6 +250,8 @@
 			
 					bodyInput.value = page['body'];
 					bodyInput.disabled = false;
+					// update autosize
+					autosize.update(bodyInput);
 					
 					updatePreview(true);
 					updatePreviewTitle();
