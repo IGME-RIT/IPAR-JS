@@ -405,8 +405,12 @@ label {
 	color: rgba(244, 56, 56, 1);
 }
 
-#preview-modal-body p {
+.modal-body p {
 	font-size: 14px;
+}
+
+.modal-body h1 {
+	font-size: 36px;
 }
 
 @media screen and (max-width: 767px) {
