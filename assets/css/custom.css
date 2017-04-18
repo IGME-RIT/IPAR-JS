@@ -413,6 +413,11 @@ label {
 	font-size: 36px;
 }
 
+.modal-body ol {
+	font-size: 1em;
+	padding-left: 1.2em;
+}
+
 @media screen and (max-width: 767px) {
     #nsf{
         position: relative;
