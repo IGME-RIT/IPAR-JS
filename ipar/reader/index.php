@@ -13,6 +13,7 @@
 </head>
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/help_modal.php'; ?>
 
 	<section id="case" style="display:none; margin-top: 51px;">
 		<div class="buttonCol">
@@ -70,6 +71,12 @@
                 <span class="name">Home</span>
             </button>
                 </li>
+				<li>
+			       	<button id="menu-button" class="btn-tile" onclick="loadHelpOnce('/assets/php/modal/modal.php?name=Reader%20Menu&format=html');">
+						<span class="glyphicon glyphicon-question-sign"></span>
+						<span class="name">Help</span>
+					</button>
+				</li>
             </ul>
 			<input type="file" id="load-input"  accept=".iparsubmit, .iparwsubmit"/>
 		</div>
