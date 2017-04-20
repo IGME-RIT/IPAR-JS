@@ -418,6 +418,17 @@ label {
 	padding-left: 1.2em;
 }
 
+#help-button-fixed {
+	position: fixed;
+	bottom: 3vh;
+	right: -1px;
+	font-size: 1.6em;
+	text-align: center;
+	padding: 5px;
+	height: 40px;
+	width: 45px;
+}
+
 @media screen and (max-width: 767px) {
     #nsf{
         position: relative;

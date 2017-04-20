@@ -6,6 +6,7 @@
 	</head>
 	<body>
 		<?php include("assets/html/navbar.php"); ?>
+		<?php include("assets/html/help_modal.php"); ?>
 		<div style="height:65px"></div>
 		<div class="container">
 			<div class="playDiv">
@@ -60,6 +61,11 @@
 				</div>
 			</div>
 		</div>
+
+		<button id="help-button-fixed" onclick="loadHelpOnce('/assets/php/modal/modal.php?name=Homepage&format=html')">
+			<span class="glyphicon glyphicon-question-sign"></span>
+		</button>
+
 		<?php include("assets/html/footer.php"); ?>
 	</body>
 </html>
