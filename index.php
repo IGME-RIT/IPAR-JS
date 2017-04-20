@@ -66,6 +66,23 @@
 			<span class="glyphicon glyphicon-question-sign"></span>
 		</button>
 
+		<script>
+			// show help if this is the first time the client has visited the page
+			if(document.cookie.replace(/(?:(?:^|.*;\s*)homepageHelpShown\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
+				// show help after 3 seconds
+				setTimeout(showHelpFirstTime, 3000);
+			}
+
+			function showHelpFirstTime() {
+				// show help
+				loadHelpOnce('/assets/php/modal/modal.php?name=Homepage&format=html');
+
+				// set cookie
+				document.cookie = "homepageHelpShown=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+				
+			}
+		</script>
+
 		<?php include("assets/html/footer.php"); ?>
 	</body>
 </html>
