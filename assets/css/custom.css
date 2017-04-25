@@ -1,18 +1,17 @@
 .playDiv{
 	width: 100%;
-	padding: 50px;
-	padding-top: 30px;
-	justify-content: center;
-	align-items: center;
 	text-align: center;
+	margin: 30px 0;
 }
 
 .playButton{
 	background-color: green;
 	color: white;
-	font-size: 150%;
-	padding: 15px 25vw;
+	font-size: 1.5em;
+	padding: 15px;
 	text-decoration: none;
+	width: 100%;
+	display: block;
 }
 
 .playButton:hover{
@@ -398,7 +397,11 @@ label {
 
 .clearfix {
     display: block;
+}
 
+.navbar.clearfix {
+	margin: 0;
+	padding: 0;
 }
 
 .unconfirmed-email {

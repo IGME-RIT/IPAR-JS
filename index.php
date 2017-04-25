@@ -7,7 +7,7 @@
 	<body>
 		<?php include("assets/html/navbar.php"); ?>
 		<?php include("assets/html/help_modal.php"); ?>
-		<div style="height:65px"></div>
+		<div class="navbar clearfix"></div>
 		<div class="container">
 			<div class="playDiv">
 				<a class="playButton" href="/ipar/game/">Play Now</a>	
