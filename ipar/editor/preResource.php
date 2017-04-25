@@ -1,5 +1,8 @@
 <?php
-	session_start();
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+
 	if(!$_SESSION || !$_SESSION["user"])
 		exit();
 	$dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
