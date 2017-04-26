@@ -18,6 +18,7 @@
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/navbar.php"; ?>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/help_modal.php'; ?>
+		<div class="navbar clearfix"></div>
 	<!-- div for console for mobile testing -->
 	<!--<div id="console" style="position:fixed;background-color:black;color:white;top:0;left:0;z-index:999;width:100vw;">This is the console</div>  -->
 	<!-- Section for the board -->

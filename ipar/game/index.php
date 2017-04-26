@@ -17,13 +17,13 @@
 </head>
 <body>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
-
+	<div class="navbar clearfix"></div>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/help_modal.php'; ?>
 	
 	<!-- div for console for mobile testing -->
 	<!--<div id="console" style="position:fixed;background-color:black;color:white;top:0;left:0;z-index:999;width:100vw;">This is the console</div>  -->
 	<!-- Section for the board -->
-	<section id="board" style="display:none; margin-top: 51px;">
+	<section id="board" style="display:none;">
 		<div id="controlBar" class="buttonBar">
 			<button id="zoom-in">+</button>
 			<button id="zoom-out">-</button>
