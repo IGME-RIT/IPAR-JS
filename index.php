@@ -18,8 +18,7 @@
 					<div class="col-xs-7 col-md-7">
 						<h4>IPAR  (Imaging, preserving, analyzing and reporting):</h4>
 						<div class="embed-responsive embed-responsive-16by9">
-							
-							<iframe class="embed-responsive-item" width="400" height="225" src="https://www.youtube.com/embed/Oq8GtXyUz1A" allowfullscreen="true"></iframe>
+							<video src="/assets/media/game-demo.mp4" controls></video>
 						</div>
 					</div>
 					<div class="col-xs-5 col-md-5">
@@ -40,7 +39,7 @@
 					<div class="col-xs-7 col-md-7">
 						<h4>IPAR Editor:</h4>
 						<div class="embed-responsive embed-responsive-16by9">
-							<iframe class="embed-responsive-item" width="400" height="225" src="https://www.youtube.com/embed/i9FSdeNNRk8"  allowfullscreen="true"></iframe>
+							<video src="/assets/media/editor-demo.mp4" controls></video>
 						</div>
 					</div>
 					
