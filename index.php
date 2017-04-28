@@ -18,7 +18,7 @@
 				<div class="row">
 					<div class="col-xs-7 col-md-7">
 						<h4>IPAR  (Imaging, preserving, analyzing and reporting):</h4>
-						<div class="player embed-responsive embed-responsive-16by9" data-video-src="/assets/media/editor-demo.mp4"></div>
+						<div class="player embed-responsive embed-responsive-16by9" data-video-src="/assets/media/game-demo.mp4"></div>
 					</div>
 					<div class="col-xs-5 col-md-5">
 						<img id="nsf" src="assets/img/NSF.png"/>
