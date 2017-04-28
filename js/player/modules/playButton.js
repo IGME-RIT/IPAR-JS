@@ -9,7 +9,7 @@ function PlayButton(video) {
 	this.element.addEventListener("click", function() {
 		// play the video
 		this.video.element.play();
-	});
+	}.bind(this));
 }
 
 p = PlayButton.prototype;
