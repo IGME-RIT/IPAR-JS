@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          src: ['.htaccess', '*.php', '*.html', 'Cases/**/*', 'CasesW/**/*', 'files/**/*', 'js/**/*', 'assets/json/**/*', 'assets/php/**/*', 'assets/css/**/*', 'assets/fonts/**/*', 'assets/html/**/*', 'assets/img/**/*', 'assets/js/**/*', 'assets/workshop/**/*', 'assets/media/**/*', 'ipar/.htaccess', 'ipar/resource/*', 'ipar/image/*', 'ipar/*.html', 'favicon.ico', 'ipar/*.php', 'ipar/*.iparw', 'ipar/game/*.html', 'ipar/game/*.php', 'ipar/game/*.iparw', 'ipar/editor/*.html', 'ipar/editor/*.iparw', 'ipar/editor/*.php', 'ipar/editor/.htaccess', 'ipar/login/*.html', 'ipar/login/*.php', 'ipar/reader/*.html', 'ipar/reader/*.php', 'ipar/*.md', 'ipar/css/**/*', 'ipar/img/**/*', 'ipar/lib/**/*', 'ipar/admin/*','ipar/admin/.htaccess', 'php-markdown/**/*'],
+          src: ['.htaccess', '*.php', '*.html', 'Cases/**/*', 'CasesW/**/*', 'files/**/*', 'js/*.js', 'assets/json/**/*', 'assets/php/**/*', 'assets/css/**/*', 'assets/fonts/**/*', 'assets/html/**/*', 'assets/img/**/*', 'assets/js/**/*', 'assets/workshop/**/*', 'assets/media/**/*', 'ipar/.htaccess', 'ipar/resource/*', 'ipar/image/*', 'ipar/*.html', 'favicon.ico', 'ipar/*.php', 'ipar/*.iparw', 'ipar/game/*.html', 'ipar/game/*.php', 'ipar/game/*.iparw', 'ipar/editor/*.html', 'ipar/editor/*.iparw', 'ipar/editor/*.php', 'ipar/editor/.htaccess', 'ipar/login/*.html', 'ipar/login/*.php', 'ipar/reader/*.html', 'ipar/reader/*.php', 'ipar/*.md', 'ipar/css/**/*', 'ipar/img/**/*', 'ipar/lib/**/*', 'ipar/admin/*','ipar/admin/.htaccess', 'php-markdown/**/*'],
           dest: 'build/',
           filter: 'isFile'
         }]
@@ -37,6 +37,24 @@ module.exports = function(grunt) {
       }
     },
     browserify: {
+	  videoplayer: {
+		  src: ['js/player/**/*.js'],
+		  dest: 'temp/player.js',
+		  options: {
+			  browserifyOptions: {
+				  debug: true
+			  }
+		  }
+	  },
+	  devvideoplayer: {
+		  src: ['js/player/**/*.js'],
+		  dest: 'build/js/player.min.js',
+		  options: {
+			  browserifyOptions: {
+				  debug: true
+			  }
+		  }
+	  },
       game: {
     	  src: ['ipar/game/js/**/*.js'],
           dest: 'temp/ipar/game.js',
@@ -93,6 +111,10 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
+	  videoplayer: {
+		  src: 'temp/player.js',
+		  dest: 'build/js/player.min.js'
+	  },
       game: {
           src: 'temp/ipar/game.js',
           dest: 'build/ipar/game/game.min.js'
@@ -123,7 +145,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-php');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ["clean", "copy:main", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader", "php", "watch"]);
-  grunt.registerTask('dev-deploy', ["clean", "copy:main", "browserify:devgame", "browserify:deveditor", "browserify:devreader"]);
-  grunt.registerTask('deploy', ["clean", "copy:main", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader"]);
+  grunt.registerTask('default', ["clean", "copy:main", "browserify:videoplayer", "uglify:videoplayer", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader", "php", "watch"]);
+  grunt.registerTask('dev-deploy', ["clean", "copy:main", "browserify:devvideoplayer", "browserify:devgame", "browserify:deveditor", "browserify:devreader"]);
+  grunt.registerTask('deploy', ["clean", "copy:main", "browserify:videoplayer", "uglify:videoplayer", "browserify:game", "uglify:game", "browserify:editor", "uglify:editor", "browserify:reader", "uglify:reader"]);
 };

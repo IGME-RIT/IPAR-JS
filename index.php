@@ -3,6 +3,7 @@
 	<head>
 		<title>Forensics Project</title>
 		<?php include("assets/html/head.php"); ?>
+		<script src="js/player.min.js"></script>
 	</head>
 	<body>
 		<?php include("assets/html/navbar.php"); ?>
@@ -17,9 +18,7 @@
 				<div class="row">
 					<div class="col-xs-7 col-md-7">
 						<h4>IPAR  (Imaging, preserving, analyzing and reporting):</h4>
-						<div class="player embed-responsive embed-responsive-16by9">
-							<video src="/assets/media/game-demo.mp4" ></video>
-						</div>
+						<div class="player embed-responsive embed-responsive-16by9" data-video-src="/assets/media/editor-demo.mp4"></div>
 					</div>
 					<div class="col-xs-5 col-md-5">
 						<img id="nsf" src="assets/img/NSF.png"/>
@@ -38,9 +37,7 @@
 				<div class="row">
 					<div class="col-xs-7 col-md-7">
 						<h4>IPAR Editor:</h4>
-						<div class="player embed-responsive embed-responsive-16by9">
-							<video src="/assets/media/editor-demo.mp4" ></video>
-						</div>
+						<div class="player embed-responsive embed-responsive-16by9" data-video-src="/assets/media/editor-demo.mp4"></div>
 					</div>
 					
 					<div class="col-xs-5 col-md-5">
@@ -60,46 +57,6 @@
 				</div>
 			</div>
 		</div>
-		<script>
-			// adds play button to video tags
-			var elements = document.getElementsByTagName("video");
-
-			for(var i=0; i<elements.length; i++) {
-				// create play button
-				var video = elements[i];
-				var playBtn = document.createElement("span");
-				playBtn.setAttribute("class", "glyphicon glyphicon-play-circle video-play");
-				elements[i].parentElement.appendChild(playBtn);
-
-				// register event handlers for play button
-				playBtn.addEventListener("click", function() {
-					// play the video
-					this.parentElement.querySelector("video").play();
-				});
-
-				// register event handlers for video
-				elements[i].addEventListener("playing", function() {
-					// hide button when playing
-					this.parentElement.querySelector(".video-play").setAttribute("style", "display: none");
-					
-					// show controls when playing
-					this.setAttribute("controls","");
-				});
-
-				elements[i].addEventListener("pause", function() {
-					// show button while paused
-					this.parentElement.querySelector(".video-play").setAttribute("style", "");
-				});
-
-				elements[i].addEventListener("ended", function() {
-					// show button when video ends
-					this.parentElement.querySelector(".video-play").setAttribute("style", "");
-
-					// hide controls
-					this.removeAttribute("controls");
-				});
-			}
-		</script>
 		<button id="help-button-fixed" onclick="loadHelpOnce('/assets/php/modal/modal.php?name=Homepage&format=html')">
 			<span class="glyphicon glyphicon-question-sign"></span>
 		</button>
