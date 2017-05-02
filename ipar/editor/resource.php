@@ -1,6 +1,9 @@
 <?php
-session_start();
-$dbh = new SDO('sqlite:../../../db/users.sql');
+if(session_status() == PHP_SESSION_NONE) {
+	session_start();
+}
+
+$dbh = new PDO('sqlite:../../../db/users.sql');
 $user = $_SESSION["user"];
 
 if($_FILES["resource"]){
@@ -22,7 +25,7 @@ if($_FILES["resource"]){
 				$fileName = $_FILES["resource"]["name"];
 				//$db->query("INSERT INTO resources VALUES ('$new_resource$extension','$fileName','$user');");
                 $sth = $dbh->prepare("INSERT INTO resources VALUES (:resource, :filename, :username)");
-                $sth.execute(array(
+                $sth->execute(array(
                     ":resource"=>($new_resource.$extension),
                     ":filename"=>$fileName,
                     ":username"=>$user

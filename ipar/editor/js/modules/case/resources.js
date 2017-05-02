@@ -195,7 +195,6 @@ p.edit = function(index, callback){
 			}
 			else
 				newResource.setAttribute("link", resources.newLink);
-			alert(form.elements["type"].value+":"+form.elements["name"].value+":"+resources.newLink);
 			resources[index] = new Resource(newResource);
 			resources.windowDiv.innerHTML = '';
 			callback();
