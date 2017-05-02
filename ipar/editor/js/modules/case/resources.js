@@ -178,7 +178,8 @@ p.edit = function(index, callback){
 	// Setup confirm button
 	buttons[3].onclick = function(){
 		var form = editInfo.getElementsByTagName("form")[0];
-		if(form.elements["name"].value && form.elements["name"].value!="" && ((form.elements["type"].value=="3" || form.elements["type"].value=="0") && resources.newLink && resources.newLink!="") && ((resources.newLink && resources.newLink!="") || Number(form.elements["type"].value)!=0)){
+		//if(form.elements["name"].value && form.elements["name"].value!="" && ((form.elements["type"].value=="3" || form.elements["type"].value=="0") && resources.newLink && resources.newLink!="") && ((resources.newLink && resources.newLink!="") || Number(form.elements["type"].value)!=0)){
+		if(this.validateResourceInput(form, resources)) {
 			if(index==null)
 				index = resources.length++;
 			var newResource = resources.doc.createElement("resource");
@@ -199,12 +200,40 @@ p.edit = function(index, callback){
 			resources.windowDiv.innerHTML = '';
 			callback();
 		}
-	}
+	}.bind(this)
 	
 
 	// Display the edit window
 	this.windowDiv.innerHTML = '';
 	this.windowDiv.appendChild(editInfo);
+}
+
+p.validateResourceInput = function(form, resources) {
+	var logInvalid = function(reason) {
+		alert("Invalid input: " + reason);
+		// TODO: use proper field validation instead of alerts
+	}
+	
+	// check that a name exists
+	if(!form.elements["name"].value || form.elements["name"].value == "") {
+		logInvalid("Missing name value");
+		return false;
+	}
+
+	// check that a link was provided for linked resources
+	// TODO: validate that text is a link
+	if(!form.elements["link"].value || form.elements["link"].value == "") {
+		logInvalid("Missing link!");
+		return false;
+	}
+
+	// check that a resource was provided for file resources
+	if((form.elements["type"].value == 3 || form.elements["type"].value == 0) && !(resources.newLink && resources.newLink != "")) {
+		logInvalid("No resource provided!");
+		return false;
+	}
+
+	return true
 }
 
 p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, preResources, index){
