@@ -159,7 +159,7 @@ p.act = function(gameScale, pMouseState, dt) {
 				}
 				if (pMouseState.leftMouseClicked()) {
 					// handle left click code
-					this.nodeContext.style.top = pMouseState.mousePosition.y+"px";
+					this.nodeContext.style.top = pMouseState.mousePosition.y-Constants.navbarSize+"px";
 					this.nodeContext.style.left = pMouseState.mousePosition.x+"px";
 					this.nodeContext.style.display = 'block';
 					this.nodeContext.virtualPosition = pMouseState.virtualPosition;
@@ -200,7 +200,7 @@ p.act = function(gameScale, pMouseState, dt) {
 				this.canvas.style.cursor = '';
 				if (pMouseState.leftMouseClicked()) {
 					// handle left click code
-					this.boardContext.style.top = pMouseState.mousePosition.y+"px";
+					this.boardContext.style.top = pMouseState.mousePosition.y-Constants.navbarSize+"px";
 					this.boardContext.style.left = pMouseState.mousePosition.x+"px";
 					this.boardContext.style.display = 'block';
 					this.boardContext.virtualPosition = pMouseState.virtualPosition;

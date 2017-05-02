@@ -34,3 +34,7 @@ m.nodeEdgeWidth = 25;
 // Used for drawing arrows
 m.arrowHeadSize = 50;
 m.arrowSize = 5;
+
+// fix for context menu alignment
+//TODO: do something more permanant than this
+m.navbarSize = 51;
