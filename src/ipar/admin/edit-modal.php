@@ -65,7 +65,7 @@
 				</div>
 			</div>
 		</div>
-		<script src="/js/autosize.min.js"></script>	
+		<script src="/assets/js/autosize.min.js"></script>	
 		<script>
 			autosize(document.getElementById("modal-body"));
 			//TODO: move to node module(s)

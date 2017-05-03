@@ -11,7 +11,7 @@
 	<title>IPAR - Recover User</title>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/head.php' ?>
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/menuStyle.css">
 </head>
 <body>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php' ?>

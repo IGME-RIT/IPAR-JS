@@ -5,15 +5,15 @@
 	<title>IPAR - Game</title>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/head.php'; ?>
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="../css/styles.css">
-	<link rel="stylesheet" type="text/css" href="../css/windowsStyle.css">
-	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
-    <script src="../lib/preloadjs-0.6.1.min.js"></script>
-    <script src="../lib/jszip.min.js"></script>
-    <script src="../lib/FileSaver.min.js"></script>
-    <script src="../lib/localforage.min.js"></script>
-    <script src="../lib/mimetypes.js"></script>
-    <script src="game.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/assets/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/windowsStyle.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/menuStyle.css">
+    <script src="/assets/js/preloadjs-0.6.1.min.js"></script>
+    <script src="/assets/js/jszip.min.js"></script>
+    <script src="/assets/js/FileSaver.min.js"></script>
+    <script src="/assets/js/localforage.min.js"></script>
+    <script src="/assets/js/mimetypes.js"></script>
+    <script src="/assets/js/game.min.js"></script>
 </head>
 <body>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>

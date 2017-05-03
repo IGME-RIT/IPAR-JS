@@ -4,12 +4,12 @@
 	<title>IPAR - Reader</title>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/head.php'; ?>
 	<link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="../css/readerStyle.css">
-	<link rel="stylesheet" type="text/css" href="../css/menuStyle.css">
-    <script src="../lib/preloadjs-0.6.1.min.js"></script>
-    <script src="../lib/jszip.min.js"></script>
-    <script src="../lib/FileSaver.min.js"></script>
-    <script src="reader.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/assets/css/readerStyle.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/menuStyle.css">
+    <script src="/assets/js/preloadjs-0.6.1.min.js"></script>
+    <script src="/assets/js/jszip.min.js"></script>
+    <script src="/assets/js/FileSaver.min.js"></script>
+    <script src="/assets/js/reader.min.js"></script>
 </head>
 <body>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/navbar.php'; ?>
