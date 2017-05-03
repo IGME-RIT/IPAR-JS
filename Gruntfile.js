@@ -22,7 +22,29 @@ module.exports = function(grunt) {
 				dest: 'build/'
 			}
 		},
-		watch: {
+		watch: { // watch doesn't seem to work on wsl :(
+			// watch for changes in scripts that need to be minified
+			scripts: {
+				files: ['src/**/*.js'],
+				tasks: ['browserify','uglify'],
+				options: {
+					spawn: false,
+				},
+			},
+
+			// watch for changes in direct copy files	
+			src: {
+				files: ['src/**/*.php', 'src/**/*.html', '**/*.css', '**/.htaccess'],
+				tasks: ['copy:main'],
+			},
+
+			// watch for configuration changes
+			conf: {
+				files: ['Gruntfile.js'],
+				options: {
+					reload: true
+				},
+			},
 		},
 		browserify: {
 			// TODO: make this more dynamic so we don't have to add every file manually
