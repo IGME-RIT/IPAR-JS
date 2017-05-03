@@ -1,9 +1,0 @@
-
-
-Test on Browsers:
-Opera - Works
-Firefox - Works
-IE - 
-Edge - Works
-Safari - 
-Chrome - Works
