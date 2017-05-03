@@ -46,64 +46,50 @@ module.exports = function(grunt) {
 				},
 			},
 		},
-		browserify: {
-			// TODO: make this more dynamic so we don't have to add every file manually
-			videoplayer: {
-				src: ['src/js/player/**/*.js'],
-				dest: 'temp/player.js',
-				options: {
-					browserifyOptions: {
-						debug: true
-					}
-				}
-			},
-			game: {
-				src: ['src/ipar/game/js/**/*.js'],
-				dest: 'temp/ipar/game.js',
-				options: {
-					browserifyOptions: {
-						debug: true
-					}
-				}
-			},
-			editor: {
-				src: ['src/ipar/editor/js/**/*.js'],
-				dest: 'temp/ipar/editor.js',
-				options: {
-					browserifyOptions: {
-						debug: true
-					}
-				}
-			},
-			reader: {
-				src: ['src/ipar/reader/js/**/*.js'],
-				dest: 'temp/ipar/reader.js',
-				options: {
-					browserifyOptions: {
-						debug: true
-					}
-				}
+		uglify: {
+			main: {
+				files: [
+					{
+						expand: true,
+						src: ['temp/*.js'],
+						dest: 'build/assets/js/',
+						ext: '.min.js',
+						extDot: 'first'
+					},
+				],
 			},
 		},
-		uglify: {
-			videoplayer: {
-				src: 'temp/player.js',
-				dest: 'build/js/player.min.js'
-			},
-			game: {
-				src: 'temp/ipar/game.js',
-				dest: 'build/ipar/game/game.min.js'
-			},
-			editor: {
-				src: 'temp/ipar/editor.js',
-				dest: 'build/ipar/editor/editor.min.js'
-			},
-			reader: {
-				src: 'temp/ipar/reader.js',
-				dest: 'build/ipar/reader/reader.min.js'
+	});
+
+	// register task to dynamically browserify js files by directory
+	grunt.registerTask("browserify-dynamic", "Iterates over directories in src/assets/js, and browserifies their contents into one file named after the directory.", function() {
+		// read all directories from src/assets/js
+		grunt.file.expand("./src/assets/js/*").forEach(function(dir) {
+			// get the current browserify config
+			var browserify = grunt.config.get('browserify') || {};
+
+			// get the subdirectory name
+			var dirs = dir.split('/');
+			dir = dirs[dirs.length - 1];
+
+			// set the config for this directory
+			browserify[dir] = {
+				src: ['src/assets/js/'+dir+'/**.js'],
+				dest: 'temp/' + dir + '.js',
+				options: {
+					browserifyOptions: {
+						debug: true
+					}
+				}
 			}
-		}
-});
+
+			// save the new configuration
+			grunt.config.set('browserify', browserify);
+		});
+
+		// run browserify
+		grunt.task.run('browserify');
+	});
 
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
