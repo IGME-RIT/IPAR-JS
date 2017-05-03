@@ -72,8 +72,8 @@ module.exports = function(grunt) {
 	grunt.loadTasks('./tasks');
 
 	// updates src files, excludes static files
-	grunt.registerTask('default', ["copy:main", "browserify", "uglify"]);
+	grunt.registerTask('default', ["copy:main", "browserify-dynamic", "uglify"]);
 
 	// cleans build and temp directories, copies all files
-	grunt.registerTask('build-clean', ["clean", "copy", "browserify", "uglify"]);
+	grunt.registerTask('build-clean', ["clean", "copy", "browserify-dynamic", "uglify"]);
 };
