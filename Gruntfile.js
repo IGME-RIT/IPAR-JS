@@ -67,7 +67,6 @@ module.exports = function(grunt) {
 				}
 			},
 			editor: {
-				cwd: 'src',
 				src: ['src/ipar/editor/js/**/*.js'],
 				dest: 'temp/ipar/editor.js',
 				options: {
@@ -77,7 +76,6 @@ module.exports = function(grunt) {
 				}
 			},
 			reader: {
-				cwd: 'src',
 				src: ['src/ipar/reader/js/**/*.js'],
 				dest: 'temp/ipar/reader.js',
 				options: {
