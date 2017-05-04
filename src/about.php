@@ -2,11 +2,11 @@
 <html lang="en">
 	<head>
 		<title>Forensics Project</title>
-		<?php include("/assets/html/head.php"); ?>
+		<?php include("assets/html/head.php"); ?>
 		<script src="/assets/js/player.min.js"></script>
 	</head>
 	<body>
-		<?php include("/assets/html/navbar.php"); ?>
+		<?php include("assets/html/navbar.php"); ?>
 		<div class="jumbotron">
             <div class="container">
                 <div class="row">

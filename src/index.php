@@ -3,7 +3,7 @@
 	<head>
 		<title>Forensics Project</title>
 		<?php include("assets/html/head.php"); ?>
-		<script src="/js/assets/player.min.js"></script>
+		<script src="/assets/js/player.min.js"></script>
 	</head>
 	<body>
 		<?php include("assets/html/navbar.php"); ?>
