@@ -1,0 +1,112 @@
+// buttons on ipar main menus (game/editor/etc)
+.panel-buttons {
+	display:block;
+	text-align:center;
+	padding:0;
+}
+
+.panel-buttons li {
+	text-align:center;
+	width: 100px;
+	height: 112px;
+	background-color: #f6f6f6;
+	display: inline-block;
+	color: #337ab7;
+	transition: background-color 0.2s;
+	margin-bottom: 3px;
+	position: relative;
+	vertical-align: top;
+}
+
+.panel-buttons.col li {
+	width: 100%;
+	height: auto;
+}
+
+.panel-buttons.border li {
+	border: 1px solid #aaa;
+}
+
+.panel-buttons li a, .panel-buttons li button {
+	padding: 14px 4px 10px 4px;
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+}
+
+.panel-buttons.col li a, .panel-buttons.col li button {
+	padding: 5px;
+	height: auto;
+	width: 100%;
+}
+
+.panel-buttons.inline li {
+	height: auto;
+	width: auto;
+}
+
+.panel-buttons.inline li a, .panel-buttons.inline li button {
+	padding: inherit 20px inherit 20px;
+	height: 2.4em;
+	width: 100%;
+	text-align:center;
+}
+
+.panel-buttons li button, .panel-buttons li a, .panel-buttons li a:visited, .panel-buttons li a:hover{
+	text-decoration: none;
+	color: inherit;
+	transition: color 0.05s;
+}
+
+.panel-buttons li:hover {
+	background-color: #337ab7;
+	color: #fff;
+	transition: background-color 0.1s;
+}
+
+button.btn-tile {
+	background: none;
+	border: none;
+	color: inherit;
+	width: 100%;
+	height: 100%;
+
+}
+
+.btn-tile.horiz {
+	width: auto;
+	height: auto;
+}
+
+.btn-tile.horiz .glyphicon, .panel-buttons.inline li button .glyphicon {
+	font-size: 1.3em;
+	display: inline;
+}
+
+.btn-tile.horiz .name{
+	vertical-align: top;
+}
+
+.btn-tile[disabled] {
+	color: #aaa;
+}
+
+.btn-tile.medium {
+	font-size: 16px;
+}
+
+.btn-tile.large {
+	font-size: 20px;
+}
+
+button.btn-tile:focus{
+	outline: none;
+}
+
+.btn-tile .glyphicon {
+	display: block;
+	width: 100%;
+	font-size: 4em;
+	text-align:center;
+}

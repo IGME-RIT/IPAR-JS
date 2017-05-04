@@ -11,5 +11,5 @@ pid
 *.swo
 *.swp
 .vscode/
-
+.sass-cache/
 demo-full.mp4

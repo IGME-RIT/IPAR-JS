@@ -1,0 +1,17 @@
+// nsf logo
+#nsf{
+	position: relative;
+	left: 87%;
+	margin-top: -25%;
+}
+
+#nsf2{
+	@extend #nsf;
+	left: 15%;
+}
+
+@media screen and (max-width: $smallscreen) {
+	#nsf {
+		left: 0%;
+	}
+}

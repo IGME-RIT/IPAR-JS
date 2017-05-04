@@ -46,6 +46,17 @@ module.exports = function(grunt) {
 				},
 			},
 		},
+		sass: {
+			main: {
+				files: [{
+					expand: true,
+					cwd: 'src/',
+					src: ['assets/css/*.scss'],
+					dest: 'build/',
+					ext: '.css',
+				}]
+			},
+		},
 		uglify: {
 			main: {
 				files: [
@@ -68,13 +79,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-sass');
 
 	// load our tasks
 	grunt.loadTasks('./tasks');
 
 	// updates src files, excludes static files
-	grunt.registerTask('default', ["copy:main", "browserify-dynamic", "uglify"]);
+	grunt.registerTask('default', ["copy:main", "sass", "browserify-dynamic", "uglify"]);
 
 	// cleans build and temp directories, copies all files
-	grunt.registerTask('build-clean', ["clean", "copy", "browserify-dynamic", "uglify"]);
+	grunt.registerTask('build-clean', ["clean", "copy", "sass", "browserify-dynamic", "uglify"]);
 };

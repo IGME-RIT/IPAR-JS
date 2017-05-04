@@ -1,3 +1,5 @@
+@import 'ipar-variables';
+
 body {
 	margin: 0;
 	padding: 0;
@@ -13,12 +15,12 @@ body {
 	text-align:center;
 	color: white;
 	overflow: hidden;
-	background-color: #15718F;
+	background-color: $ipar-blue;
 }
 
 .menuButton {
 	display:flex;
-	background-color: #15718F;
+	background-color: $ipar-blue;
 	color: white;
 	width: 20vw;
 	height: 5vh;
@@ -51,7 +53,7 @@ body {
 }
 
 .menuButton:disabled {
-	background-color: #F8F8FF;
+	background-color: $ipar-lightgrey;
 	color: #B89880;
 }
 
@@ -117,8 +119,8 @@ form input{
 }
 
 .menu table {
-	background-color: #F8F8FF;
-	color: #15718F;
+	background-color: $ipar-lightgrey;
+	color: $ipar-blue;
 	border-collapse: collapse;
 }
 

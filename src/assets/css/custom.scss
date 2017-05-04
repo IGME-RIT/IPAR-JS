@@ -1,0 +1,184 @@
+$smallscreen: 767px;
+
+@import 'playButton';
+@import 'nsf';
+@import 'navbar';
+@import 'panel-buttons';
+@import 'player';
+
+ol{
+	font-size: 1.3em;
+}
+
+h3, h4{
+	font-weight: bold;
+}
+
+hr {
+	border-top-color: #aaa;
+}
+
+label {
+	margin-top: 5px;
+	margin-bottom: 0px;
+	font-weight: normal;
+}
+
+input {
+	color: black;
+}
+
+.larger{
+	font-size: 1.1em;
+}
+
+.larger2{
+	font-size: 1.3em;
+
+}
+
+.moveDown{
+	position: relative;
+	top: 26px;
+}
+
+.label{
+	font-size: 105%;
+}
+
+.top-buffer { margin-top:20px; }
+
+// vertically centered bootstrap column
+.col-vcenter {
+	display: inline-block;
+	vertical-align: middle;
+	float: none;
+}
+
+.footer {
+	position: relative;
+	z-index: -1;
+}
+
+// header element decorations
+.uline:after {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	background-color: #aaa;
+}
+
+.subtitle {
+	font-size: 12px !important;
+	color: #bbb;
+	font-style: italic;
+}
+
+h1.med {
+	font-size: 42px
+}
+
+.heavy {
+	font-weight: 600;
+}
+
+// jumbotron modifications
+.jumbotron {
+	margin-bottom: 0;
+}
+
+.jumbotron.light {
+	background-color: #fafafa; 
+}
+
+.jumbotron.short {
+	padding-top: 1em;
+}
+
+// bootstrap modal modifications
+.modal-dialog {
+	background-color: #fefefe;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+}
+
+.modal-header .close {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+}
+
+.modal-body p {
+	font-size: 14px;
+}
+
+.modal-body h1 {
+	font-size: 36px;
+}
+
+.modal-body ol {
+	font-size: 1em;
+	padding-left: 1.2em;
+}
+
+// make tables look better in jumbotrons (mostly for admin panel)
+.jumbotron table td, .jumbotron table th{
+	padding-left: 6px;
+	white-space: nowrap;
+	max-width: 300px;
+	vertical-align: top;
+}
+
+.jumbotron table {
+	border-collapse: collapse;
+	border: 1px solid #aaa;
+}
+
+.jumbotron table td.of-scroll {
+	white-space:nowrap;
+	overflow-x:scroll;
+}
+
+.jumbotron table td.wrap {
+	white-space:normal;
+}
+
+.jumbotron table th {
+	padding: 4px 10px;
+	text-align:center;
+	background-color: #555;
+	color: #fff;
+}
+
+.jumbotron table td {
+	padding: 0 0.6em;
+}
+
+.jumbotron table tr:nth-child(even) {
+	background-color: #fefefe;
+}
+
+// unconfirmed email decoration
+.unconfirmed-email {
+	color: rgba(244, 56, 56, 1);
+}
+
+// fixed help button on homepage
+#help-button-fixed {
+	position: fixed;
+	bottom: 3vh;
+	right: -1px;
+	font-size: 1.6em;
+	text-align: center;
+	padding: 5px;
+	height: 40px;
+	width: 45px;
+}
+
+// support for small screens
+@media screen and (max-width: $smallscreen) {
+	#footer-logos {
+		float: none;
+	}
+}

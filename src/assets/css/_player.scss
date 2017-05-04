@@ -1,0 +1,30 @@
+// html5 video player 
+.player {
+	padding: 0;
+	height: auto;
+	display: flex;
+	align-items: center;
+	text-align: center;
+	justify-content: center;
+}
+
+.embed-responsive-16by9:after {
+	content: "";
+	display: block;
+	padding-bottom: 56.25%;
+}
+
+.video-play {
+	font-size: 132px;
+	transition: color 0.3s;
+}
+
+.video-play:hover {
+	color: #666;
+}
+
+@media screen and (max-width: $smallscreen) {
+	.btn-play-big {
+		font-size: 18pt;
+	}
+}
