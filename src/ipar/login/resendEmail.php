@@ -16,8 +16,9 @@
     $sdh = $dbh->prepare("SELECT * FROM users WHERE curKey = :curKey");
     $sdh->execute($params);
 	
-	include 'send_activation_email.php'; // contains sendActivationEmail($username, $email)
 	if($res = $sdh->fetch()){ // valid key
+		require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php'; 
+
 		sendActivationEmail($res['username'], $res['email'], $dbh);
 
 		// redirect to success message

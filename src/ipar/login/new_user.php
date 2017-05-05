@@ -137,7 +137,6 @@
         //$sth->execute(array(":username"=>$user, ":role"=>"editor"));
        	
 		// send activation email to user
-		include 'send_activation_email.php';
 		sendActivationEmail($user, $email, $dbh);
         
         // send new user email to admin
