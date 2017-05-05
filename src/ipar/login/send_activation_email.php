@@ -1,8 +1,10 @@
 <?php
+	require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php';
+	
 	// sends an activation email to the user with provided username
 	function sendActivationEmail($username, $email, $dbh) {
 		// get uid for email activation
-        $newKey = uniqid($username, true);
+        $newKey = gen_key();
 
 		// update key in database
 		$sdh = $dbh->prepare("UPDATE users SET curKey = :newKey WHERE username = :username");

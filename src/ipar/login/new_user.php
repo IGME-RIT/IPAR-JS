@@ -1,4 +1,5 @@
 <?php
+
     // check if all user information has been posted
 	if(!$_POST || 
        !$_POST['username'] || 
@@ -8,7 +9,8 @@
        !$_POST['last-name'] ||
        !$_POST['organization'])
 		exit();
-
+	
+	require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php';
     include $_SERVER['DOCUMENT_ROOT']."/assets/php/users_db.php"; //sets $dbh
 
     // make username and email all lowercase (case insensitive)
@@ -91,7 +93,7 @@
    		$characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		
         // get uid for email activation
-        $key = uniqid($user, true);
+        $key = gen_key();
         
         // hash password
    		$hash = password_hash($_POST['password'], PASSWORD_DEFAULT);

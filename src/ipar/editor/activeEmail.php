@@ -1,8 +1,11 @@
-<?php 
+<?php
+	require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php';
+
 	session_start();
+
     $dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
 	$user = $_SESSION["user"];
-	$key = uniqid($user, true);
+	$key = gen_key();
     $sdh = $dbh->prepare("UPDATE users SET curKey = :curKey WHERE username = :username");
     $sdh->execute(array(":curKey"=>$key, ":username"=>$user));
 	$parts = explode('/',$_SERVER['REQUEST_URI']);
