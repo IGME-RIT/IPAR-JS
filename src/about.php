@@ -3,7 +3,6 @@
 	<head>
 		<title>Forensics Project</title>
 		<?php include("assets/html/head.php"); ?>
-		<script src="/assets/js/player.min.js"></script>
 	</head>
 	<body>
 		<?php include("assets/html/navbar.php"); ?>
@@ -30,8 +29,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="embed-responsive embed-responsive-16by9 player" data-video-src="/assets/media/demo-full.mp4">
-                        </div>
+						<div class="embed-responsive embed-responsive-16by9">
+							<iframe src="https://www.youtube.com/embed/Oq8GtXyUz1A" frameborder="0" allowfullscreen></iframe>
+						</div>
                     </div>
                 </div>
             </div>
@@ -44,8 +44,9 @@
                         <p>Developed alongside the game is an editor that can be used to generate new cases. Everything from subject matter to graphical elements to story can be set by the user to create an entertaining educational experience, and an reader that allows instructors to view the reports submitted by students for grading.</p>
                     </div>
                     <div class="col-md-4">
-                        <div class="embed-responsive embed-responsive-16by9 player" data-video-src="/assets/media/editor-demo.mp4">
-                        </div>
+						<div class="embed-responsive embed-responsive-16by9">
+							<iframe class="yt-player" src="https://www.youtube.com/embed/i9FSdeNNRk8" frameborder="0" allowfullscreen></iframe>
+						</div>
                     </div>
                 </div>
             </div>

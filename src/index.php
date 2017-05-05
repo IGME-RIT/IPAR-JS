@@ -3,7 +3,6 @@
 	<head>
 		<title>Forensics Project</title>
 		<?php include("assets/html/head.php"); ?>
-		<script src="/assets/js/player.min.js"></script>
 	</head>
 	<body>
 		<?php include("assets/html/navbar.php"); ?>
@@ -18,7 +17,9 @@
 				<div class="row">
 					<div class="col-xs-7 col-md-7">
 						<h4>IPAR  (Imaging, preserving, analyzing and reporting):</h4>
-						<div class="player embed-responsive embed-responsive-16by9" data-video-src="/assets/media/game-demo.mp4"></div>
+						<div class="embed-responsive embed-responsive-16by9">
+							<iframe src="https://www.youtube.com/embed/Oq8GtXyUz1A" frameborder="0" allowfullscreen></iframe>
+						</div>
 					</div>
 					<div class="col-xs-5 col-md-5">
 						<img id="nsf" src="assets/img/NSF.png"/>
@@ -37,7 +38,9 @@
 				<div class="row">
 					<div class="col-xs-7 col-md-7">
 						<h4>IPAR Editor:</h4>
-						<div class="player embed-responsive embed-responsive-16by9" data-video-src="/assets/media/editor-demo.mp4"></div>
+						<div class="embed-responsive embed-responsive-16by9">
+							<iframe class="yt-player" src="https://www.youtube.com/embed/i9FSdeNNRk8" frameborder="0" allowfullscreen></iframe>
+						</div>
 					</div>
 					
 					<div class="col-xs-5 col-md-5">
