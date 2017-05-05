@@ -91,13 +91,13 @@
    	}
    	else{
    		$characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		
-        // get uid for email activation
-        $key = gen_key();
         
-        // hash password
+		// hash password
    		$hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        
+       
+		// placeholder key (because key is set in sendActivationEmail)
+		$key = "";
+
         // create user record in users
         $sth = $dbh->prepare("INSERT INTO users VALUES (:username, :email, :password, :curKey, 0, :firstname, :lastname, :organization)");
         

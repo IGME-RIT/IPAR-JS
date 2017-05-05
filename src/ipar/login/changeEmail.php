@@ -1,5 +1,6 @@
 <?php 
-	session_start();
+	require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php';
+	
 	$dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
 	$user = $_SESSION["user"];
 	$email = strtolower($_POST['email']);
@@ -25,7 +26,6 @@
     $success = $sth->execute(array(":email"=>$email, ":username"=>$user));
 
 	// resend validation email
-	require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php';
 	sendActivationEmail($user, $email, $dbh);
 
 	header("Location: /message.php?message=Your email address has been changed! An email has been sent to you, as you will need to confirm your new email address.&redirect=/ipar/login/edit.php");

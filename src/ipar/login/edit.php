@@ -1,6 +1,9 @@
 <?php
-	session_start();
-	if(!$_SESSION || !$_SESSION["user"]){
+	if(session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+
+	if(!isset($_SESSION) || !isset($_SESSION["user"])){
 		header("Location: ../");
 	}
 	

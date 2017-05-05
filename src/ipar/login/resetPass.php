@@ -1,12 +1,11 @@
 <?php
-	$dbh = new PDO('sqlite:../../../db/users.sql') or die ("cannot open");
+	require_once $_SERVER['DOCUMENT_ROOT']."/assets/php/util.php";
+
 	$key = $_GET['key'];
-	if(!$key)
+	if(!$key || !get_user_from_key($key, $KEY_RELATION['password']))
 		header("Location: /message.php?message=That recovery link is expired!&");
-	$sth = $dbh->prepare("SELECT username FROM users WHERE curKey = :curKey");
-    $sth->execute(array(":curKey"=>$key));
-	if(!$sth->fetch())
-		header("Location: /message.php?message=That recovery link is expired!&");
+
+	$_SESSION['key'] = $key;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,7 +45,6 @@
 			    			Confirm Password: <input type="password" name="password2" required />
 						</div>
 					</div>
-					<input type="hidden" name="key" value="<?php echo $key ?>"/>
 					<div class="row" style="margin-top: 10px;">
 					    <ul class="panel-buttons col border">
 			            	<div class="col-xs-12 col-md-4">

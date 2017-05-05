@@ -6,7 +6,7 @@ if(!isset($_SESSION)) {
 }
 
 // check if user is logged in
-$loggedIn = !(!$_SESSION || !$_SESSION["user"]);
+$loggedIn = isset($_SESSION) && isset($_SESSION["user"]);
 
 // extracts role name from row returned from select below
 function role_name($row){
