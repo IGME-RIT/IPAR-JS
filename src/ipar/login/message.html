@@ -37,7 +37,7 @@
         var get = parseURLParams(window.location.search);
         
         var message = get["message"];
-		document.getElementById("message").innerHTML = decodeURIComponent(message);
+		document.getElementById("message").innerText = decodeURIComponent(message);
         
         // get redirect location if set
         if("redirect" in get && get["redirect"] != "") {
