@@ -1,7 +1,9 @@
-<?php include $_SERVER['DOCUMENT_ROOT']. "/assets/php/user_auth.php"; // sets $dbh, $loggedIn
+<?php 
+include $_SERVER['DOCUMENT_ROOT']. "/assets/php/user_auth.php";
+include $_SERVER['DOCUMENT_ROOT']. "/assets/php/util.php";
 
 if(!$loggedIn && $_POST){
-    $user = strtolower($_POST['username']);
+    $user = htmlspecialchars($_POST['username']);
     if($user && $_POST['password'] && $_POST['password']!="" && preg_match('/^[a-z0-9_]+$/', $user)==1){
         //$result = $db->query("SELECT password FROM users WHERE username = '$user'");
         $sth = $dbh->prepare("SELECT password FROM users WHERE username = :username");
@@ -10,50 +12,38 @@ if(!$loggedIn && $_POST){
             if(password_verify($_POST['password'] , $res['password'])){
                 $_SESSION["user"] = $user;
                 
-                if(isset($_GET['redirect'])){
-                    header("Location: ".$_GET['redirect']);
+                if(isset($_GET['redirect']) && is_safe_url($_GET['redirect'])){
+					header_redirect($_GET['redirect']);
                 }
                 else {
-                    header("Location: /");    
+					header_redirect();
                 }
                 
                 exit();
             }
         }
     }
-    $loc = "./login.php?username=$user&";
+    $loc = "login.php?username=$user&";
     if(isset($_GET['redirect'])) {
-        $loc."redirect=".$_GET['redirect']."&";
+        $loc."redirect=".encode_url($_GET['redirect'])."&";
     }
 
-    echo "<script type='text/javascript'>
-    alert('Invaild username or password!');
-    window.location.href = '$loc';
-    </script>";
+	js_redirect($loc, "Invalid username or password!", false);
     exit();
 }
 
 if($loggedIn) {
-    if(isset($_GET['redirect'])){
-        echo "<script type='text/javascript'>
-            alert('You are already logged in!');
-            window.location.href = '".$_GET['redirect']."';
-            </script>";
+    if(isset($_GET['redirect']) && is_safe_url($_GET['redirect'])){
+		js_redirect($_GET['redirect'], "You are already logged in!");
     }
     else {
-        echo "<script type='text/javascript'>
-            alert('You are already logged in!');
-            window.location.href = '../';
-            </script>";
+		js_redirect("/", "You are already logged in!");
     }
     exit();
 }
 else {
-    echo "<script type='text/javascript'>
-alert('Invaild username or password!');
-window.location.href = './login.php';
-</script>";
-exit();
+	js_redirect("login.php", "Invalid username or password!");
+	exit();
 }
 
 

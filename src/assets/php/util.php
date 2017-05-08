@@ -79,3 +79,49 @@ function sendActivationEmail($username, $email, $dbh) {
 
 	return $msg;
 }
+
+// determines whether or not a url is safe for redirect
+// valid filetypes are html and php only
+// url may not contain the characters < > : ( ) or . (before the filetype)
+// url may or may not start with /
+// url may be a directory
+function is_safe_url($url) {
+	$pattern = "/^\/?[^<>:.();]+?(?:\.(?:php|html))?$/";
+	return (bool) preg_match($pattern, $url);
+}
+
+// rawurlencodes everything in a string except /
+function encode_url($url) {
+	return implode('/', array_map('rawurlencode', explode('/', $url)));
+}
+
+// injects js into the page to redirect to a url
+function js_redirect($url = "/", $msg = null, $validate = true) {
+	// sanitize url, or ignore it
+	if($validate && is_safe_url($url)) {
+		$url = encode_url($url);
+	}
+	else if($validate){
+		$url = '/';
+	}
+
+	echo "<script type='text/javascript'>";
+	
+	// echo message if there is one
+	if($msg) {
+		echo "alert('".htmlspecialchars($msg)."');";
+	}
+
+	// redirect
+	echo "window.location = '".$url."';</script>";
+}
+
+// redirects to a url by header response
+function header_redirect($url = "/", $validate = true) {
+	// ignore url if unsafe
+	if($validate && !is_safe_url($url)) {
+		$url = "/";
+	}
+
+	header("Location: ".$url);
+}
