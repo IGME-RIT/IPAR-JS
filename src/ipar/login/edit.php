@@ -60,7 +60,7 @@
 	<div class="jumbotron">
     	<div class="container">
 		    <div class="row">
-        		<h1 class="uline">Edit Account: <?php echo $_SESSION['user']; ?></h1>
+        		<h1 class="uline">Edit Account: <?php echo htmlspecialchars($_SESSION['user']); ?></h1>
         		<form name="email" action="changeEmail.php" method="POST" style="padding-bottom:25px;">
         			<fieldset>
 						<div class="col-xs-12">
@@ -70,7 +70,7 @@
 									<span class="unconfirmed-email"> (Unconfirmed)</span>
 								<?php } ?>
 							</legend>
-	        			<input type="email" name="email" required value="<?php echo $res["email"]; ?>" >
+	        			<input type="email" name="email" required value="<?php echo htmlspecialchars($res["email"]); ?>" >
 	        			<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;">
 							<li><a href="#" onclick="submitEmail();" class="btn-tile ">Update Email</a></li>
 			       		 	<?php if($res['active'] == 0) { ?>
@@ -101,11 +101,11 @@
 						<div class="col-xs-12">
 		    			    <legend>Information</legend>
 		    			    First Name:
-		    			    <input type="text" name="firstname" value="<?php echo $res["firstname"]; ?>" required >
+		    			    <input type="text" name="firstname" value="<?php echo htmlspecialchars($res["firstname"]); ?>" required >
 		    			    Last Name:
-		    			    <input type="text" name="lastname" value="<?php echo $res["lastname"]; ?>" required >
+		    			    <input type="text" name="lastname" value="<?php echo htmlspecialchars($res["lastname"]); ?>" required >
 		    			    Organization:
-		    			    <input type="text" name="organization" value="<?php echo $res["organization"]; ?>" required >
+		    			    <input type="text" name="organization" value="<?php echo htmlspecialchars($res["organization"]); ?>" required >
 		    			    <ul class="panel-buttons col border" style="margin:10px 0 10px 0;"><li><a href="#" onclick="submitInfo();" class="btn-tile">Update</a></li></ul>
 						</div>
 		    		</fieldset>
