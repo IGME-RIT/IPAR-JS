@@ -88,14 +88,14 @@ $rolesth =  $dbh->prepare("SELECT name, id, (username IS NOT NULL) AS hasrole FR
                                     <td>
 									<?php 
 										if($row['active'] == 0) { ?>
-											<a href="mailto:<?php echo $row['email']; ?>" class="unconfirmed-email"><?php echo $row['email']; ?></a><br><span class="unconfirmed-email">(unconfirmed)</a>
+											<a href="mailto:<?php echo $row['email']; ?>" class="unconfirmed-email"><?php echo htmlspecialchars($row['email']); ?></a><br><span class="unconfirmed-email">(unconfirmed)</a>
 									<?php } else { ?>
-											<a href="mailto:<?php echo $row['email']; ?>"><?php echo $row['email']; ?></a>
+											<a href="mailto:<?php echo $row['email']; ?>"><?php echo htmlspecialchars($row['email']); ?></a>
 									<?php } ?>
 									</td>
-                                    <td><?php echo $row['firstname']; ?></td>
-                                    <td><?php echo $row['lastname']; ?></td>
-                                    <td class="wrap"><?php echo $row['organization'] ?></td>
+                                    <td><?php echo htmlspecialchars($row['firstname']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['lastname']); ?></td>
+                                    <td class="wrap"><?php echo htmlspecialchars($row['organization']); ?></td>
                                     <td>
                                         <?php 
                                         while($rolerow = $rolesth->fetch()) { 
@@ -119,8 +119,8 @@ $rolesth =  $dbh->prepare("SELECT name, id, (username IS NOT NULL) AS hasrole FR
                                         } 
                                         ?>
                                     </td>
-                                    <td><?php echo $ip ?></td>
-                                    <td class="of-scroll"><?php echo $row['useragent'] ?></td>
+                                    <td><?php echo htmlspecialchars($ip); ?></td>
+                                    <td class="of-scroll"><?php echo htmlspecialchars($row['useragent']); ?></td>
                                     <td class="wrap"><?php echo $date ?></td>
                                 </tr>
                                 <?php
