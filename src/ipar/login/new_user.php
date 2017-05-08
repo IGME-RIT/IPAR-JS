@@ -22,6 +22,10 @@
     $lastname = $_POST['last-name'];
     $organization = $_POST['organization'];
 
+	// sanitize user and email in case we're displaying them on the page
+   	$userSan = htmlspecialchars($user);
+	$emailSan = htmlspecialchars($email);
+	
     // check if password matches reqirements
     if(strlen($_POST['password'])<6 || 
        preg_match('/^[A-Za-z0-9_]*$/', $_POST['password'])!=1 || 
@@ -30,7 +34,7 @@
        preg_match('/[0-9]+/', $_POST['password'])!=1){
         echo "<script type='text/javascript'>
             \t	alert('Your password can only contain letters, numbers, and an underscore, must be at least 6 characters, and contain at least one lowercase letter, one uppercase letter, and one number!');
-            window.location.href = './signup.php?username=$user&email=$email&';
+            window.location.href = './signup.php?username=$userSan&email=$emailSan&';
 		   	</script>";
         exit();
     }
@@ -41,7 +45,7 @@
        preg_match('/^[a-z0-9_]*$/', $user)!=1){
         echo "<script type='text/javascript'>
 			   	alert('Your username can only contain letters, numbers, and an underscore and must be between 6 and 32 characters!');
-			   	window.location.href = './signup.php?username=$user&email=$email&';
+			   	window.location.href = './signup.php?username=$userSan&email=$emailSan&';
 		   	</script>";
 	   	exit();
     }
@@ -50,7 +54,7 @@
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         echo "<script type='text/javascript'>
 			   	alert('The given email address is not vaild!');
-			   	window.location.href = './signup.php?username=$user&email=$email&';
+			   	window.location.href = './signup.php?username=$userSan&email=$emailSan&';
 		   	</script>";
         exit();
     }
@@ -68,7 +72,7 @@
     if($userStatement->fetchAll()){
         echo "<script type='text/javascript'>
 	   			alert('That username is already in use!');
-	   			window.location.href = './signup.php?username=$user&email=$email&';
+	   			window.location.href = './signup.php?username=$userSan&email=$emailSan&';
 	   		  </script>";
 	   	exit();
     }
@@ -85,7 +89,7 @@
    	    if($res = $emailStatement->fetchAll()){
    		   echo "<script type='text/javascript'> 
                     alert('That email is already in use!');
-                    window.location.href = './signup.php?username=$user&email=$email&';
+                    window.location.href = './signup.php?username=$userSan&email=$emailSan&';
                 </script>";
    		   exit();
    	}
