@@ -41,8 +41,8 @@
 				</div>
 			</div>
     		<form name="signup" action="new_user.php" method="POST">
-				<div class="row"><div class="col-xs-12">Username: <input type="text" name="username" required /></div></div>
-				<div class="row"><div class="col-xs-12">Email: <input type="email" name="email" required /></div></div>
+				<div class="row"><div class="col-xs-12">Username: <input type="text" name="username" value="<?php if(isset($_POST['username'])) echo htmlspecialchars($_POST['username']); ?>" required /></div></div>
+				<div class="row"><div class="col-xs-12">Email: <input type="email" name="email" value="<?php if(isset($_POST['email'])) echo htmlspecialchars($_POST['email']); ?>" required /></div></div>
 				<div class="row"><div class="col-xs-12">Password: <input type="password" name="password" required /></div></div>
 				<div class="row"><div class="col-xs-12">Confirm Password: <input type="password" name="password2" required /></div></div>
     	        <div class="row"><div class="col-xs-12">First Name: <input type="text" name="first-name" required /></div></div>
@@ -71,12 +71,7 @@
 			</form>
 		</div>
     </div>
-	<script type='text/javascript'>
-		var username = /(?:&|\?)username=(.*?)&/g.exec(window.location.search)[1];
-		document.forms["signup"]["username"].value = decodeURIComponent(username);
-		var email = /(?:&|\?)email=(.*?)&/g.exec(window.location.search)[1];
-		document.forms["signup"]["email"].value = decodeURIComponent(email);
-	</script>
 	<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php' ?>
+
 </body>
 </html>

@@ -116,6 +116,39 @@ function js_redirect($url = "/", $msg = null, $validate = true) {
 	echo "window.location = '".$url."';</script>";
 }
 
+// constructs a hidden form and then submits it to redirect with POST data
+function js_redirect_post($url = "/", $msg = null, $post = array(), $validate = true) {
+	// sanitize url, or ignore it
+	if($validate && is_safe_url($url)) {
+		$url = encode_url($url);
+	}
+	else if($validate) {
+		$url = '/';
+	}
+
+	// echo form
+	echo "<form id='js-post-request' action='{$url}' method='post'>";
+
+	// echo post data
+	foreach ($post as $key => $value) {
+		echo "<input type='hidden' name='{$key}' value='{$value}'>";
+	}
+
+	echo "</form>";
+
+	echo "<script type='text/javascript'>";
+	
+	// echo message if there is one
+	if($msg) {
+		echo "alert('".htmlspecialchars($msg)."');";
+	}
+
+	// submit the form
+	echo "document.querySelector('#js-post-request').submit();";
+
+	echo "</script>";
+}
+
 // redirects to a url by header response
 function header_redirect($url = "/", $validate = true) {
 	// ignore url if unsafe
