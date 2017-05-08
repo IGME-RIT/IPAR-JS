@@ -109,3 +109,20 @@ m.image = '\
 	<img src="../img/iconClose.png" class="delete"/>\
 </div>\
 ';
+
+m.getImage = function(url) {
+	var div = document.createElement("div");
+	div.setAttribute("class", "image");
+
+	var img = document.createElement("img");
+	img.src = url;
+
+	var closeButton = document.createElement("img");
+	closeButton.src = "../img/iconClose.png";
+	closeButton.setAttribute("class", "delete");
+
+	div.appendChild(img);
+	div.appendChild(closeButton);
+
+	return div;
+}

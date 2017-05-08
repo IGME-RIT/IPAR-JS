@@ -171,7 +171,7 @@ p.createTypeWindow = function(){
         buttons[2].onclick = function(){
         	Popup.prompt(question.windowDiv, "Select Image", "Image URL:", "", "Load Image", function(newImage){
         		if(newImage)
-        			imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, newImage);
+					imageContent.appendChild(PopupWindows.getImage(newImage));
         		close();
         		button.click();
         	});
@@ -210,7 +210,7 @@ p.createTypeWindow = function(){
 							if(request.responseText.match(/^!.*$/))
 								alert(request.responseText.substr(1));
 							else
-								imageContent.innerHTML += PopupWindows.image.replace(/%image%/g, window.location.href.substr(0, window.location.href.lastIndexOf("editor/")-1)+"/image/"+request.responseText);
+								imageContent.appendChild(PopupWindows.getImage(window.location.href.substr(0, window.location.href.lastIndexOf("editor/")-1)+"/image/"+request.responseText));
 			        		close();
 			        		button.click();
 						}
