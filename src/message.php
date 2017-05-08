@@ -1,3 +1,4 @@
+<?php include $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +24,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <p id="message"></p>
+                    <p id="message"><?php echo htmlspecialchars($_GET['message']); ?></p>
                 </div>
             </div>
             <div class="row">
@@ -31,7 +32,7 @@
                 </div>
 		        	<ul class="panel-buttons col border">
 		    			<li>
-		    				<a id="back" href="./" class="btn-tile horiz">
+		    				<a id="back" href="<?php echo isset($_GET['redirect']) ? get_safe_url($_GET['redirect']) : '/'; ?>" class="btn-tile horiz">
 		    					<span class="glyphicon glyphicon-arrow-left"></span>
 		    					<span class="name">Back</span>
 		    				</a>
@@ -40,37 +41,6 @@
             </div>
         </div>
     </div>
-    
-    <script type='text/javascript'>
-        function parseURLParams(url) {
-            var queryStart = url.indexOf("?") + 1,
-                queryEnd   = url.indexOf("#") + 1 || url.length + 1,
-                query = url.slice(queryStart, queryEnd - 1),
-                pairs = query.replace(/\+/g, " ").split("&"),
-                parms = {}, i, n, v, nv;
-            
-            if (query === url || query === "") return;
-            
-            for (i = 0; i < pairs.length; i++) {
-                nv = pairs[i].split("=", 2);
-                n = decodeURIComponent(nv[0]);
-                v = decodeURIComponent(nv[1]);
-                
-                if (!parms.hasOwnProperty(n)) parms[n] = [];
-                parms[n].push(nv.length === 2 ? v : null);
-            }
-            return parms;
-        }
-        var get = parseURLParams(window.location.search);
-        
-        var message = get["message"];
-		document.getElementById("message").innerHTML = decodeURIComponent(message);
-        
-        // get redirect location if set
-        if("redirect" in get && get["redirect"] != "") {
-            document.getElementById("back").href = get["redirect"];
-        }
-	</script>
     <?php include $_SERVER['DOCUMENT_ROOT'].'/assets/html/footer.php'; ?>
 </body>
 </html>

@@ -95,14 +95,20 @@ function encode_url($url) {
 	return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
 
+function get_safe_url($url) {
+	if(is_safe_url($url)) {
+		return encode_url($url);
+	}
+	else {
+		return '/';
+	}
+}
+
 // injects js into the page to redirect to a url
 function js_redirect($url = "/", $msg = null, $validate = true) {
 	// sanitize url, or ignore it
-	if($validate && is_safe_url($url)) {
-		$url = encode_url($url);
-	}
-	else if($validate){
-		$url = '/';
+	if($validate) {
+		$url = get_safe_url($url);
 	}
 
 	echo "<script type='text/javascript'>";
@@ -119,11 +125,8 @@ function js_redirect($url = "/", $msg = null, $validate = true) {
 // constructs a hidden form and then submits it to redirect with POST data
 function js_redirect_post($url = "/", $msg = null, $post = array(), $validate = true) {
 	// sanitize url, or ignore it
-	if($validate && is_safe_url($url)) {
-		$url = encode_url($url);
-	}
-	else if($validate) {
-		$url = '/';
+	if($validate) {
+		$url = get_safe_url($url);
 	}
 
 	// echo form
