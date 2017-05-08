@@ -75,7 +75,7 @@
 							<li><a href="#" onclick="submitEmail();" class="btn-tile ">Update Email</a></li>
 			       		 	<?php if($res['active'] == 0) { ?>
 				   		 		<li>
-									<a href="./resendEmail.php?key=<?php echo $res['curKey']; ?>&redirect=<?php echo $_SERVER['REQUEST_URI']; ?>" class="btn-tile">Resend Activation Email</a>
+									<a href="./resendEmail.php?redirect=<?php echo $_SERVER['REQUEST_URI']; ?>" class="btn-tile">Resend Activation Email</a>
 				   		 		</li>
 				   		 	<?php } ?>
 						</ul>
@@ -92,7 +92,6 @@
 	            			<input type="password" name="password" required />
 	            			Confirm:
 	            			<input type="password" name="password2" required />
-							<input type="hidden" name="key" value="<?php echo $res["curKey"]; ?>">
 							<ul class="panel-buttons col border" style="margin: 10px 0 10px 0;"><li><a href="#" onclick="submitPass();" class="btn-tile ">Change Password</a></li></ul>
 						</div>
 	        		</fieldset>

@@ -1,11 +1,16 @@
 <?php
 	require_once $_SERVER['DOCUMENT_ROOT']."/assets/php/util.php";
+	
+	// set key in session from GET if it is present
+	if(isset($_GET['key'])) {
+		$key = $_GET['key'];
 
-	$key = $_GET['key'];
-	if(!$key || !get_user_from_key($key, $KEY_RELATION['password']))
-		header("Location: /message.php?message=That recovery link is expired!&");
+		if(!$key || !get_user_from_key($key, $KEY_RELATION['password'])) {
+			header("Location: /message.php?message=That recovery link is expired!&");
+		}
 
-	$_SESSION['key'] = $key;
+		$_SESSION['key'] = $key;
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
