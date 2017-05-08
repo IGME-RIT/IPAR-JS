@@ -18,6 +18,6 @@
     while($res = $sth->fetch()){
 	   	$path = $_SERVER['HTTP_HOST'].$path;
 	   	$file = "http://$path/resource/".$res['file'];
-	   	echo "<div class='image'><img src='../img/iconToolboxYellow.png' file='$file' class='viewSmall' /><a href='#' class='unactiveLink'>".$res['name']."</a><img src='../img/iconClose.png' class='deleteSmall'/></div>";
+	   	echo "<div class='image'><img src='../img/iconToolboxYellow.png' file='$file' class='viewSmall' /><a href='#' class='unactiveLink'>".htmlspecialchars($res['name'])."</a><img src='../img/iconClose.png' class='deleteSmall'/></div>";
 	}
 ?>

@@ -178,7 +178,6 @@ p.edit = function(index, callback){
 	// Setup confirm button
 	buttons[3].onclick = function(){
 		var form = editInfo.getElementsByTagName("form")[0];
-		//if(form.elements["name"].value && form.elements["name"].value!="" && ((form.elements["type"].value=="3" || form.elements["type"].value=="0") && resources.newLink && resources.newLink!="") && ((resources.newLink && resources.newLink!="") || Number(form.elements["type"].value)!=0)){
 		if(this.validateResourceInput(form, resources)) {
 			if(index==null)
 				index = resources.length++;
@@ -187,7 +186,7 @@ p.edit = function(index, callback){
 				newResource.setAttribute("type", 0);
 			else
 				newResource.setAttribute("type", form.elements["type"].value);
-			newResource.setAttribute("text", form.elements["name"].value);
+			newResource.setAttribute("text", encodeURI(form.elements["name"].value));
 			if(resources.newLink==null){
 				var newLink = form.elements["link"].value;
 				if(!newLink.match(/^https?:\/\/.*/))
@@ -303,7 +302,7 @@ p.updateEditInfo = function(type, buttons, addressTag, addressInfo, address, pre
 			var request = new XMLHttpRequest();
 			request.onreadystatechange = function() {
 				if (request.readyState == 4 && request.status == 200) {
-					preResources.innerHTML = request.responseText;
+					preResources.innerText = request.responseText;
 			        var images = preResources.getElementsByTagName("img");
 			        var links = preResources.getElementsByTagName("a");
 					for(var i=0;i<images.length;i+=2){

@@ -22,7 +22,7 @@ if($_FILES["resource"]){
 			if (move_uploaded_file($_FILES["resource"]["tmp_name"], $resource_folder . $new_resource . $extension)) {
 			        chmod($resource_folder . $new_resource . $extension, 0644);
 				echo $new_resource . $extension;
-				$fileName = $_FILES["resource"]["name"];
+				$fileName = htmlspecialchars($_FILES["resource"]["name"]);
 				//$db->query("INSERT INTO resources VALUES ('$new_resource$extension','$fileName','$user');");
                 $sth = $dbh->prepare("INSERT INTO resources VALUES (:resource, :filename, :username)");
                 $sth->execute(array(
