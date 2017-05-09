@@ -71,7 +71,7 @@ function game(section, baseScale){
 	document.querySelector('#'+section.id+' #board-context #add-category').onclick = function(e){
 		Popup.prompt(windowDiv, "Create Category", "Category Name:", "", "Create", function(newName){
     		if(newName)
-    			game.addCategory(newName);
+    			game.addCategory(Utilities.escapeHtml(newName));
     	});
 		boardContext.style.display = '';
 	};
@@ -293,7 +293,7 @@ p.addCategory = function(name){
 		var list = caseFile.getElementsByTagName("categoryList")[0];
 		list.setAttribute("categoryCount", game.categories.length);
 		var newElement = caseFile.createElement("element");
-		newElement.innerHTML = name;
+		newElement.innerText = name;
 		list.appendChild(newElement);
 		localforage.setItem('caseFile', new XMLSerializer().serializeToString(caseFile));
 	});

@@ -129,6 +129,16 @@ m.loadCaseData = function(zipName, zipBuffer, callback){
 	
 }
 
+// escapes HTML special characters
+m.escapeHtml = function(str) {
+	return str
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
 Element.prototype.innerXML = function(newText){
 	if(newText==null){
 		if(this.innerHTML)
