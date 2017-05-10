@@ -7,6 +7,7 @@
 	$rolesSchema = "CREATE TABLE roles (name CHAR(255) NOT NULL);";
 	$usersrolesSchema = "CREATE TABLE users_roles (username CHAR(255) NOT NULL, roleid INT NOT NULL);";
 	$usersKeysSchema = "CREATE TABLE users_keys (username CHAR(255) NOT NULL, key CHAR(255) NOT NULL, rel INT NOT NULL);";
+	$adminLogSchema = "CREATE TABLE admin_log (username CHAR(255) NOT NULL, message TEXT NOT NULL, datetime INTEGER NOT NULL);";
 
 	if($dbh){
 		 // create tables
@@ -16,6 +17,8 @@
 		 $dbh->query($usermetadataSchema);
 		 $dbh->query($rolesSchema);
 		 $dbh->query($usersrolesSchema);
+		 $dbh->query($usersKeysSchema);
+		 $dbh->query($adminLogSchema);
 
 		 // add default roles
 		 $sth = $dbh->prepare("INSERT INTO roles VALUES (:role)");

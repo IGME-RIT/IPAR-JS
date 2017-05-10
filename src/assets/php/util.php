@@ -95,6 +95,22 @@ function send_mail_to_user($to, $subject, $message, $from = "From IPAR Editor <y
 	mail($user['email'], $subject, $message, $from);
 }
 
+// logs an action by an IPAR admin
+function ipar_admin_log($username, $message) {
+	global $dbh; 
+
+	// get current date
+	$date = new DateTime();
+
+	// insert into log
+	$sth = $dbh->prepare("INSERT INTO admin_log VALUES (:username, :message, :date)");
+	$sth->execute(array(
+		":username"=>$username,
+		":message"=>$message,
+		":date"=>$date->getTimestamp()
+	));
+}
+
 // determines whether or not a url is safe for redirect
 // valid filetypes are html and php only
 // url may not contain the characters < > : ( ) or . (before the filetype)

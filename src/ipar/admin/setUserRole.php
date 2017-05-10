@@ -30,17 +30,29 @@ if($value == 1){
 $sth = $dbh->prepare($query);
 $success = $sth->execute(array(":username"=>$username, ":roleid"=>$roleid));
 
-if($roleid == 1) { // editor
-	$rolename = "editor";
+// get role name
+$sth = $dbh->prepare("SELECT name FROM roles WHERE rowid = :roleid");
+$sth->execute(array(":roleid"=>$roleid));
+$resp = $sth->fetch();
+$rolename = $resp['name'];
+
+if($rolename == "editor") { 
 	$msg = "Your account has been given access to the IPAR Editor by an admin. You can now use your account to create IPAR cases and to manage the images and resources for them.";
 }
-else if($roleid == 2) { // admin
-	$rolename = "admin";
+else if($rolename == "admin") {
 	$msg = "You now have administrator privledges for IPAR. You may now log in and make administrative changes to the website from the Admin panel.";
 }
 
 // send role change email
 send_mail_to_user($username, "Updated permission for your IPAR account", $msg);
+
+// log role change
+if($value == 1) {
+	ipar_admin_log($_SESSION['user'], "Gave user {$username} role \"{$rolename}\"");
+}
+else {
+	ipar_admin_log($_SESSION['user'], "Revoked role \"{$rolename}\" from user {$username}");
+}
 
 echo "Successfully changed user role.";
 ?>
