@@ -119,7 +119,7 @@
 			));
 		 	
 			// send activation email to user
-			sendActivationEmail($user, $email, $dbh);
+			sendActivationEmail($user);
 			
 			// send new user email to admin
 			$msg = "A new IPAR account has just been created:\nUsername: ".$user."\nEmail: ".$email."\nName: ".$firstname." ".$lastname."\nOrganization: ".$organization."\nIP: ".$ip."\nUseragent: ".$useragent;

@@ -64,7 +64,7 @@ function get_user($username) {
 }
 
 // sends an activation email to the user with provided username
-function sendActivationEmail($username, $email, $dbh) {
+function sendActivationEmail($username) {
 	global $KEY_RELATION;
 	// set email reset key
 	$newKey = set_key($username, $KEY_RELATION['email']);
@@ -75,9 +75,24 @@ function sendActivationEmail($username, $email, $dbh) {
     	
     // send account confirmation email to user
 	$msg = "Thank you for creating an IPAR Editor Account! You can use this account to create IPAR cases and to manage both the images and resources for them! To activate your account please use the following link:\n\nhttp://$path/activate.php?key=$newKey&\n\nPlease note: An IPAR admin must still approve your account before you can begin using the editor.";
-	mail($email,'Account Activation',wordwrap($msg,70),"From: IPAR Editor <yin.pan@rit.edu>");
+
+	send_mail_to_user($username, "Account Activation", wordwrap($msg, 70));
 
 	return $msg;
+}
+
+// sends email to a user
+function send_mail_to_user($to, $subject, $message, $from = "From IPAR Editor <yin.pan@rit.edu>") {
+	global $dbh;
+	
+	// get user info from username
+	$user = get_user($to);
+
+	if($user == null)
+		return false;
+	
+	// send email
+	mail($user['email'], $subject, $message, $from);
 }
 
 // determines whether or not a url is safe for redirect

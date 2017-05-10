@@ -3,11 +3,8 @@
 	require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php';
 	
 	if(isset($_SESSION['user'])){
-		// get user information
-		$user = get_user($_SESSION['user']);
-
 		// send the activation email
-		sendActivationEmail($user['username'], $user['email'], $dbh);
+		sendActivationEmail($_SESSION['user']);
 
 		// redirect to success message
 		// intentionally vague here so we don't expose any account info, since we don't do user auth for this script
