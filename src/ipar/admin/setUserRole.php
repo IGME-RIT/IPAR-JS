@@ -3,6 +3,7 @@
  * The admin directory .htaccess should ensure that this request is being made
  * by a user authenticated as an admin.
  */
+require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/util.php';
 
 // check to be sure there is POST data & user is authorized to change roles
 if(!$_POST){
@@ -12,7 +13,7 @@ if(!$_POST){
 
 // get POST data
 $username = $_POST['user'];
-$rolename = $_POST['roleid'];
+$roleid = $_POST['roleid'];
 $value = $_POST['value'];
 
 $query = "DELETE FROM users_roles WHERE username=:username And roleid=:roleid";
@@ -27,7 +28,19 @@ if($value == 1){
 
 // execute query
 $sth = $dbh->prepare($query);
-$success = $sth->execute(array(":username"=>$username, ":roleid"=>$rolename));
+$success = $sth->execute(array(":username"=>$username, ":roleid"=>$roleid));
+
+if($roleid == 1) { // editor
+	$rolename = "editor";
+	$msg = "Your account has been given access to the IPAR Editor by an admin. You can now use your account to create IPAR cases and to manage the images and resources for them.";
+}
+else if($roleid == 2) { // admin
+	$rolename = "admin";
+	$msg = "You now have administrator privledges for IPAR. You may now log in and make administrative changes to the website from the Admin panel.";
+}
+
+// send role change email
+send_mail_to_user($username, "Updated permission for your IPAR account", $msg);
 
 echo "Successfully changed user role.";
 ?>
