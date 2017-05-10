@@ -37,11 +37,11 @@ $rolesth =  $dbh->prepare("SELECT name, id, (username IS NOT NULL) AS hasrole FR
                 
                 var request = new XMLHttpRequest();
                 request.open("POST", "setUserRole.php");
-                request.onreadystatechange = function() {
-                    if(request.readyState === XMLHttpRequest.DONE) {
-                        alert(request.responseText);
-                    }
-                }
+//                request.onreadystatechange = function() {
+//                    if(request.readyState === XMLHttpRequest.DONE) {
+//                        alert(request.responseText);
+//                    }
+//                }
                 //TODO: alert on errors
                 request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 request.send('user='+user+"&roleid="+roleid+"&value="+value);
