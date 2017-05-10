@@ -26,6 +26,12 @@
                             <span class="name">Edit Help Modals</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="log.php" class="btn-tile">
+                            <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                            <span class="name">Log</span>
+                        </a>
+                    </li>
 					<li>
                         <a href="/" class="btn-tile">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
