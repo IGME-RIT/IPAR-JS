@@ -82,7 +82,7 @@ function sendActivationEmail($username) {
 }
 
 // sends email to a user
-function send_mail_to_user($to, $subject, $message, $from = "From IPAR Editor <yin.pan@rit.edu>") {
+function send_mail_to_user($to, $subject, $message, $from = "From: IPAR Editor <yin.pan@rit.edu>") {
 	global $dbh;
 	
 	// get user info from username
