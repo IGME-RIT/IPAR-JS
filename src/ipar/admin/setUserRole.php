@@ -36,15 +36,18 @@ $sth->execute(array(":roleid"=>$roleid));
 $resp = $sth->fetch();
 $rolename = $resp['name'];
 
-if($rolename == "editor") { 
-	$msg = "Your account has been given access to the IPAR Editor by an admin. You can now use your account to create IPAR cases and to manage the images and resources for them.";
-}
-else if($rolename == "admin") {
-	$msg = "You now have administrator privledges for IPAR. You may now log in and make administrative changes to the website from the Admin panel.";
-}
+if($value == 1) {
 
-// send role change email
-send_mail_to_user($username, "Updated permission for your IPAR account", $msg);
+	if($rolename == "editor") { 
+		$msg = "Your account has been given access to the IPAR Editor by an admin. You can now use your account to create IPAR cases and to manage the images and resources for them.";
+	}
+	else if($rolename == "admin") {
+		$msg = "You now have administrator privledges for IPAR. You may now log in and make administrative changes to the website from the Admin panel.";
+	}
+
+	// send role change email
+	send_mail_to_user($username, "Updated permission for your IPAR account", $msg);
+}
 
 // log role change
 if($value == 1) {
