@@ -1,33 +1,56 @@
-# IPAR Web
-IPAR - Web was developed using HTML/CSS, Javascript, and some PHP and is compatible with most modern browsers. This web version of IPAR has all the functionally of the original Windows Program, with some added features, but is now able to run on any operating system by simply using any modern browser to access the website with the program. Since the program is now on the web users no longer have to download/install any software to use it. The browser-based version builds on the orginal with added features like panning, zooming, and scaling to window size. With the use of PHP, images and resources (PDF Files) can be stored on the server so as to reduce the file size of cases for the user.
+# IPAR
+IPAR (Imaging, Preserving, analyzing and reporting) is a narrative-based detective-themed adventure game. In the game, the player assumes the role of an investigator: collecting evidence, answering questions, and drawing conclusions as part of a simulated investigation. Players are guided through a series of scripted steps, allowing them to gain practical experience and draw their own conclusions by answering subject related questions.
 
+# IPAR Editor
+Developed alongside the game is an editor that can be used to generate new cases. Everything from subject matter to graphical elements to story can be set by the user to create an entertaining educational experience, and an reader that allows instructors to view the reports submitted by students for grading.
 
-# Start
-Click Demo to start the demo project that is complete.
-
-# Save
-At any time you can click the save button in the top left to download a save of the current progress. You can then load the file with the load case button in the main menu. The game also autosaves everytime a window closes which can be loaded using the continue button on the main menu. If you load a case or start the demo you will lose any autosave data.
-
-# Basic Instructions
-Click on nodes to open the question. Answer the question then close the windows to make the next question appear. Once all questions are answered go to the next board by click the next board's button on the button bar of buttons.
+See [about](https://forensic-games.csec.rit.edu/about.php) for more information on IPAR.
 
 # Contributing
-The IPAR source requires [Node], and [Grunt] to be built. [Apache], [SQLite] and [PHP] are required to test and deploy. To contribute to IPAR, you will need to correctly configure your development environment:
+The IPAR source requires [Node], [Sass], and [Grunt] to be built. [Apache], [SQLite] and [PHP] are required to test and deploy. To contribute to IPAR, you will need to correctly configure your development environment:
 
-1. Install and configure [Apache], [SQLite], and [PHP]
-2. Install [Node] and [npm]
-3. Navigate to the project directory and install the IPAR project dependancies:
-	
-	`npm install`
+First, clone the repository locally:
 
-To build and deploy the application locally with Grunt, run Grunt in the project root directory: `grunt`
+```
+git clone git@github.com:IGME-RIT/IPAR-JS
+```
 
-The project will be built and deployed into the `ipar` directory.
+Navigate to the local repository, and install node dependencies:
 
-Grunt tasks can be configured in `Gruntfile.js`
+```
+cd IPAR-JS/
+npm install
+```
+
+To set up the IPAR database, you'll need to run the setup script:
+
+```
+php setup/createDatabase.php
+```
+
+To build the application locally for the first time, run the `build-clean` task:
+
+```
+grunt build-clean
+```
+
+The project will be built and deployed into the `build` directory.
+
+Static files (found in the `static` directory) are only copied to the `build` directory when the `build-clean` task is run. Otherwise, the default task will just build and copy source files. 
+
+# Deploying
+
+When deploying to the production site, first make a clean build: 
+
+```
+grunt build-clean
+```
+
+Then, copy the contents of the `build` directory to the `public_html` directory on the remote server.
 
 [Node]: https://nodejs.org/en/
 [Grunt]: http://gruntjs.com/
 [Apache]: https://www.apache.org/
 [SQLite]: https://sqlite.org/
 [PHP]: https://secure.php.net/
+[Sass]: http://sass-lang.com/
