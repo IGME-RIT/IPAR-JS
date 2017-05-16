@@ -11,28 +11,21 @@ The IPAR source requires [Node], [Sass], and [Grunt] to be built. [Apache], [SQL
 
 First, clone the repository locally:
 
-```
-git clone git@github.com:IGME-RIT/IPAR-JS
-```
+`git clone git@github.com:IGME-RIT/IPAR-JS`
 
 Navigate to the local repository, and install node dependencies:
 
-```
-cd IPAR-JS/
-npm install
-```
+`cd IPAR-JS/`
+
+`npm install`
 
 To set up the IPAR database, you'll need to run the setup script:
 
-```
-php setup/createDatabase.php
-```
+`php setup/createDatabase.php`
 
 To build the application locally for the first time, run the `build-clean` task:
 
-```
-grunt build-clean
-```
+`grunt build-clean`
 
 The project will be built and deployed into the `build` directory.
 
@@ -42,9 +35,7 @@ Static files (found in the `static` directory) are only copied to the `build` di
 
 When deploying to the production site, first make a clean build: 
 
-```
-grunt build-clean
-```
+`grunt build-clean`
 
 Then, copy the contents of the `build` directory to the `public_html` directory on the remote server.
 
