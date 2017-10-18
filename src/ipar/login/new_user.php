@@ -55,7 +55,7 @@
 	 $success = $userStatement->execute(array(":username" => $user));
 
 	 if(!$success){
-		// TODO: put some error logging here
+		log_sql_err($userStatement);
 		die("<br><br>Failed to create account. Please contact the site administrator.");
 	 }
 
@@ -69,7 +69,7 @@
 		$emailStatement->execute(array(":email" => $email));
 
 		if(!$success){
-			// TODO: put some error logging here -ntr
+			log_sql_err($emailStatement);
 			die("<br><br>Failed to create account. Please contact the site administrator.");
 		}
 
@@ -84,7 +84,7 @@
 			$hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
 		 
 			// placeholder key (because key is set in sendActivationEmail)
-			$key = "";
+			$key = gen_key(12); // must be unique just in case accounts are created at the same time or something
 
 			// create user record in users
 			$sth = $dbh->prepare("INSERT INTO users VALUES (:username, :email, :password, :curKey, 0, :firstname, :lastname, :organization)");
@@ -100,7 +100,7 @@
 			
 			$success = $sth->execute($params);
 			if(!$success){
-				// TODO: put some error logging here
+				log_sql_err($sth);
 				die("<br><br>Failed to create account. Please contact the site administrator.");
 			}
 
@@ -140,5 +140,10 @@
 			// redirect to message screen
 			header("Location: /message.php?message=Your account has been created! You will be been emailed a confirmation email shortly. Please use it to confirm your email and unlock your account for use.&redirect=$redirect");
 		}
+	}
+	
+	function log_sql_err($sth) {
+		$arr = $sth->errorInfo();
+		error_log("IPAR DB eror info:\n".$arr[0]."\n".$arr[1]."\n".$arr[2]);
 	}
 ?>
