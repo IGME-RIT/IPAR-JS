@@ -192,3 +192,15 @@ function header_redirect($url = "/", $validate = true) {
 
 	header("Location: ".$url);
 }
+
+// returns the number of page visits from the metadata table
+function get_hit_count() {
+	global $dbh;
+	// query the md table
+	$sth = $dbh->prepare("SELECT count FROM md_hits;");
+	$sth->execute();
+
+	// return value
+	return $sth->fetchColumn();
+
+}

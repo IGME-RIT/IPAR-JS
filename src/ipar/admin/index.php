@@ -3,6 +3,7 @@
 	<head>
 		<title>IPAR - Admin Panel</title>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/head.php"; ?>
+		<?php require_once $_SERVER['DOCUMENT_ROOT']."/assets/php/util.php"; ?>
 	</head>
 	<body>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/navbar.php"; ?>
@@ -39,6 +40,11 @@
                         </a>
                     </li>
                 </ul>
+								<div class="row">
+									<div class="col-md-12" style="margin: 0 auto; text-align:center;">
+									Total page views: <?php echo get_hit_count() ?> 
+									</div>
+								</div>
 			</div>
 		</div>
 		<?php include $_SERVER['DOCUMENT_ROOT']."/assets/html/footer.php"; ?>
