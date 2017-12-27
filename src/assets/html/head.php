@@ -5,3 +5,11 @@
 <meta name="description" content="Gamified Digital Forensics Project">
 <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
 <link href="/assets/css/custom.css" rel="stylesheet">
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'].'/assets/php/users_db.php';
+
+// increment the hits counter
+$sth = $dbh->prepare('UPDATE md_hits SET count = (SELECT count FROM md_hits) + 1;');
+$sth->execute();
+
+?>
